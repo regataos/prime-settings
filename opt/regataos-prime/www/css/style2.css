@@ -1,0 +1,701 @@
+@font-face{
+    font-family: "Oxygen";
+    src: url('fonts/Oxygen.otf') format('truetype');
+}
+
+body {
+	background: #171a21;
+	font-family: Oxygen;
+	font-weight: 300;
+	font-size: 15px;
+	color: #fff;
+	padding: 0;
+	margin: 0;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+/* Display content when everything is ready */
+#loadscreen {
+	display: block;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	background-color: #171a21;
+	z-index: 10000;
+}
+
+/* pages css */
+#settings {
+	display: auto;
+}
+#system {
+	display: auto;
+}
+#reverse-prime {
+	display: none;
+}
+
+/* scrollbar css */
+/* width */
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+background: #6e7478; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+transition: all .3s;
+background: #2a2d32; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+background: #43494d; 
+}
+
+/* scrollbar css */
+
+#title {
+	display: inline-block;
+	font-size: 20px;
+	margin-bottom: 10px;
+	letter-spacing: 2px;
+}
+
+#title p {
+	display: inline-block;
+	font-size: 17px;
+	margin-bottom: 10px;
+	letter-spacing: 4px;
+	margin-left: 8px;
+}
+
+.all-apps {
+	display: none;
+	float: right;
+	margin-right: 20px;
+}
+.all-apps2 {
+	display: none;
+	float: right;
+	margin-right: 80px;
+}
+
+.text-all-apps {
+	margin-right: 30px;
+}
+
+a {
+	color: #0085e4;
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+b {
+	font-weight: bold;
+}
+
+ul {
+    padding-left: 0px;
+	position: relative;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.main-ul {
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+ul.apps-bottom1 {
+	width: 1220px;
+}
+
+li {
+	display: inline-block;
+	position: relative;
+	width: 249px;
+	height: 40px;
+	list-style: none;
+	float: left;
+	background-color: #2a2f35;
+	margin-right: 3px;
+	margin-left: 3px;
+	margin-bottom: 8px;
+	padding-left: 20px;
+	padding-right: 30px;
+	padding-bottom: 20px;
+	padding-top: 20px;
+	box-shadow: 0 1px 5px rgba(0,0,0,.15);
+	transition: all ease .3s;
+}
+
+li.fake-item {
+	display: none;
+	background-color: #2a2f35;
+	box-shadow: 0 0px 0px rgba(0,0,0,.15);
+}
+
+li.libox {
+    opacity: 1;
+	animation-name: opacity;
+	animation-duration: 1s;  
+	animation-fill-mode: forwards;
+}
+
+@keyframes opacity {
+	from {opacity:0;}
+	to {opacity:1;}
+}
+
+li:hover {
+	background: #333840;
+}
+
+/* Add more apps to the list */
+li#add-external-apps {
+	cursor: pointer;
+	width: 299px;
+	height: 79px;
+	margin-bottom: 8px;
+	padding-top: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+}
+
+li#add-external-apps:active {
+	background: #2a2d32;
+}
+
+li.li-performance {
+	display: inline-block;
+    position: relative;
+    width: 247px;
+    height: 350px;
+    list-style: none;
+    float: left;
+    background: #333840;
+    margin-right: 11px;
+    margin-left: 11px;
+	margin-bottom: 27px;
+	padding: 0px;
+    box-shadow: 0 1px 5px rgb(0 0 0 / 15%);
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+li.li-performance:nth-child(4) {
+	margin-right: 0px;
+}
+
+.div-for-label {
+	width: 249px;
+	height: 40px;
+	padding-top: 20px;
+	padding-left: 20px;
+	padding-right: 30px;
+	padding-bottom: 20px;
+}
+
+/* Input CSS */
+input[type='file'] {
+	display: none;
+}
+
+label.label-add {
+	cursor: pointer;
+}
+
+/* Description of option blocks */
+.desc-option-blocks {
+	position: absolute;
+	top: 40px;
+	left: 75px;
+	font-size: 13px;
+	font-weight: 600;
+	color: #adabab;
+}
+
+/* remove external apps buttom */
+.remove-app-buttom {
+	position: absolute;
+	top: 8px;
+	width: 15px;
+	height: 15px;
+	right: 6px;
+	cursor: pointer;
+}
+
+/* All CSS buttom click */
+#buttom-click {
+	cursor: pointer;
+}
+
+li#buttom-click:active {
+	background: #333840;
+	box-shadow: 0 0px 0px rgba(0,0,0,.15);
+	transition: all .2s;
+}
+
+.kscreen-desc {
+	position: absolute;
+	top: 40px;
+	left: 20px;
+	font-size: 13px;
+	font-weight: 600;
+	color: #adabab;
+}
+
+.info-item {
+	position: absolute;
+	top: 40px;
+	left: 20px;
+	font-size: 13px;
+	font-weight: 600;
+	color: #adabab;
+	max-width: 34ch;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* CSS nvidia-driver */
+#use-nvidia-click {
+	cursor: pointer;
+}
+
+li#use-nvidia-click:active {
+	background: #333840;
+	box-shadow: 0 0px 0px rgba(0,0,0,.15);
+	transition: all .2s;
+}
+
+#separator1 {
+	height: 40px;
+	margin-bottom: 130px;
+	background: transparent;
+	box-shadow: none;
+}
+
+/* switch bottom css */
+
+.switch__container {
+	margin-top: 10px;
+	display: inline-block;
+	float: right;
+}
+
+.switch__container2 {
+	margin-top: 0px;
+	display: inline-block;
+	float: right;
+}
+
+.switch {
+	position: absolute;
+	margin-left: -9999px;
+	visibility: hidden;
+}
+
+.switch + label {
+	display: block;
+	position: relative;
+	cursor: pointer;
+	outline: none;
+	user-select: none;
+}
+/* end switch bottom css */
+
+p {
+	color: #fff;
+	font-size: 16px;
+	font-weight: 300;
+	line-height: 1.4;
+	margin: 0px;
+	padding-left: 0px;
+}
+
+.text-app {
+	font-size: 16px;
+	text-align: left;
+	font-weight: 300;
+	line-height: 1.4;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.libox .text-app {
+	max-width: 18ch;
+	text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.text-app1 {
+	font-size: 16px;
+	text-align: left;
+	font-weight: 300;
+	line-height: 1.4;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.text-app2 {
+	display: none;
+	font-size: 16px;
+	text-align: left;
+	font-weight: 300;
+	line-height: 1.4;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.icon-app {
+	display: inline-block;
+	float: left;
+	height: 40px;
+	width: 40px;
+	background-position: 50% 50%;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	margin-right: 15px;
+}
+
+.p-menu {
+	color: #343638;
+	margin-top: 4px;
+	font-size: 18px;
+}
+
+.icon-menu {
+	display: inline-block;
+	float: left;
+	height: 22px;
+	width: 22px;
+	background-position: 50% 50%;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	margin-right: 10px;
+	margin-top: 2px;
+}
+
+.button-apps {
+    margin-left: auto;
+    margin-right: auto;
+    width: 120px;
+    min-width: 20px;
+    position: relative;
+    padding-bottom: 0px;
+}
+
+.button-settings {
+    margin-left: auto;
+    margin-right: auto;
+    width: 148px;
+    min-width: 20px;
+    position: relative;
+    padding-bottom: 0px;
+}
+
+.button-performance {
+    margin-left: auto;
+    margin-right: auto;
+    width: 99px;
+    min-width: 20px;
+    position: relative;
+    padding-bottom: 0px;
+}
+
+.button-system {
+    margin-left: auto;
+    margin-right: auto;
+    width: 99px;
+    min-width: 20px;
+    position: relative;
+    padding-bottom: 0px;
+}
+
+.div1 {
+	background: #171a21;
+	max-width: 100%;
+	height: 100px;
+	padding-top: 30px;
+	padding-right: 38px;
+	padding-left: 38px;
+	padding-bottom: 20px;
+}
+
+.hdiv1 {
+	color: #fff;
+	font-size: 20px;
+	font-weight: 300;
+	margin: 0px;
+}
+
+.pdiv1 {
+	color: #fff;
+	font-size: 15px;
+	font-weight: 300;
+	line-height: 1.4;
+	margin: 0px;
+}
+
+.p1-settings {
+	color: #fff;
+	font-size: 15px;
+	font-weight: 300;
+	line-height: 1.4;
+	margin: 0px;
+	max-width: 1000px
+}
+
+.p1-performance {
+	color: #fff;
+	font-size: 15px;
+	font-weight: 300;
+	line-height: 1.4;
+	margin: 0px;
+	max-width: 1000px
+}
+
+.p1-system {
+	color: #fff;
+	font-size: 15px;
+	font-weight: 300;
+	line-height: 1.4;
+	margin: 0px;
+	max-width: 1000px
+}
+
+.main-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+	transition: all ease .3s;
+	width: 100%;
+}
+
+.div2 {
+	max-width: 1220px;
+    position: relative;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: .5s;
+    animation-name: animatebottom;
+    animation-duration: .5s;
+}
+
+/* menu CSS */
+#pop-up {
+	display: none;
+    float: left;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(29, 35, 41, 0.63);
+    position: fixed;
+    top: 0px;
+	opacity: 1;
+	animation-name: example;
+	animation-duration: .5s;
+    z-index: 30000;
+}
+
+@keyframes example {
+  from {opacity: 0.5;}
+  to {opacity: 1;}
+}
+
+#pop-up:hover {
+opacity: 1;
+}
+
+#box-pop-up {
+	position: relative;
+    width: 450px;
+    height: 170px;
+    background: linear-gradient(107deg,#33373f,#25282e);
+	margin: auto;
+	margin-top: 10%;
+	padding: 10px 15px 15px 15px;
+	box-shadow: 0px 1px 10px 2px rgba(0,0,0,0.3);
+}
+
+#box-pop-up h3 {
+    text-align: center;
+	font-weight: 300;
+	color: #eff0f0;
+	width: 100%;
+    top: 0px;
+    margin: auto;
+	margin-bottom: 10px;
+}
+
+.popup-desc-settings {
+	color: #bfbfbf;
+}
+
+#button-close {
+	cursor: pointer;
+	float: right;
+    width: 17px;
+    height: 17px;
+	margin-top: 7px;
+}
+
+#copy-all {
+	float: right;
+	margin-right: 0px;
+	cursor: pointer;
+}
+
+#copy-all-img {
+	float: left;
+	width: 20px;
+	height: 20px;
+	margin-top: 3px;
+}
+
+#copy-all-txt {
+	float: left;
+	margin-left: 3px;
+}
+
+@-webkit-keyframes animatebottom {
+    from { bottom:-30px; opacity:0 } 
+    to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+    from{ bottom:-30px; opacity:0 } 
+    to{ bottom:0; opacity:1 }
+}
+
+/* responsive CSS */
+@media screen and (max-width: 1250px) {
+	.div2 {
+		max-width: 1065px;
+	}
+	.div2-performance {
+		max-width: 1055px;
+	}
+
+	ul.apps-bottom1 {
+		width: 1060px;
+	}
+
+	div.app-name {
+		max-width: 13ch;
+		text-overflow: ellipsis;
+    	white-space: nowrap;
+    	overflow: hidden;
+	}
+
+	.text-app {
+		max-width: 30ch;
+		text-overflow: ellipsis;
+    	white-space: nowrap;
+    	overflow: hidden;
+	}
+
+	.info-item {
+		max-width: 27ch;
+		text-overflow: ellipsis;
+    	white-space: nowrap;
+    	overflow: hidden;
+	}
+
+	li {
+		display: inline-block;
+		width: 209px;
+		height: 40px;
+	}
+
+	li.fake-item {
+		width: 209px;
+	}
+
+	li#add-external-apps {
+		display: inline-block;
+		width: 259px;
+	}
+	.desc-option-blocks {
+		max-width: 20ch;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+	}
+	.div-for-label {
+		width: 209px;
+	}
+
+	li.li-performance {
+		width: 240px;
+	}
+
+	.select-gpu-text {
+		max-width: 13ch;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+	}
+}
+
+@media screen and (max-width: 1100px) {
+	.div2 {
+		max-width: 800px;
+	}
+
+	ul.apps-bottom1 {
+		width: 796px;
+	}
+
+	.div2-performance {
+		max-width: 793px;
+	}
+}
+
+@media screen and (max-width: 900px) {
+	.div2 {
+		max-width: 530px;
+	}
+
+	ul.apps-bottom1 {
+		width: 530px;
+	}
+
+	.div2-performance {
+		max-width: 539px;
+	}
+}
+
+@media screen and (max-width: 640px) {
+	.div1 {
+		min-width: 225px;
+	}
+	.main-div {
+		min-width: 301px;
+	}
+	.div2 {
+		max-width: 265px;
+	}
+
+	ul.apps-bottom1 {
+		width: 265px;
+	}
+
+}

@@ -1,0 +1,20 @@
+[Desktop Entry]
+Actions=DiscreteGPU;
+Type=Service
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin
+MimeType=application/x-desktop;
+Icon=show-gpu-effects
+
+[Desktop Action DiscreteGPU]
+Exec=hybrid-graphics-open %U
+Icon=show-gpu-effects
+
+Name=Run with discrete GPU
+Name[en_GB]=Run with discrete GPU
+Name[pt]=Executar com a GPU dedicada
+Name[pt_BR]=Executar com a GPU dedicada
+
+Comment=Run with discrete GPU
+Comment[en_GB]=Run with discrete GPU
+Comment[pt]=Executar com a GPU dedicada
+Comment[pt_BR]=Executar com a GPU dedicada

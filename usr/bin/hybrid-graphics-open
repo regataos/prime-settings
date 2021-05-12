@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Run the application with the dGPU
+FILE1=$1
+
+kmsg=$(grep -r regataos-dgpu "$FILE1")
+echo $kmsg
+
+if [[ $kmsg == *"regataos-dgpu"* ]]; then
+	kmsg=$(echo $FILE1 | cut -d/ -f 5)
+	kmsg2=$(grep -r '^Exec=' $kmsg | cut -d ' ' -f 2-)
+	kmsg3=$(echo $kmsg2 | tr -s ' ' | cut -d" " -f1)
+
+	regataos-dgpu $kmsg3
+else
+	kmsg=$(echo $FILE1 | cut -d/ -f 5)
+	kmsg2=$(grep -r '^Exec=' $kmsg | cut -d= -f 2)
+	kmsg3=$(echo $kmsg2 | tr -s ' ' | cut -d" " -f1)
+
+	regataos-dgpu $kmsg3
+fi

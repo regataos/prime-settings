@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>PRIME Settings</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+	<link rel="stylesheet" type="text/css" href="../css/style2.css">
+	<link rel="stylesheet" type="text/css" href="../css/pop-up.css">
+	<link rel="stylesheet" type="text/css" href="../css/buttom-switch-all-apps.css">
+	<link rel="stylesheet" type="text/css" href="../css/style-buttom-switch/buttom-switch-external-apps.css">
+	<link rel="stylesheet" type="text/css" href="../css/buttom-switch-apps.css">
+	<script type="text/javascript" src="../js/jquery.min.js"></script>
+	<script type="text/javascript" src="../js/fas-icons.js"></script>
+	<script type="text/javascript" src="../js/check-configs.js"></script>
+	<script type="text/javascript" src="../js/settings.js"></script>
+	<script type="text/javascript" src="../js/actions-apps.js"></script>
+	<script type="text/javascript" src="../js/disable-all-apps.js"></script>
+	<script type="text/javascript" src="../js/disable-all-external-apps.js"></script>
+    <script type="text/javascript" src="../js/translations/language/index-lang.js"></script>
+
+	<script type="text/javascript">
+		//close_popup_nv
+		function close_popup_nv(){
+			document.getElementById("pop-up-nv").style.display = "none";
+		}
+
+		//close_popup_hw
+		function close_popup_hw(){
+			document.getElementById("pop-up-hw").style.display = "none";
+		}
+	</script>
+</head>
+<body>
+
+	<!-- <div id="loadscreen"></div> -->
+	<div class="div1">
+		<div id="title" class="hdiv1 page-apps-title">Applications</div>
+		<p class="pdiv1 page-apps-description">Choose which applications to run with your device's dedicated GPU.</p>
+
+		<div class="all-apps">
+			<div class="text-all-apps disable-all"></div><div class="switch__container2">
+				<input id="switch-shadow-all-apps" class="switch switch--shadow-all-apps" type="checkbox" onclick="disable_all_apps(); disable_all_external_apps(); setTimeout(function(){ check_apps_status(); }, 500); setTimeout(function(){ check_external_apps_status(); }, 1000);">
+				<label for="switch-shadow-all-apps"></label></div>
+		</div>
+	
+		<div class="all-apps2">
+			<div class="text-all-apps enable-all"></div><div class="switch__container2">
+				<input id="switch-shadow2-all-apps" class="switch switch--shadow2-all-apps" type="checkbox" onclick="enable_all_apps(); enable_all_external_apps(); setTimeout(function(){ check_apps_status(); }, 500); setTimeout(function(){ check_external_apps_status(); }, 1000);">
+				<label for="switch-shadow2-all-apps"></label></div>
+		</div>	
+	</div>
+
+	<div id="pop-up-nv">
+		<div id="box-pop-up">
+			<div id="button-close" onclick="close_popup_nv();" style="background-image:url(../images/close.png); background-repeat: no-repeat; background-size: 17px 17px;" title="" alt=""></div>
+			<h3 class="popup-title-home">PRIME Render Offload não é suportado</h3>
+			<p class="popup-desc-home">A versão do driver NVIDIA instalada no sistema não possui suporte para o "PRIME Render Offload". O recurso só é suportado a partir da série de drivers NVIDIA 440.</p>
+			<div class="pop-up-ok" onclick="close_popup_nv_on();">OK</div>
+		</div>
+	</div>
+
+	<div id="pop-up-hw">
+		<div id="box-pop-up">
+			<div id="button-close" onclick="close_popup_hw();" style="background-image:url(../images/close.png); background-repeat: no-repeat; background-size: 17px 17px;" title="" alt=""></div>
+			<h3 class="popup-title-home2">Hardware não suportado</h3>
+			<p class="popup-desc-home2">O seu hardware parece não ter suporte para o "PRIME Render Offload". Atualmente, o recurso é suportado em laptops com gráficos hibridos da AMD ou NVIDIA.</p>
+			<div class="pop-up-ok" onclick="close_popup_hw_on();">OK</div>
+		</div>
+	</div>
+
+	<div class="main-div" id="main-div">
+	<div class="div2" id="div2">
+
+		<!-- External apps -->
+		<ul class="apps-bottom1 main-ul" id="dad">
+			<li id="add-external-apps">
+				<label class="label-add" title="" for="add-apps">
+				<div class="div-for-label">
+					<div class="icon-app" style="background-image:url(../images/add-external-apps.png);"></div>
+					<div class="text-app"></div>
+					<span class='desc-option-blocks'></span>
+				</div>
+				</label>
+				<input type="file" id="add-apps" name="files[]" />
+			</li>
+			<li class="fake-item">
+			</li>
+			<li class="fake-item">
+			</li>
+			<li class="fake-item">
+			</li>
+			<li class="fake-item">
+			</li>
+		</ul>
+		<ul class="apps-bottom2 main-ul"></ul>
+		<script type="text/javascript" src="../js/list-external-apps.js"></script>
+		<script type="text/javascript" src="../js/list-apps.js"></script>
+		<script type="text/javascript" src="../js/check-apps.js"></script>
+	</div>
+	</div>
+
+</body>
+</html>

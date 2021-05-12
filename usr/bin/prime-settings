@@ -1,0 +1,85 @@
+#!/bin/bash
+
+# Create the application settings directory for Regata OS Store
+if test -e "/tmp/regataos-store/config" ; then
+	chmod 777 "/tmp/regataos-store/config"
+else
+	mkdir -p "/tmp/regataos-store/config"
+	chmod 777 "/tmp/regataos-store/config"
+fi
+
+if test ! -e "$HOME/.config/regataos-store" ; then
+	mkdir -p "$HOME/.config/regataos-store"
+	echo "" >> "$HOME/.config/regataos-store/installed-apps.txt"
+fi
+
+if test ! -e "/tmp/regataos-store/config/installed-apps.txt" ; then
+	ln -sf "$HOME/.config/regataos-store/installed-apps.txt" "/tmp/regataos-store/config/"
+else
+	rm -f "/tmp/regataos-store/config/installed-apps.txt"
+	ln -sf "$HOME/.config/regataos-store/installed-apps.txt" "/tmp/regataos-store/config/"
+fi
+
+# Check installed apps
+echo "installed" > "/tmp/apps-scripts/checkapp.txt"
+
+# Check and create the PRIME Settings configuration directory
+if test ! -e "$HOME/.config/regataos-prime" ; then
+	mkdir -p "$HOME/.config/regataos-prime/"
+fi
+
+if test ! -e "$HOME/.config/regataos-prime/img" ; then
+	mkdir -p "$HOME/.config/regataos-prime/img/"
+fi
+
+if test ! -e "$HOME/.config/regataos-prime/system-info" ; then
+	mkdir -p "$HOME/.config/regataos-prime/system-info/"
+fi
+
+if test ! -e "$HOME/.config/regataos-prime/external-app" ; then
+	mkdir -p "$HOME/.config/regataos-prime/external-app/"
+fi
+
+if test ! -e "$HOME/.config/regataos-prime/run-without-dgpu.conf" ; then
+	echo "" > "$HOME/.config/regataos-prime/run-without-dgpu.conf"
+fi
+
+if test ! -e "$HOME/.config/regataos-prime/regataos-prime.conf" ; then
+	echo "one-apps=on" > "$HOME/.config/regataos-prime/regataos-prime.conf"
+	echo "all-apps=on" >> "$HOME/.config/regataos-prime/regataos-prime.conf"
+	echo "render=igpu" >> "$HOME/.config/regataos-prime/regataos-prime.conf"
+	echo "freesync=on" >> "$HOME/.config/regataos-prime/regataos-prime.conf"
+	echo "freesync-supported=false" >> "$HOME/.config/regataos-prime/regataos-prime.conf"
+	echo "tearfree=on" >> "$HOME/.config/regataos-prime/regataos-prime.conf"
+fi
+
+if test ! -e "/tmp/regataos-prime" ; then
+	mkdir -p "/tmp/regataos-prime/"
+	chmod 777 "/tmp/regataos-prime"
+	chmod 777 /tmp/regataos-prime/*
+fi
+
+if test ! -e "/tmp/regataos-prime/config" ; then
+	ln -sf "$HOME/.config/regataos-prime" "/tmp/regataos-prime/config"
+	chmod 777 /tmp/regataos-prime/*
+fi
+
+# Display hardware information
+# sudo /opt/regataos-prime/scripts/system-info.sh start
+cat /tmp/regataos-prime/prime-info.txt
+
+if [[ $(glxinfo | grep vendor) == *"Intel"* ]]; then
+	regataosprime --disable-gpu /opt/regataos-prime
+else
+	regataosprime /opt/regataos-prime
+fi
+
+# Clear
+rm -f "/tmp/regataos-prime/nvidia-driver-notify.txt"
+rm -f "/tmp/regataos-prime/hardware-notify.txt"
+rm -f "/tmp/regataos-prime/radeontop.log"
+rm -f "/tmp/regataos-prime/cpu-usage.log"
+
+# End the radeontop process
+get_pid="radeontop -d /tmp/regataos-prime/radeontop.log"
+kill -SIGTERM $(ps -C "$get_pid" | awk '{print $1}'| tail -1)

@@ -1,0 +1,16 @@
+#!/bin/sh
+# Xsetup - run as root before the login dialog appears
+
+# Reverse PRIME
+#If the second GPU has outputs that are not accessible by the primary GPU, you can use Reverse PRIME to make use of them.
+#This will involve using the primary GPU to render the images, and then pass them off to the secondary GPU. 
+xrandr --setprovideroutputsource 0 1
+xrandr --setprovideroutputsource modesetting NVIDIA-0
+xrandr --setprovideroutputsource intel NVIDIA-0
+xrandr --setprovideroutputsource Intel NVIDIA-0
+xrandr --setprovideroutputsource intel NVIDIA-G0
+xrandr --setprovideroutputsource Intel NVIDIA-G0
+
+# Make sure xrandr sees all the outputs
+xrandr --auto
+xrandr --dpi 96

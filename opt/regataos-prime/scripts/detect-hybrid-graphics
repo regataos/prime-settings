@@ -1,0 +1,136 @@
+#!/bin/bash
+
+# Create the directory /tmp/regataos-prime
+if test -e "/tmp/regataos-prime" ; then
+	chmod 777 "/tmp/regataos-prime"
+else
+	mkdir -p "/tmp/regataos-prime"
+	chmod 777 "/tmp/regataos-prime"
+fi
+
+# Use dGPU NVIDIA
+function use_nvidia_dgpu() {
+	echo "Hybrid graphics detected"
+	echo Set hybrid graphics > "/tmp/regataos-prime/use-hybrid-graphics.txt"
+	echo NVIDIA > "/tmp/regataos-prime/use-hybrid-graphics-nvidia.txt"
+	echo NVIDIA > "/tmp/regataos-prime/nvidia-driver.txt"
+	rm -f "/tmp/regataos-prime/not-hybrid-graphics.txt"
+	rm -f "/tmp/regataos-prime/use-hybrid-graphics-amd.txt"
+
+	# Verify that the NVIDIA driver is being used
+	detect_driver=$(lshw -class display | grep "driver")
+	if [[ $detect_driver == *"nvidia"* ]]; then
+
+		# If you are in Regata OS, remove some settings from X.Org Server
+		detect_os=$(grep -r NAME /etc/os-release)
+		if [[ $detect_os == *"Regata OS"* ]]; then
+			rm -f "/etc/X11/xorg.conf.d/20-amdgpu.conf"
+			rm -f "/usr/share/X11/xorg.conf.d/20-amdgpu.conf"
+			rm -f "/etc/X11/xorg.conf.d/20-radeon.conf"
+			rm -f "/usr/share/X11/xorg.conf.d/20-radeon.conf"
+			rm -f "/etc/X11/xorg.conf.d/20-intel.conf"
+			rm -f "/usr/share/X11/xorg.conf.d/20-intel.conf"
+			rm -f "/etc/X11/xorg.conf.d/20-nvidia.conf"
+			rm -f "/usr/share/X11/xorg.conf.d/20-nvidia.conf"
+		fi
+
+		# Copy xorg config files
+		if test -e /usr/bin/nvidia-xconfig ; then
+			#Identify NVIDIA driver version
+			driver_version=$(nvidia-smi -i 0 --query-gpu=driver_version --format=csv,noheader)
+			driver_installed=$(echo $driver_version | cut -d. -f -1)
+
+			if [ $driver_installed -ge 440 ]; then
+				echo "NVIDIA driver version: $driver_version (supported)"
+				cp -f /opt/regataos-prime/all-files/10-intel-nvidia-drm-outputclass.conf /usr/share/X11/xorg.conf.d/10-intel-nvidia-drm-outputclass.conf
+				cp -f /opt/regataos-prime/all-files/10-amdgpu-nvidia-drm-outputclass.conf /usr/share/X11/xorg.conf.d/10-amdgpu-nvidia-drm-outputclass.conf
+				cp -f /opt/regataos-prime/all-files/10-intel-nvidia-drm-outputclass.conf /etc/X11/xorg.conf.d/10-intel-nvidia-drm-outputclass.conf
+				cp -f /opt/regataos-prime/all-files/10-amdgpu-nvidia-drm-outputclass.conf /etc/X11/xorg.conf.d/10-amdgpu-nvidia-drm-outputclass.conf
+			else
+				if [ $driver_installed -gt 440 ]; then
+					echo "NVIDIA driver version: $driver_version"
+					rm -f "/usr/share/X11/xorg.conf.d/10-intel-nvidia-drm-outputclass.conf"
+					rm -f "/usr/share/X11/xorg.conf.d/10-amdgpu-nvidia-drm-outputclass.conf"
+					rm -f "/etc/X11/xorg.conf.d/10-intel-nvidia-drm-outputclass.conf"
+					rm -f "/etc/X11/xorg.conf.d/10-amdgpu-nvidia-drm-outputclass.conf"
+					cp -f /opt/regataos-prime/all-files/10-nvidia-primary.conf /etc/X11/xorg.conf.d/10-nvidia-primary.conf
+					cp -f /opt/regataos-prime/all-files/10-nvidia-primary.conf /usr/share/X11/xorg.conf.d/10-nvidia-primary.conf
+				elif [ $driver_installed -le 390 ]; then
+					echo "NVIDIA driver version: $driver_version"
+					rm -f "/usr/share/X11/xorg.conf.d/10-intel-nvidia-drm-outputclass.conf"
+					rm -f "/usr/share/X11/xorg.conf.d/10-amdgpu-nvidia-drm-outputclass.conf"
+					rm -f "/etc/X11/xorg.conf.d/10-intel-nvidia-drm-outputclass.conf"
+					rm -f "/etc/X11/xorg.conf.d/10-amdgpu-nvidia-drm-outputclass.conf"
+					cp -f /opt/regataos-prime/all-files/10-nvidia-primary.conf /etc/X11/xorg.conf.d/10-nvidia-primary.conf
+					cp -f /opt/regataos-prime/all-files/10-nvidia-primary.conf /usr/share/X11/xorg.conf.d/10-nvidia-primary.conf
+				else
+					echo "NVIDIA driver version: $driver_version (not supported)"
+				fi
+			fi
+		fi
+	fi
+}
+
+# Use dGPU AMD
+function use_amd_dgpu() {
+	echo "Hybrid graphics detected"
+	echo Set hybrid graphics > /tmp/regataos-prime/use-hybrid-graphics.txt
+	echo AMD > /tmp/regataos-prime/use-hybrid-graphics-amd.txt
+	rm -f "/tmp/regataos-prime/use-hybrid-graphics-nvidia.txt"
+	rm -f "/tmp/regataos-prime/not-hybrid-graphics.txt"
+	rm -f "/tmp/regataos-prime/nvidia-driver.txt"
+}
+
+# Check for hybrid graphics support
+#Identify dGPU
+detect_dgpu2=$(inxi -G | egrep -i "Card-2|Device-2")
+
+if [[ $detect_dgpu2 == *"Picasso"* ]]; then
+	# The dGPU appears to be an AMD APU. Check the primary GPU
+	detect_dgpu1=$(inxi -G | egrep -i "Card-1|Device-1")
+	if [[ $detect_dgpu1 == *"NVIDIA"* ]]; then
+		use_nvidia_dgpu
+
+	elif [[ $detect_dgpu1 == *"GeForce"* ]]; then
+		use_nvidia_dgpu
+
+	else
+		use_amd_dgpu
+	fi
+
+elif [[ $detect_dgpu2 == *"RAVEN"* ]]; then
+	# The dGPU appears to be an AMD APU. Check the primary GPU
+	detect_dgpu1=$(inxi -G | egrep -i "Card-1|Device-1")
+	if [[ $detect_dgpu1 == *"NVIDIA"* ]]; then
+		use_nvidia_dgpu
+
+	elif [[ $detect_dgpu1 == *"GeForce"* ]]; then
+		use_nvidia_dgpu
+
+	else
+		use_amd_dgpu
+	fi
+
+elif [[ $detect_dgpu2 == *"AMD"* ]]; then
+	use_amd_dgpu
+
+elif [[ $detect_dgpu2 == *"Radeon"* ]]; then
+	use_amd_dgpu
+
+elif [[ $detect_dgpu2 == *"ATI"* ]]; then
+	use_amd_dgpu
+
+elif [[ $detect_dgpu2 == *"NVIDIA"* ]]; then
+	use_nvidia_dgpu
+
+elif [[ $detect_dgpu2 == *"GeForce"* ]]; then
+	use_nvidia_dgpu
+
+else
+	echo "Not detected graphics"
+	echo "Not use hybrid graphics" > /tmp/regataos-prime/not-hybrid-graphics.txt
+	rm -f "/tmp/regataos-prime/use-hybrid-graphics.txt"
+	rm -f "/tmp/regataos-prime/use-hybrid-graphics-amd.txt"
+	rm -f "/tmp/regataos-prime/use-hybrid-graphics-nvidia.txt"
+	rm -f "/tmp/regataos-prime/nvidia-driver.txt"
+fi

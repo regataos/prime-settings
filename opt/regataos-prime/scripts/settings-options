@@ -1,0 +1,61 @@
+#!/bin/bash
+
+# Enable/Disable TearFree
+function tearfree() {
+	if [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"tearfree=on"* ]]; then
+		sed -i 's/\(tearfree=on\)/tearfree=off/' "/tmp/regataos-prime/config/regataos-prime.conf"
+		sudo /opt/regataos-prime/scripts/gpu-render -tearfree-off
+
+		#For NVIDIA Driver
+		sleep 3
+		nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 { ForceFullCompositionPipeline = Off }"
+
+		#For open source drivers
+		screen=$(xrandr --props | grep 'connected primary' | awk '{print $1}')
+		xrandr --output $screen --set TearFree off
+
+	elif [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"tearfree=off"* ]]; then
+		sed -i 's/\(tearfree=off\)/tearfree=on/' "/tmp/regataos-prime/config/regataos-prime.conf"
+		sudo /opt/regataos-prime/scripts/gpu-render -tearfree-on
+
+		#For NVIDIA Driver
+		sleep 3
+		nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 { ForceFullCompositionPipeline = On }"
+
+		#For open source drivers
+		screen=$(xrandr --props | grep 'connected primary' | awk '{print $1}')
+		xrandr --output $screen --set TearFree on
+
+	else
+		echo "Option not found in the file with configuration options."
+	fi
+}
+
+# Enable/Disable FreeSync
+function enable_freesync() {
+	screen=$(xrandr --props | grep 'connected primary' | awk '{print $1}')
+	echo "Enabling FreeSync on $screen"
+	DISPLAY=:0 xrandr --output $screen --set "freesync" 1
+	xrandr --output $screen --set "freesync" 1
+	sed -i 's/\(freesync=off\)/freesync=on/' "/tmp/regataos-prime/config/regataos-prime.conf"
+}
+
+function disable_freesync() {
+	screen=$(xrandr --props | grep 'connected primary' | awk '{print $1}')
+	echo "Disabling FreeSync on $screen"
+	DISPLAY=:0 xrandr --output $screen --set "freesync" 0
+	xrandr --output $screen --set "freesync" 0
+	sed -i 's/\(freesync=on\)/freesync=off/' "/tmp/regataos-prime/config/regataos-prime.conf"
+}
+
+case $1 in
+   "-tearfree") tearfree
+         ;;
+   "-freesync-on") enable_freesync
+         ;;
+   "-freesync-off") disable_freesync
+         ;;
+   *) echo "Invalid option!"
+      exit 1
+      ;;
+esac

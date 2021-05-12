@@ -1,0 +1,34 @@
+[Desktop Entry]
+Name=Graphical settings
+Name[en_US]=Graphical settings
+Name[pt_BR]=Configurações gráficas
+Name[pt_PT]=Configurações gráficas
+Name[es]=Configuraciones gráficas
+
+Comment=Graphics settings and GPU usage
+Comment[en_US]=Graphics settings and GPU usage
+Comment[pt_BR]=Configurações gráficas e uso da GPU
+Comment[pt_PT]=Configurações gráficas e uso da GPU
+Comment[es]=Configuración de gráficos y uso de GPU
+
+GenericName=Graphics settings and GPU usage
+GenericName[en_US]=Graphics settings and GPU usage
+GenericName[pt_BR]=Configurações gráficas e uso da GPU
+GenericName[pt_PT]=Configurações gráficas e uso da GPU
+GenericName[es]=Configuración de gráficos y uso de GPU
+
+Exec=bash -x prime-settings
+Icon=regataos-gs
+Categories=Settings;
+MimeType=
+Path=
+StartupNotify=true
+StartupWMClass=Graphical settings
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-Protocols=skype
+X-KDE-SubstituteUID=false
+X-KDE-Username=

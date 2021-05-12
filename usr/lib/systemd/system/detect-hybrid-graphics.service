@@ -1,0 +1,9 @@
+[Unit]
+Description=PRIME is a technology used to manage hybrid graphics found on recent laptops
+Before=display-manager.service
+
+[Service]
+ExecStart=/opt/regataos-prime/scripts/detect-hybrid-graphics
+
+[Install]
+WantedBy=graphical.target

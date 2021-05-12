@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>PRIME Settings</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+	<link rel="stylesheet" type="text/css" href="../css/style2.css">
+	<link rel="stylesheet" type="text/css" href="../css/buttom-switch-settings.css">
+	<link rel="stylesheet" type="text/css" href="../css/buttom-switch-settings-options.css">
+	<script type="text/javascript" src="../js/jquery.min.js"></script>
+	<script type="text/javascript" src="../js/check-configs.js"></script>
+	<script type="text/javascript" src="../js/check-system.js"></script>
+    <script type="text/javascript" src="../js/translations/language/index-lang.js"></script>
+	<script type="text/javascript" src="../js/settings.js"></script>
+
+	<script type="text/javascript">
+		//close_popup
+		function close_popup(){
+			document.getElementById("pop-up").style.display = "none";
+		}
+
+		//open_popup
+		function open_popup(){
+			document.getElementById("pop-up").style.display = "block";
+		}
+	</script>
+</head>
+<body>
+
+	<!-- <div id='loadscreen'></div> -->
+	<div class="div1">
+		<div id="title" class="hdiv1 page-settings-title">Settings</div>
+		<p class="pdiv1 page-settings-description">Choose the best configuration for your dedicated GPU, configure the display and perform simple tests.</p>
+	</div>
+
+	<div class="main-div" id="main-div">
+	<div class="div2" id="div2">
+		<ul class="main-ul">
+			<li id="selecte-gpu">
+				<div class="text-app select-gpu-text"></div><select class="selectnav" id="selectnav1" onchange="choose_gpu1()"><option class="integrated" value="igpu"></option><option class="dedicated" value="dgpu"></option></select><select class="selectnav" id="selectnav2" onchange="choose_gpu2();"><option class="dedicated" value="dgpu"></option><option class="integrated" value="igpu"></option></select><span class='render-igpu-desc'></span><span class='render-dgpu-desc'></span>
+			</li>
+			<li id="buttom-click" onclick="display();">
+				<div class="text-app display-settings"></div><span class='info-item display-settings-info'></span>
+			</li>
+			<li id="use-nvidia-click" onclick="nvidia_driver();">
+				<div class="text-app nvidia-settings"></div><span class='info-item nvidia-settings-info'></span>
+			</li>
+			<li id="buttom-click" onclick="open_popup();">
+				<div class="text-app run-tests"></div><span class='info-item run-tests-info'></span>
+			</li>
+			<li id="freesync-toggle">
+				<div class="text-app">Radeon FreeSync</div><div class="switch__container">
+					<input id="switch-shadow-freesync" class="switch switch--shadow-freesync" type="checkbox" onclick="disable_freesync();">
+					<label for="switch-shadow-freesync"></label></div><div class="switch__container">
+					<input id="switch-shadow2-freesync" class="switch switch--shadow2-freesync" type="checkbox" onclick="enable_freesync();">
+					<label for="switch-shadow2-freesync"></label></div><span class='freesync-on'></span><span class='freesync-off'></span>
+			</li>
+			<li id="tearfree-toggle">
+				<div class="text-app pst-text">Prevent Screen Tearing</div>
+				<div class="switch__container">
+					<input id="switch-shadow-app tearfree" class="switch switch--shadow-app switch-on-tearfree" type="checkbox" onclick="window.config_option='tearfree'; run_config_option();">
+					<label for="switch-shadow-app tearfree"></label>
+				</div>
+				<div class="switch__container">
+					<input id="switch-shadow2-app tearfree" class="switch switch--shadow2-app switch-off-tearfree" type="checkbox" onclick="window.config_option='tearfree'; run_config_option();">
+					<label for="switch-shadow2-app tearfree"></label>
+				</div>
+				<span class="enabled tearfree-on"></span>
+				<span class="disabled tearfree-off"></span>
+			</li>
+		</ul>
+	</div>
+	</div>
+
+	<div id="pop-up">
+		<div id="box-pop-up">
+			<div id="button-close" type="button" onclick="close_popup();" style="background-image:url(./../images/close.png); background-repeat: no-repeat; background-size: 17px 17px;" title="Fechar" alt="Fechar"></div>
+			<h3 class="popup-title-settings"></h3>
+			<p class="popup-desc-settings"></p>
+			<div class="div-test">
+				<ul>
+					<li class="test-dgpu button-gl" onclick="teste_dgpu_gl();"><span></span></li>
+					<li class="test-dgpu button-vk" onclick="teste_dgpu_vk();"><span></span></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

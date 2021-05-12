@@ -1,0 +1,70 @@
+#!/bin/bash
+#
+# This script helps to run applications and games with the dGPU of notebooks with hybrid graphics.
+
+# Show notification
+/bin/bash /opt/regataos-prime/scripts/notify -running-with-dgpu
+
+if test ! -e "/tmp/regataos-prime" ; then
+	mkdir -p "/tmp/regataos-prime/"
+fi
+
+export binary_file=$(echo "$@" | sed 's/ %f//')
+
+# Verifying that the NVIDIA driver is installed.
+if test -e /usr/bin/nvidia-xconfig ; then
+	# Set Vulkan ICD file for NVIDIA dGPU
+	if test -e "/opt/regataos-vulkan/icd.d/nvidia_icd.json"; then
+		export VK_ICD_FILENAMES=/opt/regataos-vulkan/icd.d/nvidia_icd.json
+	else
+		export VK_ICD_FILENAMES=/etc/vulkan/icd.d/nvidia_icd.json
+	fi
+
+	# Run the application with the NVIDIA dGPU
+	echo "nvidia" > "/tmp/regataos-prime/running-with-dgpu.txt"
+	export GAMEMODERUNEXEC="env __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia __VK_LAYER_NV_optimus=NVIDIA_only"
+	env __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia __VK_LAYER_NV_optimus=NVIDIA_only "$@" & /opt/regataos-prime/icontray/run-dgpu-tray.sh start & /opt/regataos-prime/icontray/stop-dgpu-tray.sh start
+
+else
+	# If the NVIDIA driver is not installed, detect which dGPU is available on the hardware
+	detect_dgpu=$(DRI_PRIME=1 glxinfo | grep vendor)
+	if [[ $detect_dgpu == *"AMD"* ]]; then
+		# Set Vulkan ICD file for AMD dGPU
+		if test -e "/opt/regataos-vulkan/icd.d/radeon_icd.i686.json"; then
+			export VK_ICD_FILENAMES=/opt/regataos-vulkan/icd.d/radeon_icd.i686.json:/opt/regataos-vulkan/icd.d/radeon_icd.x86_64.json
+		else
+			export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/radeon_icd.i686.json:/usr/share/vulkan/icd.d/radeon_icd.x86_64.json
+		fi
+
+		# Run the application with the AMD dGPU
+		echo "amd" > "/tmp/regataos-prime/running-with-dgpu.txt"
+		export GAMEMODERUNEXEC="env DRI_PRIME=1"
+		env DRI_PRIME=1 "$@" & /opt/regataos-prime/icontray/run-dgpu-tray.sh start & /opt/regataos-prime/icontray/stop-dgpu-tray.sh start
+
+	elif [[ $detect_dgpu == *"Intel"* ]]; then
+		# Set Vulkan ICD file for Intel dGPU
+		if test -e "/opt/regataos-vulkan/icd.d/intel_icd.i686.json"; then
+			export VK_ICD_FILENAMES=/opt/regataos-vulkan/icd.d/intel_icd.i686.json:/opt/regataos-vulkan/icd.d/intel_icd.x86_64.json
+		else
+			export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.i686.json:/usr/share/vulkan/icd.d/intel_icd.x86_64.json
+		fi
+
+		# Run the application with the Intel dGPU
+		echo "intel" > "/tmp/regataos-prime/running-with-dgpu.txt"
+		export GAMEMODERUNEXEC="env DRI_PRIME=1"
+		env DRI_PRIME=1 "$@" & /opt/regataos-prime/icontray/run-dgpu-tray.sh start & /opt/regataos-prime/icontray/stop-dgpu-tray.sh start
+
+	else
+		# Run the application with the Intel dGPU
+		echo "not-detected" > "/tmp/regataos-prime/running-with-dgpu.txt"
+		export GAMEMODERUNEXEC="env DRI_PRIME=1"
+		env DRI_PRIME=1 "$@" & /opt/regataos-prime/icontray/run-dgpu-tray.sh start & /opt/regataos-prime/icontray/stop-dgpu-tray.sh start
+	fi
+fi
+
+# Check how many processes are running
+running=$(ps -C regataos-dgpu | wc -l)
+
+if [ $(echo $running) -le 2 ]; then
+	rm -f "/tmp/regataos-prime/running-with-dgpu.txt"
+fi

@@ -1,0 +1,47 @@
+#!/bin/bash
+#
+# Initial configuration of the external application
+
+# Capture .desktop file
+desktop_file=$(echo "$1" | sed 's,/, ,g' | awk '{print $NF'})
+
+# Find the user's desktop
+user=$(users | awk '{print $1}')
+test -f "${XDG_CONFIG_HOME:-/home/$user/.config}/user-dirs.dirs" && source "${XDG_CONFIG_HOME:-/home/$user/.config}/user-dirs.dirs"
+desktop_dir="${XDG_DESKTOP_DIR:-/home/$user/Desktop}"
+desktop_folder="$(echo $desktop_dir | cut -d/ -f 3-)"
+
+# Directories where possible .desktop files for apps
+apps_dir="/usr/share/applications"
+desktop_dir="/home/$user/$desktop_folder"
+apps_local_dir="/home/$user/.local/share/applications"
+snap_dir="/var/lib/snapd/desktop/applications"
+flatpak_dir="/var/lib/flatpak/exports/share/applications"
+
+# Run app without the dGPU
+sed -i 's/Exec=/Exec=regataos-dgpu /' $(echo "$1")
+
+if [[ $(grep -r "regataos-dgpu" "$apps_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
+	sed -i 's/Exec=/Exec=regataos-dgpu /' "$apps_dir/$desktop_file"
+	sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$apps_dir/$desktop_file"
+fi
+
+if [[ $(grep -r "regataos-dgpu" "$desktop_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
+	sed -i 's/Exec=/Exec=regataos-dgpu /' "$desktop_dir/$desktop_file"
+	sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$desktop_dir/$desktop_file"
+fi
+
+if [[ $(grep -r "regataos-dgpu" "$apps_local_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
+	sed -i 's/Exec=/Exec=regataos-dgpu /' "$apps_local_dir/$desktop_file"
+	sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$apps_local_dir/$desktop_file"
+fi
+
+if [[ $(grep -r "regataos-dgpu" "$snap_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
+	sed -i 's/Exec=/Exec=regataos-dgpu /' "$snap_dir/$desktop_file"
+	sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$snap_dir/$desktop_file"
+fi
+
+if [[ $(grep -r "regataos-dgpu" "$flatpak_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
+	sed -i 's/Exec=/Exec=regataos-dgpu /' "$flatpak_dir/$desktop_file"
+	sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$flatpak_dir/$desktop_file"
+fi

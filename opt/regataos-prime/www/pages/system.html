@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>PRIME Settings</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+	<link rel="stylesheet" type="text/css" href="../css/style2.css">
+	<link rel="stylesheet" type="text/css" href="../css/style-system/buttom-system.css">
+	<link rel="stylesheet" type="text/css" href="../css/style-system/prime-settings-system-info.css">
+	<script type="text/javascript" src="../js/jquery.min.js"></script>
+	<script type="text/javascript" src="../js/check-system.js"></script>
+	<script type="text/javascript" src="../js/hardware-info.js"></script>
+    <script type="text/javascript" src="../js/translations/language/index-lang.js"></script>
+
+	<!-- <script type="text/javascript">
+		// Display content when everything is ready
+		$(function(){
+   			$("#loadscreen").fadeOut("slow");
+		});
+
+		$(function(){
+   			$(".div2").fadeIn("slow");
+		});
+	</script> -->
+</head>
+<body>
+
+	<!-- <div id='loadscreen'></div> -->
+	<div class="div1">
+		<div id="title" class="hdiv1 page-system-title">System</div>
+		<p class="pdiv1 page-system-description">Check out more information about hardware and software.</p>
+		<div id="copy-all" title="" onclick="copy_info();"><div  id="copy-all-img" style="background-image:url(./../images/clip.png); background-repeat: no-repeat; background-size: 17px 17px;"></div><p id="copy-all-txt"></p></div>
+	</div>
+
+	<div class="main-div" id="main-div">
+	<div class="div2" id="div2">
+		<ul class="main-ul">
+			<li id="use-nvidia">
+				<div class="text-app nvidia-driver"></div><span id="nvdriver-version" class="info-item"></span>
+			</li>
+			<li>
+				<div class="text-app dgpu-name"></div><span id="dgpu-model"  class="info-item"></span>
+			</li>
+			<li>
+				<div class="text-app vram"></div><span id="vram-size" class="info-item"></span>
+			</li>
+			<li>
+				<div class="text-app os-name"></div><span id="os-name" class="info-item"></span>
+			</li>
+			<li>
+				<div class="text-app ram"></div><span id="ram-total" class="info-item"></span>
+			</li>
+			<li>
+				<div class="text-app cpu"></div><span id="cpu-model" class="info-item"></span>
+			</li>
+			<li class="primeon">
+				<div class="text-app igpu-name"></div><span id="igpu-model" class="info-item"></span>
+			</li>
+			<li>
+				<div class="text-app mesa-driver"></div><span id="mesa-version" class="info-item"></span>
+			</li>
+			<li id="buttom-click" onclick="info();">
+				<div class="text-app more-info"></div><span class='info-item more-info-desc'></span>
+			</li>
+		</ul>
+	<script type="text/javascript" src="../js/system.js"></script>
+	</div>
+	</div>
+
+</body>
+</html>

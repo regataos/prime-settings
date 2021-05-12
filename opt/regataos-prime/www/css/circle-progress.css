@@ -1,0 +1,128 @@
+.container {
+  position: relative;
+  width: 247px;
+}
+
+.container .card {
+  position: relative;
+  width: 247px;
+  background: #2a2f35;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 350px;
+  border-radius: 4px;
+  text-align: center;
+  overflow: hidden;
+  transition: all ease .3s;
+}
+
+.container .card:hover {
+  background: #333840;
+}
+
+.container .card:hover .percent {
+  background: #333840;
+}
+
+.percent {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: #2a2f35;
+  z-index: 1000;
+  margin-left: auto;
+  margin-right: auto;
+  transition: all ease .3s;
+}
+
+.percent .number {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  transition: all ease .5s;
+}
+
+.data-number {
+  color: #f3f3f3;
+  font-weight: 500;
+  font-size: 40px;
+  font-family: "Oxygen";
+  transition: all ease .5s;
+}
+
+.data-number span {
+  font-size: 24px;
+  font-family: "Oxygen";
+  color: #f3f3f3;
+  transition: all ease .5s;
+}
+
+.text {
+  position: relative;
+  color: #ddd;
+  font-family: "Oxygen";
+  margin-top: 20px;
+  font-weight: 400;
+  font-size: 18px;
+  letter-spacing: 1px;
+  transition: 0.5s;
+}
+
+svg {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  z-index: 1000;
+}
+
+svg circle
+{
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: #4e555f;
+  stroke-width: 10;
+  stroke-linecap: round;
+  transform: translate(5px, 5px);
+  transition: all ease .3s;
+}
+
+svg circle:nth-child(2) {
+  stroke-dasharray: 440;
+  stroke-dashoffset: 440;
+}
+
+.card:nth-child(1) svg circle:nth-child(2) {
+  stroke-dashoffset: calc(440 - (440 * 85) / 100);
+  stroke: #0085e4;
+}
+
+.more-data-child {
+  color: #ddd;
+  float: left;
+  width: 95px;
+}
+
+.mode-data-desc {
+  color: #9fa9b8;
+}
+
+.more-data-child:nth-child(even) {
+  border-left: 1px solid #4e555f;
+}
+
+.more-data-child:nth-child(1) {
+  padding-right: 10px;
+}
+
+.more-data-child:nth-child(2) {
+  padding-left: 10px;
+}

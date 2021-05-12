@@ -1,0 +1,26 @@
+#!/bin/bash
+
+cd /
+
+while :
+do
+
+# Capture Intel GPU info
+ps -C regataosprime > /dev/null;
+if [ $? = 0 ] ; then
+	gpu=$(inxi -G)
+	if [[ $gpu == *"Intel"* ]]; then
+		# Capture the discrete GPU frequency
+		gpu_freq=$(intel_gpu_frequency | grep cur | awk '{print $2}')
+		echo "$gpu_freq" > /tmp/regataos-prime/intel_gpu_freq.log
+	fi
+else
+	if test -e "/tmp/regataos-prime/intel_gpu_freq.log"; then
+		rm -f "/tmp/regataos-prime/intel_gpu_freq.log"
+		rm -f "/tmp/regataos-prime/intel_gpu_top.log"
+		killall intel_gpu_top
+	fi
+fi
+
+   sleep 1
+done

@@ -1,0 +1,9 @@
+[Unit]
+Description=Capture frequency of Intel GPUs when available
+Before=display-manager.service
+
+[Service]
+ExecStart=/opt/regataos-prime/scripts/intel-gpu-frequency
+
+[Install]
+WantedBy=graphical.target

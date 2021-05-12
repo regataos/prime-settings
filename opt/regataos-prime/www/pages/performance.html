@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>PRIME Settings</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+	<link rel="stylesheet" type="text/css" href="../css/style2.css">
+	<link rel="stylesheet" type="text/css" href="../css/circle-progress.css">
+	<link rel="stylesheet" type="text/css" href="../css/style-system/buttom-system.css">
+	<link rel="stylesheet" type="text/css" href="../css/style-system/prime-settings-system-info.css">
+	<script type="text/javascript" src="../js/jquery.min.js"></script>
+	<script type="text/javascript" src="../js/capture-performance.js"></script>
+    <script type="text/javascript" src="../js/translations/language/index-lang.js"></script>
+	<script type="text/javascript" src="../js/hardware-info.js"></script>
+</head>
+<body>
+
+	<div class="div1">
+		<div id="title" class="hdiv1 page-performance-title">Performance</div>
+		<p class="pdiv1 page-performance-description">Check hardware resource consumption information.</p>
+	</div>
+
+	<div class="main-div" id="main-div">
+	<div class="div2 div2-performance" id="div2">
+		<ul class="main-ul">
+			<li class="li-performance">
+				<div class="text-app"></div><span class='info-item'></span>
+				<div class="container">
+				  <div class="card">
+					<div class="box">
+					  <div class="percent">
+						<svg>
+						  <circle cx="70" cy="70" r="70"></circle>
+						  <circle id="gpu-usage" cx="70" cy="70" r="70"></circle>
+						</svg>
+						<div class="number">
+							<h2><span class="data-number" id="gpu-usage-number">85</span><span>%</span></h2>
+						</div>
+					  </div>
+					  <h2 class="text gpu-desc">GPU usage</h2>
+					  <div class="more-data">
+							<div class="more-data-child">
+								<div id="gpu-temp">45°C</div>
+								<div class="mode-data-desc temp-text">Temperature</div>
+							</div>
+							<div class="more-data-child">
+						  		<div id="gpu-freq">59MHz</div>
+								<div class="mode-data-desc freq-text">Frequency</div>
+							</div>
+					  </div>
+					</div>
+				  </div>
+				</div>
+			</li>
+			<li class="li-performance">
+				<div class="text-app"></div><span class='info-item'></span>
+				<div class="container">
+				  <div class="card">
+					<div class="box">
+					  <div class="percent">
+						<svg>
+						  <circle cx="70" cy="70" r="70"></circle>
+						  <circle id="vram-usage" cx="70" cy="70" r="70"></circle>
+						</svg>
+						<div class="number">
+						  <h2><span class="data-number" id="vram-usage-number">85</span><span>%</span></h2>
+						</div>
+					  </div>
+					  <h2 class="text vram-desc">VRAM usage</h2>
+					  <div class="more-data">
+							<div class="more-data-child">
+								<div id="vram-size">1024MB</div>
+								<div class="mode-data-desc mem-sz-text">Memory size</div>
+							</div>
+							<div class="more-data-child">
+						  		<div id="vram-freq">59MHz</div>
+								<div class="mode-data-desc freq-text">Frequency</div>
+							</div>
+					  </div>
+					</div>
+				  </div>
+				</div>
+			</li>
+			<li class="li-performance">
+				<div class="text-app"></div><span class='info-item'></span>
+				<div class="container">
+				  <div class="card">
+					<div class="box">
+					  <div class="percent">
+						<svg>
+						  <circle cx="70" cy="70" r="70"></circle>
+						  <circle id="cpu-usage" cx="70" cy="70" r="70"></circle>
+						</svg>
+						<div class="number">
+						  <h2><span class="data-number" id="cpu-usage-number">85</span><span>%</span></h2>
+						</div>
+					  </div>
+					  <h2 class="text cpu-desc">CPU usage</h2>
+					  <div class="more-data">
+							<div class="more-data-child">
+								<div id="cpu-temp">45°C</div>
+								<div class="mode-data-desc temp-text">Temperature</div>
+							</div>
+							<div class="more-data-child">
+						  		<div id="cpu-freq">59MHz</div>
+								<div class="mode-data-desc freq-text">Frequency</div>
+							</div>
+					  </div>
+					</div>
+				  </div>
+				</div>
+			</li>
+			<li class="li-performance">
+				<div class="text-app"></div><span class='info-item'></span>
+				<div class="container">
+				  <div class="card">
+					<div class="box">
+					  <div class="percent">
+						<svg>
+						  <circle cx="70" cy="70" r="70"></circle>
+						  <circle id="ram-usage" cx="70" cy="70" r="70"></circle>
+						</svg>
+						<div class="number">
+						  <h2><span class="data-number" id="ram-usage-number">85</span><span>%</span></h2>
+						</div>
+					  </div>
+					  <h2 class="text ram-desc">RAM usage</h2>
+					  <div class="more-data">
+							<div class="more-data-child">
+								<div id="ram-use">512MB</div>
+								<div class="mode-data-desc in-use-text">In use</div>
+							</div>
+							<div class="more-data-child">
+						  		<div id="ram-size">2GB</div>
+								<div class="mode-data-desc mem-tt-text">Memory total</div>
+							</div>
+					  </div>
+					</div>
+				  </div>
+				</div>
+			</li>
+		</ul>
+	<script type="text/javascript" src="./../js/system.js"></script>
+	<script type="text/javascript" src="../js/check-system.js"></script>
+	</div>
+	</div>
+
+</body>
+</html>

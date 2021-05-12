@@ -1,0 +1,336 @@
+#!/bin/bash
+
+# Check and create the PRIME Settings configuration directory
+if test -e "/tmp/regataos-prime" ; then
+	chmod 777 "/tmp/regataos-prime/"
+	chmod 777 /tmp/regataos-prime/*
+else
+	mkdir -p "/tmp/regataos-prime/"
+	chmod 777 "/tmp/regataos-prime"
+	chmod 777 /tmp/regataos-prime/*
+fi
+
+if test ! -e "/tmp/regataos-prime/config" ; then
+	user=$(users | awk '{print $1}')
+	ln -sf "/home/$user/.config/regataos-prime" "/tmp/regataos-prime/config"
+	chmod 777 /tmp/regataos-prime/*
+fi
+
+# Find the user's desktop
+user=$(users | awk '{print $1}')
+test -f "${XDG_CONFIG_HOME:-/home/$user/.config}/user-dirs.dirs" && source "${XDG_CONFIG_HOME:-/home/$user/.config}/user-dirs.dirs"
+desktop_dir="${XDG_DESKTOP_DIR:-/home/$user/Desktop}"
+desktop_folder="$(echo $desktop_dir | cut -d/ -f 3-)"
+
+# Directories where possible .desktop files for apps
+apps_dir="/usr/share/applications"
+desktop_dir="/home/$user/$desktop_folder"
+apps_local_dir="/home/$user/.local/share/applications"
+snap_dir="/var/lib/snapd/desktop/applications"
+flatpak_dir="/var/lib/flatpak/exports/share/applications"
+
+# Enable or disable running applications with the dGPU
+function check_app() {
+if [[ $(echo $package_manager) == *"zypper"* ]]; then
+	desktop_file=$(rpm -ql $package_name | grep ".desktop" | head -1 | tail -1 | sed 's/\// /g' | awk '{print $4}');
+
+	# Enable or disable running applications with the dGPU
+	if [[ $(grep -R "$app_name=on" /tmp/regataos-prime/config/run-without-dgpu.conf) == *"$app_name=on"* ]]; then
+		# Run app with the dGPU
+		if [[ $(grep -r "regataos-dgpu" "$apps_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
+			sed -i 's/Exec=/Exec=regataos-dgpu /' "$apps_dir/$desktop_file"
+			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$apps_dir/$desktop_file"
+		fi
+
+		if [[ $(grep -r "regataos-dgpu" "$desktop_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
+			sed -i 's/Exec=/Exec=regataos-dgpu /' "$desktop_dir/$desktop_file"
+			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$desktop_dir/$desktop_file"
+		fi
+
+		if [[ $(grep -r "regataos-dgpu" "$apps_local_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
+			sed -i 's/Exec=/Exec=regataos-dgpu /' "$apps_local_dir/$desktop_file"
+			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$apps_local_dir/$desktop_file"
+		fi
+
+		# Add the app name to the list of apps running with the dGPU and clear empty lines
+		if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) != *"$app_name"* ]]; then
+			echo "$app_name" >> "/tmp/regataos-prime/config/run-with-dgpu.conf"
+			sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
+		fi
+
+		# Remove the app name to the list of apps not running with the dGPU and clear empty lines
+		sed -i "s/$app_name//" "/tmp/regataos-prime/config/run-without-dgpu.conf"
+		sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
+
+	elif [[ $(grep -R 'all-apps' /tmp/regataos-prime/config/regataos-prime.conf | cut -d'=' -f 2-) == *"off"* ]]; then
+		# Run app without the dGPU
+		sed -i 's/Exec=regataos-dgpu /Exec=/' "$apps_dir/$desktop_file" "$desktop_dir/$desktop_file" "$apps_local_dir/$desktop_file"
+
+		# Add the app name to the list of apps not running with the dGPU and clear empty lines
+		if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) != *"$app_name"* ]]; then
+			echo "$app_name" >> "/tmp/regataos-prime/config/run-without-dgpu.conf"
+			sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
+		fi
+
+		# Remove the app name to the list of apps running with the dGPU and clear empty lines
+		sed -i "s/$app_name//" "/tmp/regataos-prime/config/run-with-dgpu.conf"
+		sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
+
+	elif [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) == *"$app_name"* ]]; then
+		# Run app with the dGPU
+		if [[ $(grep -r "regataos-dgpu" "$apps_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
+			sed -i 's/Exec=/Exec=regataos-dgpu /' "$apps_dir/$desktop_file"
+			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$apps_dir/$desktop_file"
+		fi
+
+		if [[ $(grep -r "regataos-dgpu" "$desktop_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
+			sed -i 's/Exec=/Exec=regataos-dgpu /' "$desktop_dir/$desktop_file"
+			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$desktop_dir/$desktop_file"
+		fi
+
+		if [[ $(grep -r "regataos-dgpu" "$apps_local_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
+			sed -i 's/Exec=/Exec=regataos-dgpu /' "$apps_local_dir/$desktop_file"
+			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$apps_local_dir/$desktop_file"
+		fi
+
+		# Add the app name to the list of apps running with the dGPU and clear empty lines
+		if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) != *"$app_name"* ]]; then
+			echo "$app_name" >> "/tmp/regataos-prime/config/run-with-dgpu.conf"
+			sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
+		fi
+
+		# Remove the app name to the list of apps not running with the dGPU and clear empty lines
+		sed -i "s/$app_name//" "/tmp/regataos-prime/config/run-without-dgpu.conf"
+		sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
+
+	elif [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) == *"$app_name"* ]]; then
+		# Run app without the dGPU
+		sed -i 's/Exec=regataos-dgpu /Exec=/' "$apps_dir/$desktop_file" "$desktop_dir/$desktop_file" "$apps_local_dir/$desktop_file"
+
+		# Add the app name to the list of apps not running with the dGPU and clear empty lines
+		if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) != *"$app_name"* ]]; then
+			echo "$app_name" >> "/tmp/regataos-prime/config/run-without-dgpu.conf"
+			sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
+		fi
+
+		# Remove the app name to the list of apps running with the dGPU and clear empty lines
+		sed -i "s/$app_name//" "/tmp/regataos-prime/config/run-with-dgpu.conf"
+		sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
+
+	else
+		# Run app with the dGPU
+		if [[ $(grep -r "regataos-dgpu" "$apps_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
+			sed -i 's/Exec=/Exec=regataos-dgpu /' "$apps_dir/$desktop_file"
+			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$apps_dir/$desktop_file"
+		fi
+
+		if [[ $(grep -r "regataos-dgpu" "$desktop_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
+			sed -i 's/Exec=/Exec=regataos-dgpu /' "$desktop_dir/$desktop_file"
+			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$desktop_dir/$desktop_file"
+		fi
+
+		if [[ $(grep -r "regataos-dgpu" "$apps_local_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
+			sed -i 's/Exec=/Exec=regataos-dgpu /' "$apps_local_dir/$desktop_file"
+			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$apps_local_dir/$desktop_file"
+		fi
+
+		# Add the app name to the list of apps running with the dGPU and clear empty lines
+		if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) != *"$app_name"* ]]; then
+			echo "$app_name" >> "/tmp/regataos-prime/config/run-with-dgpu.conf"
+			sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
+		fi
+
+		# Remove the app name to the list of apps not running with the dGPU and clear empty lines
+		sed -i "s/$app_name//" "/tmp/regataos-prime/config/run-without-dgpu.conf"
+		sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
+	fi
+
+elif [[ $(echo $package_manager) == *"snap"* ]]; then
+	# Enable or disable running applications with the dGPU
+	if [[ $(grep -R "$app_name=on" /tmp/regataos-prime/config/run-without-dgpu.conf) == *"$app_name=on"* ]]; then
+		# Run app with the dGPU
+		if [[ $(grep -r "regataos-dgpu" "$snap_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
+			sed -i 's/Exec=/Exec=regataos-dgpu /' "$snap_dir/$desktop_file"
+			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$snap_dir/$desktop_file"
+		fi
+
+		if [[ $(grep -r "regataos-dgpu" "$desktop_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
+			sed -i 's/Exec=/Exec=regataos-dgpu /' "$desktop_dir/$desktop_file"
+			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$desktop_dir/$desktop_file"
+		fi
+
+		if [[ $(grep -r "regataos-dgpu" "$apps_local_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
+			sed -i 's/Exec=/Exec=regataos-dgpu /' "$apps_local_dir/$desktop_file"
+			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$apps_local_dir/$desktop_file"
+		fi
+
+		# Add the app name to the list of apps running with the dGPU and clear empty lines
+		if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) != *"$app_name"* ]]; then
+			echo "$app_name" >> "/tmp/regataos-prime/config/run-with-dgpu.conf"
+			sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
+		fi
+
+		# Remove the app name to the list of apps not running with the dGPU and clear empty lines
+		sed -i "s/$app_name//" "/tmp/regataos-prime/config/run-without-dgpu.conf"
+		sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
+
+	elif [[ $(grep -R 'all-apps' /tmp/regataos-prime/config/regataos-prime.conf | cut -d'=' -f 2-) == *"off"* ]]; then
+		# Run app without the dGPU
+		sed -i 's/Exec=regataos-dgpu /Exec=/' "$snap_dir/$desktop_file" "$desktop_dir/$desktop_file" "$apps_local_dir/$desktop_file"
+
+		# Add the app name to the list of apps not running with the dGPU and clear empty lines
+		if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) != *"$app_name"* ]]; then
+			echo "$app_name" >> "/tmp/regataos-prime/config/run-without-dgpu.conf"
+			sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
+		fi
+
+		# Remove the app name to the list of apps running with the dGPU and clear empty lines
+		sed -i "s/$app_name//" "/tmp/regataos-prime/config/run-with-dgpu.conf"
+		sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
+
+	elif [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) == *"$app_name"* ]]; then
+		# Run app without the dGPU
+		sed -i 's/Exec=regataos-dgpu /Exec=/' "$snap_dir/$desktop_file" "$desktop_dir/$desktop_file" "$apps_local_dir/$desktop_file"
+
+		# Add the app name to the list of apps not running with the dGPU and clear empty lines
+		if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) != *"$app_name"* ]]; then
+			echo "$app_name" >> "/tmp/regataos-prime/config/run-without-dgpu.conf"
+			sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
+		fi
+
+		# Remove the app name to the list of apps running with the dGPU and clear empty lines
+		sed -i "s/$app_name//" "/tmp/regataos-prime/config/run-with-dgpu.conf"
+		sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
+
+	else
+		# Run app with the dGPU
+		if [[ $(grep -r "regataos-dgpu" "$snap_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
+			sed -i 's/Exec=/Exec=regataos-dgpu /' "$snap_dir/$desktop_file"
+			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$snap_dir/$desktop_file"
+		fi
+
+		if [[ $(grep -r "regataos-dgpu" "$desktop_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
+			sed -i 's/Exec=/Exec=regataos-dgpu /' "$desktop_dir/$desktop_file"
+			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$desktop_dir/$desktop_file"
+		fi
+
+		if [[ $(grep -r "regataos-dgpu" "$apps_local_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
+			sed -i 's/Exec=/Exec=regataos-dgpu /' "$apps_local_dir/$desktop_file"
+			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$apps_local_dir/$desktop_file"
+		fi
+
+		# Add the app name to the list of apps running with the dGPU and clear empty lines
+		if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) != *"$app_name"* ]]; then
+			echo "$app_name" >> "/tmp/regataos-prime/config/run-with-dgpu.conf"
+			sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
+		fi
+
+		# Remove the app name to the list of apps not running with the dGPU and clear empty lines
+		sed -i "s/$app_name//" "/tmp/regataos-prime/config/run-without-dgpu.conf"
+		sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
+	fi
+
+else
+	echo "Nothing to do..."
+fi
+}
+
+for i in /opt/regataos-store/apps-list/*.json; do
+app_name="$(grep -R '"nickname":' $i | awk '{print $2}' | sed 's/"\|,//g')";
+package_name="$(grep -R '"package":' $i | awk '{print $2}' | sed 's/"\|,//g')";
+package_manager="$(grep -R '"package_manager":' $i | awk '{print $2}' | sed 's/"\|,//g')";
+enable_dgpu="$(grep -R '"dgpu":' $i | awk '{print $2}' | sed 's/"\|,//g')";
+app_executable_snap="$(grep -R '"executable":' $i | awk '{print $4}' | sed 's/"\|,\|snap run //g')";
+
+installed_apps=$(cat /opt/regataos-store/installed-apps/installed-apps.txt)
+if [[ $installed_apps == *"$app_name"* ]]; then
+if [[ $enable_dgpu != *"none"* ]]; then
+	if [[ $(echo $package_manager) == *"zypper"* ]]; then
+
+		if test ! -e "/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt"; then
+    		desktop_file=$(rpm -ql $package_name | grep ".desktop" | head -1 | tail -1);
+
+        	if [ ! -z $desktop_file ];then
+            	icon_name=$(grep -r "Icon=" "$desktop_file" | cut -d"=" -f 2-);
+
+            	search_icon_directory_svg=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | egrep "svg" | sed '/symbolic/d' | head -1 | tail -1);
+            	search_icon_directory_png1=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | head -1 | tail -1);
+            	search_icon_directory_png2=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | tail -1 | head -1);
+
+            	if [ -z $search_icon_directory_svg ];then
+            		size_icon_png1=$(identify -verbose $search_icon_directory_png1 | grep Geometry | awk '{print $2}' | cut -d"x" -f -1)
+            		size_icon_png2=$(identify -verbose $search_icon_directory_png2 | grep Geometry | awk '{print $2}' | cut -d"x" -f -1)
+
+                	if [ $(echo $size_icon_png1) -gt $(echo $size_icon_png2) ]; then
+                    	search_icon_directory=$(echo $search_icon_directory_png1)
+
+                	elif [ $(echo $size_icon_png2) -gt $(echo $size_icon_png1) ]; then
+                    	search_icon_directory=$(echo $search_icon_directory_png2)
+
+                	elif [ $(echo $size_icon_png1) -ge $(echo $size_icon_png2) ]; then
+                    	search_icon_directory=$(echo $search_icon_directory_png2)
+
+                	elif [ $(echo $size_icon_png2) -ge $(echo $size_icon_png1) ]; then
+                    	search_icon_directory=$(echo $search_icon_directory_png2)
+
+                	else
+                    	search_icon_directory="/usr/share/icons/breeze-dark/apps/48/ktip.svg"
+                	fi
+
+            	else
+                	search_icon_directory=$(echo $search_icon_directory_svg)
+            	fi
+
+            	echo "file://$search_icon_directory" > "/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt";
+        	fi
+		fi
+
+	elif [[ $(echo $package_manager) == *"snap"* ]]; then
+		# Locate the Snap app .desktop file
+		search_desktop_snap_file=$(grep -r $(echo "$app_executable_snap" | sed 's/snap run //') "/var/lib/snapd/desktop/applications/" | sed '/mimeinfo/d' | grep .desktop | head -1 | tail -1 | cut -d":" -f -1 | sed '/^$/d')
+
+		# Get the name of the .desktop file from the Snap app
+		desktop_file=$(echo "$search_desktop_snap_file" | sed 's/\// /g' | awk '{print $6}')
+
+		if test ! -e "/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt"; then
+			# Find the directory for the Snap app icon
+			search_desktop_snap_icon=$(grep -r "Icon=" $(echo $search_desktop_snap_file) | cut -d"=" -f 2-)
+			echo "file://$search_desktop_snap_icon" > "/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt";
+		fi
+	else
+		echo "Nothing to do..."
+	fi
+
+	if [[ $enable_dgpu == *"deactivate"* ]]; then
+		if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) == *"$app_name"* ]]; then
+			check_app
+
+		else
+			if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) != *"$app_name"* ]]; then
+				echo "$app_name" >> "/tmp/regataos-prime/config/run-without-dgpu.conf"
+				sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
+			fi
+
+			check_app
+		fi
+
+	else
+		if  [[ $enable_dgpu == *"activate "* ]]; then
+			if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) == *"$app_name"* ]]; then
+				check_app
+
+			else
+				if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) != *"$app_name"* ]]; then
+					echo "$app_name" >> "/tmp/regataos-prime/config/run-with-dgpu.conf"
+					sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
+				fi
+
+				check_app
+			fi
+		fi
+	fi
+fi
+fi
+done
+
+exit;

@@ -1,0 +1,39 @@
+/* CPU info css */
+.cpu-info:before {
+	content: "cpuhere";
+}
+
+/* RAM memory info css */
+.ram-info:before {
+	content: "ramhere";
+}
+
+/* Video Memory info css */
+.vram-info:before {
+	content: "memoryvideo";
+}
+
+/* dGPU info css */
+.dgpu-info:before {
+	content: "dgpuhere";
+}
+
+/* iGPU info css */
+.igpu-info:before {
+	content: "igpuhere";
+}
+
+/* Operational System info css */
+.os-info:before {
+	content: "oshere";
+}
+
+/* NVIDIA driver info css */
+.nvidia-driver-info:before {
+	content: "nvdriverversion";
+}
+
+/* Mesa info css */
+.mesa-info:before {
+	content: "mesaversion";
+}

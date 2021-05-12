@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Graphical settings</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+	<link rel="stylesheet" type="text/css" href="css/roboto-style.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/responsive.css">
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/translations/language/index-lang.js"></script>
+</head>
+<body>
+
+	<div class="sidebar">
+	<div class="hide-sidebar" onclick="hide_sidebar();">
+		<img class="icones-menu" title="Apenas ícones" style="height: 16px;" src="images/img-sidebar/hide-sidebar.png"/>
+	</div>
+	<div class="show-sidebar" onclick="show_sidebar();">
+		<img class="icones-menu" title="Icones e textos" style="height: 16px;" src="images/img-sidebar/hide-sidebar.png"/>
+	</div>
+		<ul class="ul-sidebar">
+            <li class="li-sidebar applications" onclick="go_applications();">
+                <a class="link-items" onclick="go_applications();">
+                    <img class="icones-menu" title="Applications" style="height: 30px;" src="images/img-sidebar/apps2.png"/>
+                    <p style="margin-left: 20px;"></p>
+                </a>
+            </li>
+            <li class="li-sidebar settings" onclick="go_settings();">
+                <a class="link-items" onclick="go_settings();">
+                    <img class="icones-menu" title="Settings" style="height: 30px;" src="images/img-sidebar/tools.png"/>
+                    <p style="margin-left: 22px;"></p>
+                </a>
+            </li>
+            <li class="li-sidebar system-info" onclick="go_system_info();">
+                <a class="link-items" onclick="go_system_info();">
+                    <img class="icones-menu" title="Performance" style="height: 30px;" src="images/img-sidebar/performance.png"/>
+                    <p style="margin-left: 20px;"></p>
+                </a>
+            </li>
+            <li class="li-sidebar system" onclick="go_system();">
+                <a class="link-items" onclick="go_system();">
+                    <img class="icones-menu" title="System" style="height: 30px;" src="images/img-sidebar/info.png"/>
+                    <p style="margin-left: 20px;"></p>
+                </a>
+            </li>
+        </ul>
+	</div>
+
+	<div class="div-iframe">
+        <iframe src="" allowfullscreen frameborder="0" class="iframe" id="main-iframe"></iframe>
+    </div>
+
+</body>
+</html>

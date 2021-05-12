@@ -1,0 +1,120 @@
+/* reverse prime bottom css */
+/* reverse-prime */
+/* on */
+.switch--shadow-reverse-prime + label {
+	top: -18px;
+	right: -15px;
+	padding: 2px;
+	width: 31px;
+	height: 10px;
+	background-color: #2e3539;
+	border-radius: 60px;
+}
+.switch--shadow-reverse-prime + label:before,
+.switch--shadow-reverse-prime + label:after {
+	display: block;
+	position: absolute;
+	top: 1px;
+	left: 1px;
+	bottom: 1px;
+	content: "";
+}
+.switch--shadow-reverse-prime + label:before {
+	right: 1px;
+	background-color: #0085e4;
+	border-radius: 60px;
+	transition: all 0.3s;
+}
+.switch--shadow-reverse-prime + label:after {
+	top: -1px;
+	left: 20px;
+	width: 16px;
+	height: 16px;
+	background-color: #fff;
+	border-radius: 100%;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+	transition: all 0.3s;
+}
+.switch--shadow-reverse-prime:checked + label:before {
+	background-color: #ddd;
+}
+.switch--shadow-reverse-prime:checked + label:after {
+	transform: translateX(-20px);
+}
+
+/* off */
+.switch--shadow2-reverse-prime + label {
+	top: -18px;
+	right: -15px;
+	padding: 2px;
+	width: 31px;
+	height: 10px;
+	background-color: #2e3539;
+	border-radius: 60px;
+}
+.switch--shadow2-reverse-prime + label:before,
+.switch--shadow2-reverse-prime + label:after {
+	display: block;
+	position: absolute;
+	top: 1px;
+	left: 1px;
+	bottom: 1px;
+	content: "";
+}
+.switch--shadow2-reverse-prime + label:before {
+	right: 1px;
+	background-color: #ddd;
+	border-radius: 60px;
+	transition: all 0.3s;
+}
+.switch--shadow2-reverse-prime + label:after {
+	top: -1px;
+	left: 0px;
+	width: 16px;
+	height: 16px;
+	background-color: #fff;
+	border-radius: 100%;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+	transition: all 0.3s;
+}
+.switch--shadow2-reverse-prime:checked + label:before {
+	background-color: #0085e4;
+}
+.switch--shadow2-reverse-prime:checked + label:after {
+	transform: translateX(20px);
+}
+
+/* CSS nvidia-driver */
+.use-nvidia-version {
+	position: absolute;
+	top: 40px;
+	left: 20px;
+	font-size: 13px;
+	font-weight: 600;
+	color: #adabab;
+	max-width: 34ch;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* responsive CSS */
+@media screen and (max-width: 1280px) {
+#selectnav1 {
+	right: 15px;
+}
+#selectnav2 {
+	right: 15px;
+}
+
+/* CSS kinfocenter */
+li#kinfocenter {
+	width: 260px;
+}
+
+/* CSS teste-dgpu */
+li#teste-dgpu {
+	width: 260px;
+}
+
+}

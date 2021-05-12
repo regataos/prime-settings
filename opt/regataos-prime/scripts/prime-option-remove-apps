@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Remove external application
+appname="$1"
+desktop_file="$2"
+
+# Remove external app from the list of not run with the dGPU
+sed -i "s/$appname//" "/tmp/regataos-prime/config/run-without-dgpu.conf"
+sed -i "s/$appname=on//" "/tmp/regataos-prime/config/run-without-dgpu.conf"
+
+# Clear empty lines
+sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
+sed -i '/^0/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
+
+# Remove the external app icon and JSON file from the cache
+rm -f "/tmp/regataos-prime/config/external-app/$appname.json"
+
+#Find the user's desktop
+user=$(users | awk '{print $1}')
+test -f "${XDG_CONFIG_HOME:-/home/$user/.config}/user-dirs.dirs" && source "${XDG_CONFIG_HOME:-/home/$user/.config}/user-dirs.dirs"
+desktop_dir="${XDG_DESKTOP_DIR:-/home/$user/Desktop}"
+desktop_folder="$(echo $desktop_dir | cut -d/ -f 3-)"
+
+#Directories where possible .desktop files for apps
+apps_dir="/usr/share/applications"
+desktop_dir="/home/$user/$desktop_folder"
+apps_local_dir="/home/$user/.local/share/applications"
+snap_dir="/var/lib/snapd/desktop/applications"
+flatpak_dir="/var/lib/flatpak/exports/share/applications"
+
+#Run app without the dGPU
+sed -i 's/Exec=regataos-dgpu /Exec=/' "$apps_dir/$desktop_file" "$desktop_dir/$desktop_file" "$apps_local_dir/$desktop_file" "$snap_dir/$desktop_file" "$flatpak_dir/$desktop_file"
+sed -i 's/regataos-dgpu //g' "$apps_dir/$desktop_file" "$desktop_dir/$desktop_file" "$apps_local_dir/$desktop_file" "$snap_dir/$desktop_file" "$flatpak_dir/$desktop_file"

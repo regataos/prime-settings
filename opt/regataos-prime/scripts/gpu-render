@@ -1,0 +1,73 @@
+#!/bin/bash
+
+# Enable/Disable FreeSync
+function tearfree_on() {
+	sed -i 's/Option "TearFree" "false"/Option "TearFree" "true"/' "/usr/share/regataos/gpu/20-amdgpu.conf"
+	sed -i 's/Option "TearFree" "false"/Option "TearFree" "true"/' "/usr/share/X11/xorg.conf.d/20-amdgpu.conf"
+
+	sed -i 's/Option "TearFree" "false"/Option "TearFree" "true"/' "/usr/share/regataos/gpu/20-intel.conf"
+	sed -i 's/Option "TearFree" "false"/Option "TearFree" "true"/' "/usr/share/X11/xorg.conf.d/20-intel.conf"
+
+	sed -i 's/Option "TearFree" "off"/Option "TearFree" "on"/' "/usr/share/regataos/gpu/20-radeon.conf"
+	sed -i 's/Option "TearFree" "off"/Option "TearFree" "on"/' "/usr/share/X11/xorg.conf.d/20-radeon.conf"
+
+	sed -i 's/ForceFullCompositionPipeline=Off/ForceFullCompositionPipeline=On/' "/usr/share/regataos/gpu/20-nvidia.conf"
+	sed -i 's/Option "TripleBuffer" "off"/Option "TripleBuffer" "on"/' "/usr/share/regataos/gpu/20-nvidia.conf"
+	sed -i 's/ForceFullCompositionPipeline=Off/ForceFullCompositionPipeline=On/' "/usr/share/X11/xorg.conf.d/20-nvidia.conf"
+	sed -i 's/Option "TripleBuffer" "off"/Option "TripleBuffer" "on"/' "/usr/share/X11/xorg.conf.d/20-nvidia.conf"
+}
+
+function tearfree_off() {
+	sed -i 's/Option "TearFree" "true"/Option "TearFree" "false"/' "/usr/share/regataos/gpu/20-amdgpu.conf"
+	sed -i 's/Option "TearFree" "true"/Option "TearFree" "false"/' "/usr/share/X11/xorg.conf.d/20-amdgpu.conf"
+
+	sed -i 's/Option "TearFree" "true"/Option "TearFree" "false"/' "/usr/share/regataos/gpu/20-intel.conf"
+	sed -i 's/Option "TearFree" "true"/Option "TearFree" "false"/' "/usr/share/X11/xorg.conf.d/20-intel.conf"
+
+	sed -i 's/Option "TearFree" "on"/Option "TearFree" "off"/' "/usr/share/regataos/gpu/20-radeon.conf"
+	sed -i 's/Option "TearFree" "on"/Option "TearFree" "off"/' "/usr/share/X11/xorg.conf.d/20-radeon.conf"
+
+	sed -i 's/ForceFullCompositionPipeline=On/ForceFullCompositionPipeline=Off/' "/usr/share/regataos/gpu/20-nvidia.conf"
+	sed -i 's/Option "TripleBuffer" "on"/Option "TripleBuffer" "off"/' "/usr/share/regataos/gpu/20-nvidia.conf"
+	sed -i 's/ForceFullCompositionPipeline=On/ForceFullCompositionPipeline=Off/' "/usr/share/X11/xorg.conf.d/20-nvidia.conf"
+	sed -i 's/Option "TripleBuffer" "on"/Option "TripleBuffer" "off"/' "/usr/share/X11/xorg.conf.d/20-nvidia.conf"
+}
+
+# Choose which GPU to use for rendering
+#Use integrated graphics (iGPU)
+function use_igpu() {
+	cp -f /opt/regataos-prime/all-files/10-intel-nvidia-drm-outputclass.conf /usr/share/X11/xorg.conf.d/10-intel-nvidia-drm-outputclass.conf
+	cp -f /opt/regataos-prime/all-files/10-amdgpu-nvidia-drm-outputclass.conf /usr/share/X11/xorg.conf.d/10-amdgpu-nvidia-drm-outputclass.conf
+	cp -f /opt/regataos-prime/all-files/10-intel-nvidia-drm-outputclass.conf /etc/X11/xorg.conf.d/10-intel-nvidia-drm-outputclass.conf
+	cp -f /opt/regataos-prime/all-files/10-amdgpu-nvidia-drm-outputclass.conf /etc/X11/xorg.conf.d/10-amdgpu-nvidia-drm-outputclass.conf
+	rm -f "/etc/X11/xorg.conf.d/10-nvidia-primary.conf"
+	rm -f "/usr/share/X11/xorg.conf.d/10-nvidia-primary.conf"
+
+	sed -i 's/\(render=dgpu\)/render=igpu/' "/tmp/regataos-prime/config/regataos-prime.conf"
+}
+
+#Use the dedicated GPU (dGPU)
+function use_dgpu() {
+	rm -f "/usr/share/X11/xorg.conf.d/10-intel-nvidia-drm-outputclass.conf"
+	rm -f "/usr/share/X11/xorg.conf.d/10-amdgpu-nvidia-drm-outputclass.conf"
+	rm -f "/etc/X11/xorg.conf.d/10-intel-nvidia-drm-outputclass.conf"
+	rm -f "/etc/X11/xorg.conf.d/10-amdgpu-nvidia-drm-outputclass.conf"
+	cp -f /opt/regataos-prime/all-files/10-nvidia-primary.conf /etc/X11/xorg.conf.d/10-nvidia-primary.conf
+	cp -f /opt/regataos-prime/all-files/10-nvidia-primary.conf /usr/share/X11/xorg.conf.d/10-nvidia-primary.conf
+
+	sed -i 's/\(render=igpu\)/render=dgpu/' "/tmp/regataos-prime/config/regataos-prime.conf"
+}
+
+case $1 in
+   "-tearfree-on") tearfree_on
+        ;;
+   "-tearfree-off") tearfree_off
+        ;;
+   "-igpu") use_igpu
+        ;;
+   "-dgpu") use_dgpu
+        ;;
+   *) echo "Invalid option!"
+    	exit 1
+    	;;
+esac

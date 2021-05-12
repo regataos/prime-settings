@@ -1,0 +1,59 @@
+#!/bin/bash
+
+# Save the current state in which the user left the Regata OS Help application
+
+# Check and create the Regata OS Help configuration directory
+if test ! -e "$HOME/.config/regataos-prime/config-app" ; then
+	mkdir -p "$HOME/.config/regataos-prime/config-app/"
+fi
+
+if test ! -e "/tmp/regataos-prime/" ; then
+	mkdir -p "/tmp/regataos-prime/"
+
+	if test ! -e "/tmp/regataos-prime/config-app" ; then
+		ln -s "$HOME/.config/regataos-prime/config-app" "/tmp/regataos-prime/"
+	fi
+else
+	if test ! -e "/tmp/regataos-prime/config-app" ; then
+		ln -s "$HOME/.config/regataos-prime/config-app" "/tmp/regataos-prime/"
+	fi
+fi
+
+#Save the status of the application sidebar
+function hide_sidebar() {
+	if test ! -e "$HOME/.config/regataos-prime/config-app/config-app.conf" ; then
+		echo "hide_sidebar=1" > "$HOME/.config/regataos-prime/config-app/config-app.conf"
+	else
+		if [[ $(grep -r hide_sidebar "$HOME/.config/regataos-prime/config-app/config-app.conf") == *"hide_sidebar=0"* ]]; then
+			sed -i 's/\(hide_sidebar=0\)/hide_sidebar=1/' "$HOME/.config/regataos-prime/config-app/config-app.conf"
+		elif [[ $(grep -r hide_sidebar "$HOME/.config/regataos-prime/config-app/config-app.conf") == *"hide_sidebar=1"* ]]; then
+			echo "Nothing to do..."
+		else
+			echo "hide_sidebar=1" >> "$HOME/.config/regataos-prime/config-app/config-app.conf"
+		fi
+	fi
+}
+
+function show_sidebar() {
+	if test ! -e "$HOME/.config/regataos-prime/config-app/config-app.conf" ; then
+		echo "hide_sidebar=0" > "$HOME/.config/regataos-prime/config-app/config-app.conf"
+	else
+		if [[ $(grep -r hide_sidebar "$HOME/.config/regataos-prime/config-app/config-app.conf") == *"hide_sidebar=1"* ]]; then
+			sed -i 's/\(hide_sidebar=1\)/hide_sidebar=0/' "$HOME/.config/regataos-prime/config-app/config-app.conf"
+		elif [[ $(grep -r hide_sidebar "$HOME/.config/regataos-prime/config-app/config-app.conf") == *"hide_sidebar=0"* ]]; then
+			echo "Nothing to do..."
+		else
+			echo "hide_sidebar=0" >> "$HOME/.config/regataos-prime/config-app/config-app.conf"
+		fi
+	fi
+}
+
+case $1 in
+   "-hide-sidebar") hide_sidebar
+         ;;
+   "-show-sidebar") show_sidebar
+         ;;
+   *) echo "Invalid option!"
+      exit 1
+      ;;
+esac

@@ -1,0 +1,15 @@
+{
+  "name": "Graphical settings",
+  "description": "Graphical settings for Regata OS",
+  "version": "0.1.0",
+  "main": "www/index.html",
+  "inject_js_start": "www/js/jquery.min.js",
+  "inject_js_end": "",
+  "window": {
+    "toolbar": false,
+    "position": "center",
+    "width": 1366,
+    "height": 950,
+    "icon": "www/images/icon.png"
+  }
+}

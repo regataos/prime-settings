@@ -1,0 +1,11 @@
+@media screen and (max-width: 1300px) {
+    .ul-blocks {
+        display: block;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .div2 {
+        width: 90%;
+    }
+}
