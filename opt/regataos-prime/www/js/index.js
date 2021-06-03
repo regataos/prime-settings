@@ -42,7 +42,7 @@ function hide_sidebar() {
     $(".hide-sidebar").css("display", "none");
     $(".show-sidebar").css("display", "flex");
     $(".iframe").css("width", "calc(100% - 68px)");
-    $(".div-iframe").css("margin-left", "68px");
+    $(".div-iframe").css("margin-left", "56px");
 
     hide_sidebar_shell();
 }
@@ -71,7 +71,7 @@ function hide_sidebar2() {
     $(".hide-sidebar").css("display", "none");
     $(".show-sidebar").css("display", "flex");
     $(".iframe").css("width", "calc(100% - 68px)");
-    $(".div-iframe").css("margin-left", "68px");
+    $(".div-iframe").css("margin-left", "56px");
 
     hide_sidebar_shell();
 }

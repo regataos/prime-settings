@@ -3,7 +3,7 @@
 %define service_name4 intel-gpu-usage
 
 Name: regataos-prime
-Version: 12.0
+Version: 12.1
 Release: 0
 Url: https://github.com/LinuxbuzzSoftware/prime-settings
 Summary: PRIME for Regata OS.

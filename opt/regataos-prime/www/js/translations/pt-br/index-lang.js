@@ -62,7 +62,7 @@ $(document).ready(function() {
     $(".display-settings-info").text("Gerencie e configure monitores e telas");
     $(".nvidia-settings").text("Configurações do NVIDIA Driver");
     $(".nvidia-settings-info").text("Escolha a melhor configuração para a sua GPU");
-    $(".run-tests").text("Executar testes com a GPU dedicada");
+    $(".run-tests").text("Testar a GPU dedicada");
     $(".run-tests-info").text("Rode simples teste com OpenGL ou Vulkan");
 
     //Popup

@@ -506,12 +506,12 @@ p {
     float: left;
     width: 100%;
     height: 100%;
-    background-color: rgba(29, 35, 41, 0.63);
+    background-color: rgba(29, 35, 41, 0.77);
     position: fixed;
     top: 0px;
 	opacity: 1;
 	animation-name: example;
-	animation-duration: .5s;
+	animation-duration: .2s;
     z-index: 30000;
 }
 
