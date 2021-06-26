@@ -1,7 +1,3 @@
-%define service_name detect-hybrid-graphics
-%define service_name3 intel-gpu-frequency
-%define service_name4 intel-gpu-usage
-
 Name: regataos-prime
 Version: 12.3
 Release: 0
@@ -73,23 +69,23 @@ if test ! -e /usr/bin/regataosprime ; then
 fi
 
 # Start systemd service
-%service_add_post %{service_name}.service
-systemctl enable  %{service_name}.service || true
-systemctl stop    %{service_name}.service || true
-systemctl start   %{service_name}.service || true
-systemctl restart %{service_name}.service || true
+%service_add_post detect-hybrid-graphics.service
+systemctl enable  detect-hybrid-graphics.service || true
+systemctl stop    detect-hybrid-graphics.service || true
+systemctl start   detect-hybrid-graphics.service || true
+systemctl restart detect-hybrid-graphics.service || true
 
-%service_add_post %{service_name3}.service
-systemctl enable  %{service_name3}.service || true
-systemctl stop    %{service_name3}.service || true
-systemctl start   %{service_name3}.service || true
-systemctl restart %{service_name3}.service || true
+%service_add_post set-configs-on-boot.service
+systemctl enable  set-configs-on-boot.service || true
+systemctl stop    set-configs-on-boot.service || true
+systemctl start   set-configs-on-boot.service || true
+systemctl restart set-configs-on-boot.service || true
 
-%service_add_post %{service_name4}.service
-systemctl enable  %{service_name4}.service || true
-systemctl stop    %{service_name4}.service || true
-systemctl start   %{service_name4}.service || true
-systemctl restart %{service_name4}.service || true
+# Disable old systemd services
+systemctl stop    intel-gpu-frequency.service || true
+systemctl disable intel-gpu-frequency.service || true
+systemctl stop    intel-gpu-usage.service || true
+systemctl disable intel-gpu-usage.service || true
 
 if test -e /tmp/regataos-prime/use-hybrid-graphics.txt ; then
 	# Open apps with hybrid graphics manually
