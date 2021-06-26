@@ -80,6 +80,13 @@ $(document).ready(function() {
     $(".tearfree-on").text("Ativado");
     $(".tearfree-off").text("Desativado");
 
+    //CPU governor
+    $(".cpu-governor-text").text("CPU Power");
+    $(".governor-powersave").text("Equilibrado");
+    $(".governor-performance").text("Desempenho");
+    $(".cpu-powersave-desc").text("Equilibrado");
+    $(".cpu-performance-desc").text("Desempenho");
+
     // Performance
     //Session title performance
     $(".page-performance-title").text("Desempenho");

@@ -120,12 +120,31 @@
 	color: #adabab;
 }
 
+/* select CPU governor */
+#cpugovernor1 {
+	display: none;
+	position: absolute;
+	margin-top: 10px;
+	right: 20px;
+	top: 6px;
+	padding-left: 2px;
+}
+
+#cpugovernor2 {
+	display: none;
+	position: absolute;
+	margin-top: 10px;
+	right: 20px;
+	top: 6px;
+	padding-left: 2px;
+}
+
 /* select GPU */
 #selectnav1 {
 	display: none;
 	position: absolute;
 	margin-top: 10px;
-	right: 30px;
+	right: 20px;
 	top: 6px;
 	padding-left: 2px;
 }
@@ -134,7 +153,7 @@
 	display: none;
 	position: absolute;
 	margin-top: 10px;
-	right: 30px;
+	right: 20px;
 	top: 6px;
 	padding-left: 2px;
 }
@@ -146,6 +165,16 @@ select.selectnav {
 	font-family: Roboto,sans-serif;
 	cursor: pointer;
 	width: 95px;
+	height: 30px;
+}
+
+select.selectnav-cpu {
+	border-radius: 4px;
+	font-size: 15px;
+	font-weight: 400;
+	font-family: Roboto,sans-serif;
+	cursor: pointer;
+	width: 120px;
 	height: 30px;
 }
 
@@ -336,6 +365,13 @@ li.button-vk:active {
 
 /* responsive CSS */
 @media screen and (max-width: 1280px) {
+#cpugovernor1 {
+	right: 15px;
+}
+#cpugovernor2 {
+	right: 15px;
+}
+
 #selectnav1 {
 	right: 15px;
 }

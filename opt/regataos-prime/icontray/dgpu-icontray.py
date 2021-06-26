@@ -1,21 +1,20 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import os
 import sys
-import subprocess
 from PyQt5.QtWidgets import QApplication, QSystemTrayIcon, QMenu
 from PyQt5.QtGui import QIcon
 
 app = QApplication(sys.argv)
 
 # System tray icon information
-icon = subprocess.Popen("echo $product", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0]
-icon = str(icon.rstrip("\n") + ".png")
+icon = os.popen('echo $product')
+icon = icon.read().rstrip('\n')
 trayIcon = QSystemTrayIcon(QIcon(icon), parent=app)
 
 # System tray title information
-title = subprocess.Popen("./select-lang.sh", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0]
-title = str(title.rstrip("\n"))
+title = os.popen('./select-lang.sh')
+title = title.read().rstrip('\n')
 trayIcon.setToolTip(title)
 trayIcon.show()
 

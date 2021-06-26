@@ -27,7 +27,6 @@ function all_apps_buttom() {
 		}
 	});	
 }
-
 all_apps_buttom();
 
 // Check support for FreeSync and make sure it is enabled
@@ -116,7 +115,6 @@ function option_choose_gpu() {
 		}
 	});
 }
-
 option_choose_gpu();
 
 //Select performance or energy savings for the description
@@ -183,6 +181,46 @@ function check_tearfree() {
 });
 }
 check_tearfree();
+
+// Check cpu governor configuration
+function check_cpu_governor() {
+	const fs = require('fs');
+
+	fs.access('/etc/regataos-prime/cpu-governor.txt', (err) => {
+	if (!err) {
+		fs.readFile('/etc/regataos-prime/cpu-governor.txt', (err, data) => {
+		if (err) throw err;
+			var check_configs = data
+
+			if ((check_configs.indexOf("performance") > -1) == "1") {
+				$("select#cpugovernor1").css("display", "none")
+				$("select#cpugovernor2").css("display", "block")
+				$(".cpu-powersave-desc").css("display", "none")
+				$(".cpu-performance-desc").css("display", "block")
+
+			} else if ((check_configs.indexOf("powersave") > -1) == "1") {
+				$("select#cpugovernor1").css("display", "block")
+				$("select#cpugovernor2").css("display", "none")
+				$(".cpu-powersave-desc").css("display", "block")
+				$(".cpu-performance-desc").css("display", "none")
+
+			} else {
+				$("select#cpugovernor1").css("display", "block")
+				$("select#cpugovernor2").css("display", "none")
+				$(".cpu-powersave-desc").css("display", "block")
+				$(".cpu-performance-desc").css("display", "none")
+			}
+		});
+
+	} else {
+		$("select#cpugovernor1").css("display", "block")
+		$("select#cpugovernor2").css("display", "none")
+		$(".cpu-powersave-desc").css("display", "block")
+		$(".cpu-performance-desc").css("display", "none")
+	}
+	});
+}
+check_cpu_governor();
 
 setInterval(function() {
 	option_choose_gpu_desc();

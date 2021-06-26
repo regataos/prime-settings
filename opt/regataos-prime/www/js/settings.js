@@ -164,3 +164,73 @@ function remove_external_app() {
 		check_external_apps_status();
 	}, 500);
 }
+
+// Set cpu governor configuration
+function choose_cpugovernor1() {
+	const exec = require('child_process').exec;
+
+	var select = document.getElementById('cpugovernor1');
+	var value = select.options[select.selectedIndex].value;
+
+	var command = "sudo /opt/regataos-prime/scripts/cpu-configs -cpu-" + value;
+	console.log(command);
+	exec(command,function(error,call,errlog){
+	});
+
+	//Notify user on desktop that restart is required
+	var notify_user = value.indexOf("powersave") > -1;
+	if (notify_user == '1') {
+		var command = "/opt/regataos-prime/scripts/notify -cpu-powersave";
+		console.log(command);
+		exec(command,function(error,call,errlog){
+		});
+
+		$(".cpu-powersave-desc").css("display", "block")
+		$(".cpu-performance-desc").css("display", "none")
+	}
+
+	var notify_user = value.indexOf("performance") > -1;
+	if (notify_user == '1') {
+		var command = "/opt/regataos-prime/scripts/notify -cpu-performance";
+		console.log(command);
+		exec(command,function(error,call,errlog){
+		});
+
+		$(".cpu-powersave-desc").css("display", "none")
+		$(".cpu-performance-desc").css("display", "block")
+	}
+}
+
+function choose_cpugovernor2() {
+	var select = document.getElementById('cpugovernor2');
+	var value = select.options[select.selectedIndex].value;
+
+	const exec = require('child_process').exec;
+	var command = "sudo /opt/regataos-prime/scripts/cpu-configs -cpu-" + value;
+	console.log(command);
+	exec(command,function(error,call,errlog){
+	});
+
+	//Notify user on desktop that restart is required
+	var notify_user = value.indexOf("powersave") > -1;
+	if (notify_user == '1') {
+		var command = "/opt/regataos-prime/scripts/notify -cpu-powersave";
+		console.log(command);
+		exec(command,function(error,call,errlog){
+		});
+
+		$(".cpu-powersave-desc").css("display", "block")
+		$(".cpu-performance-desc").css("display", "none")
+	}
+
+	var notify_user = value.indexOf("performance") > -1;
+	if (notify_user == '1') {
+		var command = "/opt/regataos-prime/scripts/notify -cpu-performance";
+		console.log(command);
+		exec(command,function(error,call,errlog){
+		});
+
+		$(".cpu-powersave-desc").css("display", "none")
+		$(".cpu-performance-desc").css("display", "block")
+	}
+}

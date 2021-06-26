@@ -36,9 +36,6 @@
 	<div class="main-div" id="main-div">
 	<div class="div2" id="div2">
 		<ul class="main-ul">
-			<li id="selecte-gpu">
-				<div class="text-app select-gpu-text"></div><select class="selectnav" id="selectnav1" onchange="choose_gpu1()"><option class="integrated" value="igpu"></option><option class="dedicated" value="dgpu"></option></select><select class="selectnav" id="selectnav2" onchange="choose_gpu2();"><option class="dedicated" value="dgpu"></option><option class="integrated" value="igpu"></option></select><span class='render-igpu-desc'></span><span class='render-dgpu-desc'></span>
-			</li>
 			<li id="buttom-click" onclick="display();">
 				<div class="text-app display-settings"></div><span class='info-item display-settings-info'></span>
 			</li>
@@ -67,6 +64,32 @@
 				</div>
 				<span class="enabled tearfree-on"></span>
 				<span class="disabled tearfree-off"></span>
+			</li>
+			<li id="selecte-gpu">
+				<div class="text-app select-gpu-text"></div>
+				<select class="selectnav" id="selectnav1" onchange="choose_gpu1()">
+					<option class="integrated" value="igpu"></option>
+					<option class="dedicated" value="dgpu"></option>
+				</select>
+				<select class="selectnav" id="selectnav2" onchange="choose_gpu2();">
+					<option class="dedicated" value="dgpu"></option>
+					<option class="integrated" value="igpu"></option>
+				</select>
+				<span class='render-igpu-desc'></span>
+				<span class='render-dgpu-desc'></span>
+			</li>
+			<li id="cpu-governor">
+				<div class="text-app cpu-governor-text"></div>
+				<select class="selectnav-cpu" id="cpugovernor1" onchange="choose_cpugovernor1()">
+					<option class="governor-powersave" value="powersave"></option>
+					<option class="governor-performance" value="performance"></option>
+				</select>
+				<select class="selectnav-cpu" id="cpugovernor2" onchange="choose_cpugovernor2();">
+					<option class="governor-performance" value="performance"></option>
+					<option class="governor-powersave" value="powersave"></option>
+				</select>
+				<span class='info-item cpu-powersave-desc'></span>
+				<span class='info-item cpu-performance-desc'></span>
 			</li>
 		</ul>
 	</div>

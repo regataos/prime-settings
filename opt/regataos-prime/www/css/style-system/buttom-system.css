@@ -100,6 +100,13 @@
 
 /* responsive CSS */
 @media screen and (max-width: 1280px) {
+#cpugovernor1 {
+	right: 15px;
+}
+#cpugovernor2 {
+	right: 15px;
+}
+
 #selectnav1 {
 	right: 15px;
 }

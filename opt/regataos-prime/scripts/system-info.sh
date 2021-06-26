@@ -16,16 +16,19 @@ fi
 # Configure application language
 if [[ $language == *"pt"* ]]; then
 	rm -rf "/opt/regataos-prime/www/js/translations/language"
+	rm -rf "/opt/regataos-prime/scripts/notify"
 	ln -sf /opt/regataos-prime/www/js/translations/pt-br /opt/regataos-prime/www/js/translations/language
 	ln -sf /opt/regataos-prime/scripts/notifications/notify-pt /opt/regataos-prime/scripts/notify
 
 elif [[ $language == *"en"* ]]; then
 	rm -rf "/opt/regataos-prime/www/js/translations/language"
+	rm -rf "/opt/regataos-prime/scripts/notify"
 	ln -sf /opt/regataos-prime/www/js/translations/en-us /opt/regataos-prime/www/js/translations/language
 	ln -sf /opt/regataos-prime/scripts/notifications/notify-en /opt/regataos-prime/scripts/notify
 
 else
 	rm -rf "/opt/regataos-prime/www/js/translations/language"
+	rm -rf "/opt/regataos-prime/scripts/notify"
 	ln -sf /opt/regataos-prime/www/js/translations/en-us /opt/regataos-prime/www/js/translations/language
 	ln -sf /opt/regataos-prime/scripts/notifications/notify-en /opt/regataos-prime/scripts/notify
 fi

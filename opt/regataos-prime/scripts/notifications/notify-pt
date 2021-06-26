@@ -49,6 +49,17 @@ function copy_info() {
 	"Informações copiadas para área de transferência."
 }
 
+# CPU governor
+function cpu_powersave() {
+	notify-send -i preferences-system-power-management -u normal -a 'PRIME Settings' "Equilibrado" \
+	"Fazer o equilíbrio entre o desempenho e o consumo de energia."
+}
+
+function cpu_performance() {
+	notify-send -i preferences-system-power-management -u normal -a 'PRIME Settings' "Alto desempenho" \
+	"Dar prioridade ao desempenho; pode consumir mais energia."
+}
+
 case $1 in
    "-restart") restart_system
         ;;
@@ -59,6 +70,10 @@ case $1 in
    "-running-with-dgpu") running_with_dgpu
         ;;
    "-copy-info") copy_info
+        ;;
+   "-cpu-powersave") cpu_powersave
+        ;;
+   "-cpu-performance") cpu_performance
         ;;
    *) echo "Invalid option!"
     	exit 1

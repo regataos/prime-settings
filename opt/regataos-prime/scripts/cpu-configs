@@ -1,0 +1,64 @@
+#!/bin/bash
+
+# Choosing the governor for the CPU
+#Save current configuration
+function save_governor_settings() {
+	if test ! -e "/etc/regataos-prime"; then
+		mkdir -p "/etc/regataos-prime/"
+	fi
+	echo "$cpu_governor" > "/etc/regataos-prime/cpu-governor.txt"
+}
+
+#Save default CPU governor
+function save_governor_default() {
+	export LC_ALL="en_US.UTF-8"
+	export LANG="en_US.UTF-8"
+	export LANGUAGE="en_US"
+
+	echo $(cpupower frequency-info | grep decide | awk '{print $3}' | sed 's/"//g') > "/etc/regataos-prime/cpu-governor-default.txt"
+}
+
+#Set CPU governor
+function use_powersave() {
+	if test ! -e "/etc/regataos-prime/cpu-governor-default.txt"; then
+		save_governor_default
+	fi
+
+	if [[ $(cpupower frequency-info | grep powersave) == *"powersave"* ]]; then
+		cpupower frequency-set -g powersave
+		cpu_governor="powersave"
+		save_governor_settings
+
+	else
+		cpupower frequency-set -g schedutil
+		cpu_governor="schedutil"
+		save_governor_settings
+	fi
+}
+
+function use_performance() {
+	if test ! -e "/etc/regataos-prime/cpu-governor-default.txt"; then
+		save_governor_default
+	fi
+
+	cpupower frequency-set -g performance
+	cpu_governor="performance"
+	save_governor_settings
+}
+
+function use_default() {
+	rm -f "/etc/regataos-prime/cpu-governor.txt"
+	cpupower frequency-set -g $(cat "/etc/regataos-prime/cpu-governor-default.txt")
+}
+
+case $1 in
+   "-cpu-powersave") use_powersave
+        ;;
+   "-cpu-performance") use_performance
+        ;;
+   "-cpu-default") use_default
+        ;;
+   *) echo "Invalid option!"
+    	exit 1
+    	;;
+esac

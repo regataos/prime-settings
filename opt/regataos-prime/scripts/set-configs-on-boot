@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Check and apply cpu governor configuration
+if test -e "/etc/regataos-prime/cpu-governor.txt"; then
+    cpupower frequency-set -g $(cat /etc/regataos-prime/cpu-governor.txt)
+else
+	export LC_ALL="en_US.UTF-8"
+	export LANG="en_US.UTF-8"
+	export LANGUAGE="en_US"
+
+	mkdir -p "/etc/regataos-prime/"
+	echo $(cpupower frequency-info | grep decide | awk '{print $3}' | sed 's/"//g') > "/etc/regataos-prime/cpu-governor-default.txt"
+fi
+
+# We're finished!
+exit 0

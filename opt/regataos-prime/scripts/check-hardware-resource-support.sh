@@ -34,7 +34,6 @@ fi
 
 # If necessary, disable TearFree
 if [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"tearfree=off"* ]]; then
-
 	#For NVIDIA Driver
 	if [[ $(cat /usr/share/X11/xorg.conf.d/20-nvidia.conf) == *"ForceFullCompositionPipeline=On"* ]]; then
 		nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 { ForceFullCompositionPipeline = Off }"
@@ -47,7 +46,6 @@ if [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"tearfree=off"* 
 	sudo /opt/regataos-prime/scripts/gpu-render -tearfree-off
 
 elif [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"tearfree=on"* ]]; then
-
 	#For NVIDIA Driver
 	if [[ $(cat /usr/share/X11/xorg.conf.d/20-nvidia.conf) == *"ForceFullCompositionPipeline=Off"* ]]; then
 		nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 { ForceFullCompositionPipeline = On }"
