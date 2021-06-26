@@ -49,6 +49,17 @@ function copy_info() {
 	"Information copied to clipboard."
 }
 
+# Enable/Disable TearFree
+function tearfree_on() {
+	notify-send -i video-display -u normal -a 'PRIME Settings' "Prevent Screen Tearing" \
+	'Prevent the Tearing phenomenon to avoid "broken image" on the screen.'
+}
+
+function tearfree_off() {
+	notify-send -i video-display -u normal -a 'PRIME Settings' "Do not prevent Screen Tearing" \
+	'The Tearing phenomenon results in "broken image" on the screen.'
+}
+
 # CPU governor
 function cpu_powersave() {
 	notify-send -i preferences-system-power-management -u normal -a 'PRIME Settings' "Balanced" \
@@ -70,6 +81,10 @@ case $1 in
    "-running-with-dgpu") running_with_dgpu
         ;;
    "-copy-info") copy_info
+        ;;
+   "-tearfree-on") tearfree_on
+        ;;
+   "-tearfree-off") tearfree_off
         ;;
    "-cpu-powersave") cpu_powersave
         ;;

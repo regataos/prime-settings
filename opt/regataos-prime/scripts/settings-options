@@ -14,6 +14,9 @@ function tearfree() {
 		screen=$(xrandr --props | grep 'connected primary' | awk '{print $1}')
 		xrandr --output $screen --set TearFree off
 
+		# Show notify on desktop
+		/bin/bash /opt/regataos-prime/scripts/notify -tearfree-off
+
 	elif [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"tearfree=off"* ]]; then
 		sed -i 's/\(tearfree=off\)/tearfree=on/' "/tmp/regataos-prime/config/regataos-prime.conf"
 		sudo /opt/regataos-prime/scripts/gpu-render -tearfree-on
@@ -25,6 +28,9 @@ function tearfree() {
 		#For open source drivers
 		screen=$(xrandr --props | grep 'connected primary' | awk '{print $1}')
 		xrandr --output $screen --set TearFree on
+
+		# Show notify on desktop
+		/bin/bash /opt/regataos-prime/scripts/notify -tearfree-on
 
 	else
 		echo "Option not found in the file with configuration options."
@@ -38,6 +44,9 @@ function enable_freesync() {
 	DISPLAY=:0 xrandr --output $screen --set "freesync" 1
 	xrandr --output $screen --set "freesync" 1
 	sed -i 's/\(freesync=off\)/freesync=on/' "/tmp/regataos-prime/config/regataos-prime.conf"
+
+	# Show notify on desktop
+	/bin/bash /opt/regataos-prime/scripts/notify -tearfree-on
 }
 
 function disable_freesync() {
@@ -46,6 +55,9 @@ function disable_freesync() {
 	DISPLAY=:0 xrandr --output $screen --set "freesync" 0
 	xrandr --output $screen --set "freesync" 0
 	sed -i 's/\(freesync=on\)/freesync=off/' "/tmp/regataos-prime/config/regataos-prime.conf"
+
+	# Show notify on desktop
+	/bin/bash /opt/regataos-prime/scripts/notify -tearfree-off
 }
 
 case $1 in
