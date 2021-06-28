@@ -222,6 +222,36 @@ function check_cpu_governor() {
 }
 check_cpu_governor();
 
+// Check the configuration for the KWin compositor
+function check_option_compositor() {
+	const fs = require('fs');
+
+	fs.readFile('/tmp/regataos-prime/config/regataos-prime.conf', (err, data) => {
+	if (err) throw err;
+	var check_compositor = data
+
+	if ((check_compositor.indexOf("compositor=on") > -1) == "1") {
+		$("#compositor1").css("display", "block");
+		$("#compositor2").css("display", "none");
+		$(".compositor-on").css("display", "block");
+		$(".compositor-off").css("display", "none");
+
+	} else if ((check_compositor.indexOf("compositor=off") > -1) == "1") {
+		$("#compositor1").css("display", "none");
+		$("#compositor2").css("display", "block");
+		$(".compositor-on").css("display", "none");
+		$(".compositor-off").css("display", "block");
+
+	} else {
+		$("#compositor1").css("display", "block");
+		$("#compositor2").css("display", "none");
+		$(".compositor-on").css("display", "block");
+		$(".compositor-off").css("display", "none");
+	}
+	});
+}
+check_option_compositor();
+
 setInterval(function() {
 	option_choose_gpu_desc();
 	check_freesync();

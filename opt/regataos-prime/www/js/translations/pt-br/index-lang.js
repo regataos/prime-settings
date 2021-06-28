@@ -87,6 +87,11 @@ $(document).ready(function() {
     $(".cpu-powersave-desc").text("Equilibrado");
     $(".cpu-performance-desc").text("Desempenho");
 
+    //KWin compositor
+    $(".compositor-text").text("Efeitos da área de trabalho");
+    $(".compositor-on").text("Compositor ativado");
+    $(".compositor-off").text("Compositor desativado");
+
     // Performance
     //Session title performance
     $(".page-performance-title").text("Desempenho");

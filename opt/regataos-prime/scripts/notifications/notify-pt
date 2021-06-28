@@ -71,6 +71,17 @@ function cpu_performance() {
 	"Dar prioridade ao desempenho; pode consumir mais energia."
 }
 
+# KWin compositor
+function compositor_on() {
+	notify-send -i preferences-system-windows-effect-logout -u normal -a 'PRIME Settings' "Efeitos ativados" \
+	"Os efeitos da área de trabalho foram ativados."
+}
+
+function compositor_off() {
+	notify-send -i preferences-system-windows-effect-login -u normal -a 'PRIME Settings' "Efeitos desativados" \
+	"Os efeitos da área de trabalho foram desativados; reduz o uso da GPU."
+}
+
 case $1 in
    "-restart") restart_system
         ;;
@@ -89,6 +100,10 @@ case $1 in
    "-cpu-powersave") cpu_powersave
         ;;
    "-cpu-performance") cpu_performance
+        ;;
+   "-compositor-on") compositor_on
+        ;;
+   "-compositor-off") compositor_off
         ;;
    *) echo "Invalid option!"
     	exit 1

@@ -363,7 +363,15 @@ li.button-vk:active {
 	margin: auto;
 }
 
-/* responsive CSS */
+/* KWin compositor */
+#compositor2 {
+	display: none;
+}
+#compositor-off {
+	display: none;
+}
+
+/* Responsive CSS */
 @media screen and (max-width: 1280px) {
 #cpugovernor1 {
 	right: 15px;

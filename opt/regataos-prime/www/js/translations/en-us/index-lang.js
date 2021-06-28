@@ -87,6 +87,11 @@ $(document).ready(function() {
     $(".cpu-powersave-desc").text("Powersave");
     $(".cpu-performance-desc").text("Performance");
 
+    //KWin compositor
+    $(".compositor-text").text("Desktop Effects");
+    $(".compositor-on").text("Compositor activated");
+    $(".compositor-off").text("Compositor disabled");
+
     // Performance
     //Session title performance
     $(".page-performance-title").text("Performance");

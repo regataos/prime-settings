@@ -51,6 +51,7 @@ if test ! -e "$HOME/.config/regataos-prime/regataos-prime.conf" ; then
 	echo "freesync=on" >> "$HOME/.config/regataos-prime/regataos-prime.conf"
 	echo "freesync-supported=false" >> "$HOME/.config/regataos-prime/regataos-prime.conf"
 	echo "tearfree=on" >> "$HOME/.config/regataos-prime/regataos-prime.conf"
+	echo "compositor=on" >> "$HOME/.config/regataos-prime/regataos-prime.conf"
 fi
 
 if test ! -e "/tmp/regataos-prime" ; then

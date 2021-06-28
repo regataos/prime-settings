@@ -52,6 +52,19 @@
 					<input id="switch-shadow2-freesync" class="switch switch--shadow2-freesync" type="checkbox" onclick="enable_freesync();">
 					<label for="switch-shadow2-freesync"></label></div><span class='freesync-on'></span><span class='freesync-off'></span>
 			</li>
+			<li id="compositor-toggle">
+				<div class="text-app compositor-text">Desktop Effects</div>
+				<div class="switch__container" id="compositor1">
+					<input id="switch-shadow-app compositor" class="switch switch--shadow-app switch-on-compositor" type="checkbox" onclick="window.config_option='compositor'; compositor_config();">
+					<label for="switch-shadow-app compositor"></label>
+				</div>
+				<div class="switch__container" id="compositor2">
+					<input id="switch-shadow2-app compositor" class="switch switch--shadow2-app switch-off-compositor" type="checkbox" onclick="window.config_option='compositor'; compositor_config();">
+					<label for="switch-shadow2-app compositor"></label>
+				</div>
+				<span class="enabled compositor-on"></span>
+				<span class="disabled compositor-off"></span>
+			</li>
 			<li id="tearfree-toggle">
 				<div class="text-app pst-text">Prevent Screen Tearing</div>
 				<div class="switch__container">

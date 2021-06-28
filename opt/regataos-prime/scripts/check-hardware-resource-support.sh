@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sleep 10;
+sleep 2;
 
 # Check support for FreeSync and, if necessary, activate the feature
 #Check nvidia driver
@@ -59,4 +59,16 @@ elif [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"tearfree=on"*
 
 else
 	echo "Option not found in the file with configuration options."
+fi
+
+# If necessary, disable desktop effects
+if [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"compositor=off"* ]]; then
+	qdbus org.kde.KWin /Compositor suspend
+
+else
+	# Check if the "compositor" option is present in the configuration file
+	if [[ $(grep -r "compositor=" "/tmp/regataos-prime/config/regataos-prime.conf") != *"compositor="* ]]; then
+		echo "compositor=on" >> "$HOME/.config/regataos-prime/regataos-prime.conf"
+		sed -i '/^$/d' "$HOME/.config/regataos-prime/regataos-prime.conf"
+	fi
 fi
