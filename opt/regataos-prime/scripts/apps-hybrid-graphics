@@ -16,6 +16,11 @@ if test ! -e "/tmp/regataos-prime/config" ; then
 	chmod 777 /tmp/regataos-prime/*
 fi
 
+if test ! -e "/opt/regataos-prime/www/images/apps-icons"; then
+	mkdir -p "/opt/regataos-prime/www/images/apps-icons/"
+	chmod 777 /opt/regataos-prime/www/images/apps-icons/*
+fi
+
 # Find the user's desktop
 user=$(users | awk '{print $1}')
 test -f "${XDG_CONFIG_HOME:-/home/$user/.config}/user-dirs.dirs" && source "${XDG_CONFIG_HOME:-/home/$user/.config}/user-dirs.dirs"
