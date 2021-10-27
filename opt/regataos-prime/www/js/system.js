@@ -1,11 +1,13 @@
 // system page options
 //Open the Information Center application
 function info() {
-	const exec = require('child_process').exec;
-	var comando = "kinfocenter";
-	console.log(comando);
-	exec(comando,function(error,call,errlog){
-	});
+	setTimeout(function(){
+		const exec = require('child_process').exec;
+		var comando = "kinfocenter";
+		console.log(comando);
+		exec(comando,function(error,call,errlog){
+		});
+	}, 500);
 }
 
 // Copy hardware and software information to the clipboard

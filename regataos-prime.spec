@@ -1,7 +1,7 @@
 Name: regataos-prime
-Version: 12.3
+Version: 21.3
 Release: 0
-Url: https://github.com/LinuxbuzzSoftware/prime-settings
+Url: https://github.com/regataos/prime-settings
 Summary: PRIME for Regata OS.
 Group: System/GUI/KDE
 License: MIT
@@ -13,11 +13,10 @@ BuildRequires: -post-build-checks
 BuildRequires: systemd
 BuildRequires: grep
 Source1: %{name}-%{version}.tar.xz
-#Source2: nvidia-modeset.conf
 Requires: xz
-Requires: magma >= 5.52.2-lp152.6.1
-Requires: regataos-base >= 20.1.2-lp152.7.1
-Requires: regataos-store >= 5.3-lp152.36.1
+Requires: magma >= 5.54.1
+Requires: regataos-base >= 21.0.15
+Requires: regataos-store >= 21.3
 Requires: inxi
 Requires: lshw
 Requires: lshw-lang
@@ -39,16 +38,11 @@ PRIME GPU offloading and Reverse PRIME is an attempt to support muxless hybrid g
 mkdir -p %buildroot/opt/regataos-base/
 mkdir -p %buildroot/etc/modprobe.d/
 cp -f %{SOURCE1} %{buildroot}/opt/regataos-base/%{name}-%{version}.tar.xz
-#cp -f %{SOURCE2} %{buildroot}/etc/modprobe.d/nvidia-modeset.conf
 
 %post
 if test -e /opt/regataos-base/%{name}-%{version}.tar.xz ; then
 	tar xf /opt/regataos-base/%{name}-%{version}.tar.xz -C /
 fi
-
-# Fix permission for sudoers-prime-settings file
-chown root:root /etc/sudoers.d/sudoers-prime-settings
-chmod 600 /etc/sudoers.d/sudoers-prime-settings
 
 # Create the directory /tmp/regataos-prime
 if test -e /tmp/regataos-prime ; then
@@ -80,12 +74,6 @@ systemctl enable  set-configs-on-boot.service || true
 systemctl stop    set-configs-on-boot.service || true
 systemctl start   set-configs-on-boot.service || true
 systemctl restart set-configs-on-boot.service || true
-
-# Disable old systemd services
-systemctl stop    intel-gpu-frequency.service || true
-systemctl disable intel-gpu-frequency.service || true
-systemctl stop    intel-gpu-usage.service || true
-systemctl disable intel-gpu-usage.service || true
 
 if test -e /tmp/regataos-prime/use-hybrid-graphics.txt ; then
 	# Open apps with hybrid graphics manually
@@ -125,14 +113,6 @@ fi
 # Update system info
 sudo /opt/regataos-prime/scripts/system-info.sh start
 
-# Fix old installation
-if test -e "/opt/regataos-prime/scripts/check-use-dgpu" ; then
-  rm -f "/opt/regataos-prime/scripts/check-use-dgpu"
-  rm -f "/etc/xdg/autostart/prime-settings-notifications.desktop"
-  rm -f "/etc/xdg/autostart/run-dgpu-tray.desktop"
-  rm -f "/etc/xdg/autostart/stop-dgpu-tray.desktop"
-fi
-
 update-desktop-database
 
 %clean
@@ -141,7 +121,5 @@ update-desktop-database
 %defattr(-,root,root)
 /opt/regataos-base
 /opt/regataos-base/%{name}-%{version}.tar.xz
-/etc/modprobe.d/
-#/etc/modprobe.d/nvidia-modeset.conf
 
 %changelog

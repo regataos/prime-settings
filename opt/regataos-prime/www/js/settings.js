@@ -75,11 +75,13 @@ function choose_gpu2() {
 
 // Open display
 function display() {
-	const exec = require('child_process').exec;
-	var command = "kcmshell5 kcm_kscreen";
-	console.log(command);
-	exec(command,function(error,call,errlog){
-	});
+	setTimeout(function(){
+		const exec = require('child_process').exec;
+		var command = "kcmshell5 kcm_kscreen";
+		console.log(command);
+		exec(command,function(error,call,errlog){
+		});
+	}, 500);
 }
 
 // Open dgpu-teste
@@ -101,11 +103,13 @@ function teste_dgpu_vk() {
 
 // Open nvidia-settings
 function nvidia_driver() {
-	const exec = require('child_process').exec;
-	var command = "nvidia-settings";
-	console.log(command);
-	exec(command,function(error,call,errlog){
-	});
+	setTimeout(function(){
+		const exec = require('child_process').exec;
+		var command = "nvidia-settings";
+		console.log(command);
+		exec(command,function(error,call,errlog){
+		});
+	}, 500);
 }
 
 // Freesync

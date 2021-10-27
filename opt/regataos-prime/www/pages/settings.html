@@ -21,7 +21,9 @@
 
 		//open_popup
 		function open_popup(){
+		setTimeout(function(){
 			document.getElementById("pop-up").style.display = "block";
+		}, 500);
 		}
 	</script>
 </head>
@@ -36,13 +38,13 @@
 	<div class="main-div" id="main-div">
 	<div class="div2" id="div2">
 		<ul class="main-ul">
-			<li id="buttom-click" onclick="display();">
+			<li id="buttom-click" class="button-effect" onclick="display();">
 				<div class="text-app display-settings"></div><span class='info-item display-settings-info'></span>
 			</li>
-			<li id="use-nvidia-click" onclick="nvidia_driver();">
+			<li id="use-nvidia-click" class="button-effect" onclick="nvidia_driver();">
 				<div class="text-app nvidia-settings"></div><span class='info-item nvidia-settings-info'></span>
 			</li>
-			<li id="buttom-click" onclick="open_popup();">
+			<li id="buttom-click" class="button-effect" onclick="open_popup();">
 				<div class="text-app run-tests"></div><span class='info-item run-tests-info'></span>
 			</li>
 			<li id="freesync-toggle">

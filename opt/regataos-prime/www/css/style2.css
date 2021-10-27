@@ -104,8 +104,8 @@ b {
 ul {
     padding-left: 0px;
 	position: relative;
-    -webkit-transition: all 0.3s ease-in-out;
-    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
 }
 
 .main-ul {
@@ -127,6 +127,8 @@ li {
 	list-style: none;
 	float: left;
 	background-color: #2a2f35;
+    background-position: center;
+    border-radius: 5px;
 	margin-right: 3px;
 	margin-left: 3px;
 	margin-bottom: 8px;
@@ -135,7 +137,18 @@ li {
 	padding-bottom: 20px;
 	padding-top: 20px;
 	box-shadow: 0 1px 5px rgba(0,0,0,.15);
-	transition: all ease .3s;
+    -webkit-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+li.button-effect:hover {
+    background: #333840 radial-gradient(circle, transparent 1%, #333840 1%) center/15000% !important;
+}
+
+li.button-effect:active {
+    background-color: #23272c !important;
+    background-size: 100% !important;
+    transition: all 0s !important;
 }
 
 li.fake-item {
@@ -165,15 +178,26 @@ li#add-external-apps {
 	cursor: pointer;
 	width: 299px;
 	height: 79px;
+	background-color: #2a2f35;
+    background-position: center;
+    border-radius: 5px;
 	margin-bottom: 8px;
 	padding-top: 0px;
 	padding-left: 0px;
 	padding-right: 0px;
 	padding-bottom: 0px;
+    -webkit-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+li#add-external-apps:hover {
+    background: #333840 radial-gradient(circle, transparent 1%, #333840 1%) center/15000%;
 }
 
 li#add-external-apps:active {
-	background: #2a2d32;
+    background-color: #23272c;
+    background-size: 100%;
+    transition: all 0s;
 }
 
 li.li-performance {
@@ -189,8 +213,8 @@ li.li-performance {
 	margin-bottom: 27px;
 	padding: 0px;
     box-shadow: 0 1px 5px rgb(0 0 0 / 15%);
-    -webkit-transition: all 0.3s ease-in-out;
-    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
     -webkit-animation-name: animatebottom;
     -webkit-animation-duration: .5s;
     animation-name: animatebottom;
@@ -436,6 +460,14 @@ p {
 	padding-right: 38px;
 	padding-left: 38px;
 	padding-bottom: 20px;
+	opacity: 1;
+	animation-name: display-element;
+	animation-duration: 1.5s;
+}
+
+@keyframes display-element {
+  from {opacity: 0.2;}
+  to {opacity: 1;}
 }
 
 .hdiv1 {
@@ -492,8 +524,8 @@ p {
 .div2 {
 	max-width: 1220px;
     position: relative;
-    -webkit-transition: all 0.3s ease-in-out;
-    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
     -webkit-animation-name: animatebottom;
     -webkit-animation-duration: .5s;
     animation-name: animatebottom;
@@ -529,6 +561,7 @@ opacity: 1;
     width: 450px;
     height: 170px;
     background: linear-gradient(107deg,#33373f,#25282e);
+	border-radius: 8px;
 	margin: auto;
 	margin-top: 10%;
 	padding: 10px 15px 15px 15px;
