@@ -2,7 +2,7 @@
 Name=Enable dGPU for apps
 GenericName=Automatically enable dGPU for selected apps
 Comment=Automatically enable dGPU for selected apps
-Exec=sleep 10; sudo /opt/regataos-prime/scripts/apps-hybrid-graphics
+Exec=sleep 5; sudo /opt/regataos-prime/scripts/apps-hybrid-graphics
 Terminal=false
 NoDisplay=true
 Type=Application
