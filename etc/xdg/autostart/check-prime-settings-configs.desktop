@@ -2,10 +2,9 @@
 Name=Check configs for Prime Settings
 GenericName=Check configs for Prime Settings
 Comment=Check configs for Prime Settings
-Exec=/opt/regataos-prime/scripts/check-hardware-resource-support.sh
+Exec=sleep 5; /bin/bash /opt/regataos-prime/scripts/check-hardware-resource-support.sh
 Terminal=false
 NoDisplay=true
 Type=Application
-
 X-GNOME-Autostart-Phase=Initialization
 X-KDE-autostart-phase=1

@@ -312,7 +312,14 @@ if [[ $enable_dgpu != *"none"* ]]; then
                 	search_icon_directory=$(echo $search_icon_directory_svg)
             	fi
 
-            	echo "file://$search_icon_directory" > "/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt";
+				# File where the application icon directory will be stored
+				app_icon_dir="/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt"
+            	echo "file://$search_icon_directory" > "$app_icon_dir";
+
+				# If the file is saved with two lines, this could be a problem. If necessary, remove the last row.
+				if [ $(find $app_icon_dir -type f -exec wc -l {} + | awk '{print $1}') -ge 2 ]; then
+					sed -i '$ d' "$app_icon_dir";
+				fi
         	fi
 		fi
 
