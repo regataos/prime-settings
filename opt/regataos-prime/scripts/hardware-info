@@ -317,6 +317,11 @@ elif [[ $(echo $mesa_driver) == *"nvidia"* ]]; then
 	mesa_version=$(grep -R 'srcpackage:Mesa' /var/cache/zypp/solv/$(echo "$mesa_repo") | awk '{print $2}' | cut -d'-' -f -1 | head -1 | tail -1)
 	echo "$mesa_version"
 
+elif [[ $(echo $mesa_driver) == *"NVIDIA"* ]]; then
+	mesa_repo=$(grep -r "mainRepositoryName" "/usr/share/regataos/regataos-base-version.txt" | cut -d"=" -f 2-)
+	mesa_version=$(grep -R 'srcpackage:Mesa' /var/cache/zypp/solv/$(echo "$mesa_repo") | awk '{print $2}' | cut -d'-' -f -1 | head -1 | tail -1)
+	echo "$mesa_version"
+
 else
 	echo "Not detected driver for Mesa"
 fi

@@ -92,6 +92,11 @@ $(document).ready(function() {
     $(".compositor-on").text("Compositor activated");
     $(".compositor-off").text("Compositor disabled");
 
+    //Unlock widgets
+    $(".unlockwidgets-text").text("Lock widgets");
+    $(".unlockwidgets-on").text("Blocked widgets");
+    $(".unlockwidgets-off").text("Unlocked widgets");
+
     // Performance
     //Session title performance
     $(".page-performance-title").text("Performance");

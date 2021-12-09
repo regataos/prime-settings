@@ -653,6 +653,13 @@ opacity: 1;
     	overflow: hidden;
 	}
 
+	.unlockwidgets-text {
+		max-width: 18ch;
+		text-overflow: ellipsis;
+    	white-space: nowrap;
+    	overflow: hidden;
+	}
+
 	.info-item {
 		max-width: 27ch;
 		text-overflow: ellipsis;

@@ -67,6 +67,19 @@
 				<span class="enabled compositor-on"></span>
 				<span class="disabled compositor-off"></span>
 			</li>
+			<li id="unlockwidgets-toggle">
+				<div class="text-app unlockwidgets-text">Lock desktop widgets</div>
+				<div class="switch__container" id="unlockwidgets1">
+					<input id="switch-shadow-app unlockwidgets" class="switch switch--shadow-app switch-on-unlockwidgets" type="checkbox" onclick="window.config_option='unlockwidgets'; unlock_widgets_config();">
+					<label for="switch-shadow-app unlockwidgets"></label>
+				</div>
+				<div class="switch__container" id="unlockwidgets2">
+					<input id="switch-shadow2-app unlockwidgets" class="switch switch--shadow2-app switch-off-unlockwidgets" type="checkbox" onclick="window.config_option='unlockwidgets'; unlock_widgets_config();">
+					<label for="switch-shadow2-app unlockwidgets"></label>
+				</div>
+				<span class="enabled unlockwidgets-on"></span>
+				<span class="disabled unlockwidgets-off"></span>
+			</li>
 			<li id="tearfree-toggle">
 				<div class="text-app pst-text">Prevent Screen Tearing</div>
 				<div class="switch__container">
@@ -107,6 +120,9 @@
 				<span class='info-item cpu-performance-desc'></span>
 			</li>
 		</ul>
+		<script type="text/javascript">
+			check_cpu_governor();
+		</script>
 	</div>
 	</div>
 

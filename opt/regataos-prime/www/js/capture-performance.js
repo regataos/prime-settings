@@ -147,7 +147,7 @@ setInterval(function() {
 
 function cpu_temp() {
 	const exec = require('child_process').exec;
-    var command = "echo $(sensors | egrep -wi 'tdie|Package id 0' | sed 's/Package id//' | awk '{print $2}' | cut -d'.' -f -1 | sed 's/+//')°C";
+    var command = "echo $(sensors | egrep -wi 'Tctl|tdie|Package id 0' | sed 's/Package id//' | awk '{print $2}' | cut -d'.' -f -1 | sed 's/+//')°C";
 	exec(command, (error, stdout, stderr) => {
 	if (stdout) {
 		document.getElementById("cpu-temp").innerHTML=stdout;

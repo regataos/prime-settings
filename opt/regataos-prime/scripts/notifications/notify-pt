@@ -82,6 +82,17 @@ function compositor_off() {
 	"Os efeitos da área de trabalho foram desativados; reduz o uso da GPU."
 }
 
+# Widgets unlocked
+function unlockwidgets_on() {
+	notify-send -i lock -u normal -a 'PRIME Settings' "Widgets bloqueados" \
+	"Os widgets da área de trabalho foram bloqueados."
+}
+
+function unlockwidgets_off() {
+	notify-send -i unlock -u normal -a 'PRIME Settings' "Widgets desbloqueados" \
+	"Os widgets da área de trabalho foram desbloqueados."
+}
+
 case $1 in
    "-restart") restart_system
         ;;
@@ -104,6 +115,10 @@ case $1 in
    "-compositor-on") compositor_on
         ;;
    "-compositor-off") compositor_off
+        ;;
+   "-unlockwidgets-on") unlockwidgets_on
+        ;;
+   "-unlockwidgets-off") unlockwidgets_off
         ;;
    *) echo "Invalid option!"
     	exit 1

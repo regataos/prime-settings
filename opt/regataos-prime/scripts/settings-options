@@ -71,7 +71,7 @@ function compositor() {
 	# Disable or enable KWin compositing
 	if [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"compositor=on"* ]]; then
 		sed -i 's/\(compositor=on\)/compositor=off/' "/tmp/regataos-prime/config/regataos-prime.conf"
-		qdbus org.kde.KWin /Compositor suspend
+		qdbus-qt5 org.kde.KWin /Compositor suspend
 
 		# Show notify on desktop
 		sleep 2
@@ -79,7 +79,7 @@ function compositor() {
 
 	elif [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"compositor=off"* ]]; then
 		sed -i 's/\(compositor=off\)/compositor=on/' "/tmp/regataos-prime/config/regataos-prime.conf"
-		qdbus org.kde.KWin /Compositor resume
+		qdbus-qt5 org.kde.KWin /Compositor resume
 
 		# Show notify on desktop
 		sleep 2
@@ -87,11 +87,46 @@ function compositor() {
 
 	else
 		sed -i 's/\(compositor=on\)/compositor=off/' "/tmp/regataos-prime/config/regataos-prime.conf"
-		qdbus org.kde.KWin /Compositor suspend
+		qdbus-qt5 org.kde.KWin /Compositor suspend
 
 		# Show notify on desktop
 		sleep 2
 		/bin/bash /opt/regataos-prime/scripts/notify -compositor-off
+	fi
+}
+
+# Configuration option to unlock widgets
+function unlock_widgets() {
+	# Check if the "compositor" option is present in the configuration file
+	if [[ $(grep -r "unlockwidgets=" "/tmp/regataos-prime/config/regataos-prime.conf") != *"unlockwidgets="* ]]; then
+		echo "unlockwidgets=off" >> "$HOME/.config/regataos-prime/regataos-prime.conf"
+		sed -i '/^$/d' "$HOME/.config/regataos-prime/regataos-prime.conf"
+	fi
+
+	# Disable or enable KWin compositing
+	if [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"unlockwidgets=on"* ]]; then
+		sed -i 's/\(unlockwidgets=on\)/unlockwidgets=off/' "/tmp/regataos-prime/config/regataos-prime.conf"
+		qdbus-qt5 org.kde.plasmashell /PlasmaShell evaluateScript "lockCorona(false)"
+
+		# Show notify on desktop
+		sleep 2
+		/bin/bash /opt/regataos-prime/scripts/notify -unlockwidgets-off
+
+	elif [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"unlockwidgets=off"* ]]; then
+		sed -i 's/\(unlockwidgets=off\)/unlockwidgets=on/' "/tmp/regataos-prime/config/regataos-prime.conf"
+		qdbus-qt5 org.kde.plasmashell /PlasmaShell evaluateScript "lockCorona(true)"
+
+		# Show notify on desktop
+		sleep 2
+		/bin/bash /opt/regataos-prime/scripts/notify -unlockwidgets-on
+
+	else
+		sed -i 's/\(unlockwidgets=on\)/unlockwidgets=off/' "/tmp/regataos-prime/config/regataos-prime.conf"
+		qdbus-qt5 org.kde.plasmashell /PlasmaShell evaluateScript "lockCorona(false)"
+
+		# Show notify on desktop
+		sleep 2
+		/bin/bash /opt/regataos-prime/scripts/notify -unlockwidgets-off
 	fi
 }
 
@@ -103,6 +138,8 @@ case $1 in
    "-freesync-off") disable_freesync
          ;;
    "-compositor") compositor
+         ;;
+   "-unlockwidgets") unlock_widgets
          ;;
    *) echo "Invalid option!"
       exit 1

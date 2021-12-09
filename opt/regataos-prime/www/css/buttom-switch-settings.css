@@ -371,6 +371,14 @@ li.button-vk:active {
 	display: none;
 }
 
+/* Unlock widgets */
+#unlockwidgets2 {
+	display: none;
+}
+#unlockwidgets-off {
+	display: none;
+}
+
 /* Responsive CSS */
 @media screen and (max-width: 1280px) {
 #cpugovernor1 {

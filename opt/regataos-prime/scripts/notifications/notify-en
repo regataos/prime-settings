@@ -82,6 +82,17 @@ function compositor_off() {
 	"Desktop effects have been disabled; reduces GPU usage."
 }
 
+# Widgets unlocked
+function unlockwidgets_on() {
+	notify-send -i lock -u normal -a 'PRIME Settings' "Blocked widgets" \
+	"Desktop widgets have been locked."
+}
+
+function unlockwidgets_off() {
+	notify-send -i unlock -u normal -a 'PRIME Settings' "Unlocked widgets" \
+	"Desktop widgets have been unlocked."
+}
+
 case $1 in
    "-restart") restart_system
         ;;
@@ -104,6 +115,10 @@ case $1 in
    "-compositor-on") compositor_on
         ;;
    "-compositor-off") compositor_off
+        ;;
+   "-unlockwidgets-on") unlockwidgets_on
+        ;;
+   "-unlockwidgets-off") unlockwidgets_off
         ;;
    *) echo "Invalid option!"
     	exit 1

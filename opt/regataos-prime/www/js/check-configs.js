@@ -220,7 +220,6 @@ function check_cpu_governor() {
 	}
 	});
 }
-check_cpu_governor();
 
 // Check the configuration for the KWin compositor
 function check_option_compositor() {
@@ -251,6 +250,36 @@ function check_option_compositor() {
 	});
 }
 check_option_compositor();
+
+// Check whether widgets are locked or unlocked
+function check_option_unlock_widgets() {
+	const fs = require('fs');
+
+	fs.readFile('/tmp/regataos-prime/config/regataos-prime.conf', (err, data) => {
+	if (err) throw err;
+	var check_unlock_widgets = data
+
+	if ((check_unlock_widgets.indexOf("unlockwidgets=on") > -1) == "1") {
+		$("#unlockwidgets1").css("display", "block");
+		$("#unlockwidgets2").css("display", "none");
+		$(".unlockwidgets-on").css("display", "block");
+		$(".unlockwidgets-off").css("display", "none");
+
+	} else if ((check_unlock_widgets.indexOf("unlockwidgets=off") > -1) == "1") {
+		$("#unlockwidgets1").css("display", "none");
+		$("#unlockwidgets2").css("display", "block");
+		$(".unlockwidgets-on").css("display", "none");
+		$(".unlockwidgets-off").css("display", "block");
+
+	} else {
+		$("#unlockwidgets1").css("display", "block");
+		$("#unlockwidgets2").css("display", "none");
+		$(".unlockwidgets-on").css("display", "block");
+		$(".unlockwidgets-off").css("display", "none");
+	}
+	});
+}
+check_option_unlock_widgets();
 
 setInterval(function() {
 	option_choose_gpu_desc();
