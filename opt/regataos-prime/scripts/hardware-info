@@ -130,8 +130,8 @@ function capture_igpu() {
 		echo "$igpu_model"
 
 	elif [[ $igpu == *"AMD"* ]]; then
-		igpu_model=$(echo $igpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f 1- | cut -d"," -f -1)
-		echo "AMD $igpu_model)"
+		igpu_model=$(echo $igpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
+		echo "$igpu_model"
 
 	else
 		igpu_model=$(echo $igpu | sed 's/Mesa DRI Intel(R) //' | cut -d"(" -f -1)
@@ -168,7 +168,7 @@ if test -e /tmp/regataos-prime/use-hybrid-graphics.txt ; then
 		elif [[ $dgpu1 == *"AMD"* ]]; then
 			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
 			dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
-			echo "$dgpu_model)"
+			echo "$dgpu_model"
 
 		else
 			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
@@ -198,7 +198,7 @@ if test -e /tmp/regataos-prime/use-hybrid-graphics.txt ; then
 		elif [[ $dgpu1 == *"AMD"* ]]; then
 			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
 			dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
-			echo "$dgpu_model)"
+			echo "$dgpu_model"
 
 		else
 			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
@@ -209,12 +209,12 @@ if test -e /tmp/regataos-prime/use-hybrid-graphics.txt ; then
 	elif [[ $dgpu2 == *"AMD"* ]]; then
 		dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
 		dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
-		echo "$dgpu_model)"
+		echo "$dgpu_model"
 
 	elif [[ $dgpu2 == *"Radeon"* ]]; then
 		dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
 		dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
-		echo "$dgpu_model)"
+		echo "$dgpu_model"
 
 	elif [[ $dgpu2 == *"NVIDIA"* ]]; then
 		if test -e /usr/bin/nvidia-xconfig ; then
@@ -251,12 +251,12 @@ else
 	if [[ $dgpu == *"AMD"* ]]; then
 		dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
 		dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
-		echo "$dgpu_model)"
+		echo "$dgpu_model"
 
 	elif [[ $dgpu == *"Radeon"* ]]; then
 		dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
 		dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
-		echo "$dgpu_model)"
+		echo "$dgpu_model"
 
 	elif [[ $dgpu == *"NVIDIA"* ]]; then
 		if test -e /usr/bin/nvidia-xconfig ; then
