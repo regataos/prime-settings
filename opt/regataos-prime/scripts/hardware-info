@@ -167,8 +167,8 @@ if test -e /tmp/regataos-prime/use-hybrid-graphics.txt ; then
 
 		elif [[ $dgpu1 == *"AMD"* ]]; then
 			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-			dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f 1- | cut -d"," -f -1)
-			echo "AMD $dgpu_model)"
+			dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
+			echo "$dgpu_model)"
 
 		else
 			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
@@ -197,8 +197,8 @@ if test -e /tmp/regataos-prime/use-hybrid-graphics.txt ; then
 
 		elif [[ $dgpu1 == *"AMD"* ]]; then
 			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-			dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f 1- | cut -d"," -f -1)
-			echo "AMD $dgpu_model)"
+			dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
+			echo "$dgpu_model)"
 
 		else
 			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
@@ -208,29 +208,31 @@ if test -e /tmp/regataos-prime/use-hybrid-graphics.txt ; then
 
 	elif [[ $dgpu2 == *"AMD"* ]]; then
 		dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-		dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f 1- | cut -d"," -f -1)
-		echo "AMD $dgpu_model)"
+		dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
+		echo "$dgpu_model)"
 
 	elif [[ $dgpu2 == *"Radeon"* ]]; then
 		dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-		dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f 1- | cut -d"," -f -1)
-		echo "AMD $dgpu_model)"
+		dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
+		echo "$dgpu_model)"
 
 	elif [[ $dgpu2 == *"NVIDIA"* ]]; then
 		if test -e /usr/bin/nvidia-xconfig ; then
 			dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
 		else
-			dgpu_model=$(echo $dgpu1 | cut -d: -f 3-)
+			dgpu1=$(inxi -G | egrep -i "Card-1|Device-1" | cut -d":" -f 3- | cut -d"[" -f 2- | cut -d"]" -f -1)
+			dgpu_model=$(echo NVIDIA $dgpu1 | cut -d: -f 3-)
 		fi
-		echo "NVIDIA $dgpu_model"
+		echo "$dgpu_model"
 
 	elif [[ $dgpu2 == *"GeForce"* ]]; then
 		if test -e /usr/bin/nvidia-xconfig ; then
 			dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
 		else
-			dgpu_model=$(echo $dgpu1 | cut -d: -f 3-)
+			dgpu1=$(inxi -G | egrep -i "Card-1|Device-1" | cut -d":" -f 3- | cut -d"[" -f 2- | cut -d"]" -f -1)
+			dgpu_model=$(echo NVIDIA $dgpu1 | cut -d: -f 3-)
 		fi
-		echo "NVIDIA $dgpu_model"
+		echo "$dgpu_model"
 
 	elif [[ $dgpu == *"Intel"* ]]; then
 		dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
@@ -242,35 +244,35 @@ if test -e /tmp/regataos-prime/use-hybrid-graphics.txt ; then
 	fi
 
 else
-
 	# The "PRIME" feature does not appear to be supported by the hardware, capture discrete GPU
 	dgpu=$(inxi -G | egrep -i "Card|Device")
+	dgpu1=$(inxi -G | egrep -i "Card|Device" | cut -d":" -f 3- | cut -d"[" -f 2- | cut -d"]" -f -1)
 
 	if [[ $dgpu == *"AMD"* ]]; then
 		dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-		dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f 1- | cut -d"," -f -1)
-		echo "AMD $dgpu_model)"
+		dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
+		echo "$dgpu_model)"
 
 	elif [[ $dgpu == *"Radeon"* ]]; then
 		dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-		dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f 1- | cut -d"," -f -1)
-		echo "AMD $dgpu_model)"
+		dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
+		echo "$dgpu_model)"
 
 	elif [[ $dgpu == *"NVIDIA"* ]]; then
 		if test -e /usr/bin/nvidia-xconfig ; then
 			dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
 		else
-			dgpu_model=$(echo $dgpu1 | cut -d: -f 3-)
+			dgpu_model=$(echo NVIDIA $dgpu1)
 		fi
-		echo "NVIDIA $dgpu_model"
+		echo "$dgpu_model"
 
 	elif [[ $dgpu == *"GeForce"* ]]; then
 		if test -e /usr/bin/nvidia-xconfig ; then
 			dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
 		else
-			dgpu_model=$(echo $dgpu1 | cut -d: -f 3-)
+			dgpu_model=$(echo NVIDIA $dgpu1)
 		fi
-		echo "NVIDIA $dgpu_model"
+		echo "$dgpu_model"
 
 	elif [[ $dgpu == *"Intel"* ]]; then
 		dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
@@ -285,10 +287,19 @@ fi
 
 # Capture Mesa version and identify driver for Mesa
 function mesa_version() {
-mesa_version=$(glxinfo | grep -i 'OpenGL version string' | awk '{print $8}')
 mesa_driver=$(glxinfo | grep -i 'OpenGL vendor string' | awk '{print $4}')
+mesa_version=$(glxinfo | grep -i 'OpenGL version string' | awk '{print $8}')
 
-if [[ $(echo $mesa_driver) == *"iris"* ]]; then
+if [[ $(echo $mesa_driver) == *"Intel"* ]]; then
+	echo "$mesa_version (Intel)"
+
+elif [[ $(echo $mesa_driver) == *"intel"* ]]; then
+	echo "$mesa_version (Intel)"
+
+elif [[ $(echo $mesa_driver) == *"Iris"* ]]; then
+	echo "$mesa_version (Intel Iris)"
+
+elif [[ $(echo $mesa_driver) == *"iris"* ]]; then
 	echo "$mesa_version (Intel Iris)"
 
 elif [[ $(echo $mesa_driver) == *"i915"* ]]; then
@@ -297,11 +308,11 @@ elif [[ $(echo $mesa_driver) == *"i915"* ]]; then
 elif [[ $(echo $mesa_driver) == *"i965"* ]]; then
 	echo "$mesa_version (Intel)"
 
-elif [[ $(echo $mesa_driver) == *"intel"* ]]; then
-	echo "$mesa_version (Intel)"
-
 elif [[ $(echo $mesa_driver) == *"modesetting"* ]]; then
 	echo "$mesa_version (modesetting)"
+
+elif [[ $(echo $mesa_driver) == *"AMD"* ]]; then
+	echo "$mesa_version (AMDGPU)"
 
 elif [[ $(echo $mesa_driver) == *"amdgpu"* ]]; then
 	echo "$mesa_version (AMDGPU)"

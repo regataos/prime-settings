@@ -1,5 +1,5 @@
 Name: regataos-prime
-Version: 21.3
+Version: 22.0
 Release: 0
 Url: https://github.com/regataos/prime-settings
 Summary: PRIME for Regata OS.

@@ -1,7 +1,7 @@
 // Capture information about the GPU with the RadeonTop utility
 function run_radeontop() {
 	const exec = require('child_process').exec;
-    var command = "ps -C radeontop > /dev/null; if [ $? = 1 ] ; then rm -f /tmp/regataos-prime/radeontop.log; /usr/sbin/radeontop -d /tmp/regataos-prime/radeontop.log; fi";
+    var command = "ps -C radeontop > /dev/null; if [ $? = 1 ] ; then rm -f /tmp/regataos-prime/radeontop.log; radeontop -d /tmp/regataos-prime/radeontop.log; fi";
 	exec(command, (error, stdout, stderr) => {
 	});
 }
@@ -163,10 +163,16 @@ setInterval(function() {
 // Capture information about using RAM memory
 function ram_total() {
 	const exec = require('child_process').exec;
+
     var command = "echo $(free -h | grep -i Mem | awk '{print $2}' | sed 's/Mi/MB/' | sed 's/Gi/GB/')";
 	exec(command, (error, stdout, stderr) => {
 	if (stdout) {
 		document.getElementById("ram-size").innerHTML=stdout;
+	} else {
+		var command = "echo $(free -h | grep -i Mem | awk '{print $2}' | sed 's/Mi/MB/' | sed 's/Gi/GB/')";
+		exec(command, (error, stdout, stderr) => {
+			document.getElementById("ram-size").innerHTML=stdout;
+		});
 	}
 	});
 }
