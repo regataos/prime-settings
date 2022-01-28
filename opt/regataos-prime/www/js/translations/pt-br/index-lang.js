@@ -67,7 +67,7 @@ $(document).ready(function() {
 
     //Popup
     $(".popup-title-settings").text("Testar a GPU dedicada");
-    $(".popup-desc-settings").text("Execute um teste simples com a GPU dedicada do seu dispositivo, escolhendo uma das opções:");
+    $(".popup-desc-settings").text("Execute simples testes com a GPU dedicada do seu dispositivo usando as seguintes opções:");
     $(".button-gl").text("Teste com o OpenGL");
     $(".button-vk").text("Teste com a Vulkan");
 

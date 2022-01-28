@@ -67,7 +67,7 @@ $(document).ready(function() {
 
     //Popup
     $(".popup-title-settings").text("Test the dedicated GPU");
-    $(".popup-desc-settings").text("Run a simple test with your device's dedicated GPU by choosing one of the options:");
+    $(".popup-desc-settings").text("Run simple tests with your device's dedicated GPU using the following options:");
     $(".button-gl").text("Test with OpenGL");
     $(".button-vk").text("Test with Vulkan");
 

@@ -579,7 +579,10 @@ opacity: 1;
 }
 
 .popup-desc-settings {
+    width: 360px;
 	color: #bfbfbf;
+	margin-left: auto;
+    margin-right: auto;
 }
 
 #button-close {
