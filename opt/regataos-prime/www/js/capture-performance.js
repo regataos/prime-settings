@@ -61,6 +61,22 @@ setInterval(function() {
 }, 1000);
 
 // Capture information about using VRAM
+//Capture total amount of RAM
+function vram_size() {
+	const exec = require('child_process').exec;
+    var command = "/bin/bash /opt/regataos-prime/scripts/hardware-info -vram-size";
+	exec(command, (error, stdout, stderr) => {
+	if (stdout) {
+		document.getElementById("vram-size").innerHTML=stdout;
+	}
+	});
+}
+vram_size();
+
+setInterval(function() {
+	vram_size();
+}, 1000);
+
 //Capture the discrete GPU video memory (VRAM) frequency
 function vram_freq() {
 	const exec = require('child_process').exec;
