@@ -2,7 +2,7 @@
 Name=Info for Prime Settings
 GenericName=Info for Prime Settings
 Comment=Info for Prime Settings
-Exec=sleep 5; /bin/bash /opt/regataos-prime/scripts/detect-system-info.sh & sudo /opt/regataos-prime/scripts/system-info.sh
+Exec=sleep 5; /opt/regataos-prime/scripts/detect-system-info.sh start & sudo /opt/regataos-prime/scripts/system-info.sh
 Terminal=false
 NoDisplay=true
 Type=Application
