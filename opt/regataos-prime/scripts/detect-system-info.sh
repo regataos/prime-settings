@@ -31,8 +31,14 @@ echo $(/bin/bash /opt/regataos-prime/scripts/hardware-info -capture-dgpu) > "$HO
 #Capture MESA version
 echo $(/bin/bash /opt/regataos-prime/scripts/hardware-info -mesa-version) > "$HOME/.config/regataos-prime/system-info/mesa-version.txt"
 
-#Capture MESA version
+#Capture OpenGL version
+echo $(/bin/bash /opt/regataos-prime/scripts/hardware-info -opengl-version) > "$HOME/.config/regataos-prime/system-info/opengl-version.txt"
+
+#Capture Vulkan version
 /bin/bash /opt/regataos-prime/scripts/hardware-info -vulkan-version
 echo $(cat "/tmp/regataos-prime/vulkan-version.txt" | awk '{print $4}') > "$HOME/.config/regataos-prime/system-info/vulkan-version.txt"
+
+#Capture Kernel version
+echo $(/bin/bash /opt/regataos-prime/scripts/hardware-info -kernel-version) > "$HOME/.config/regataos-prime/system-info/kernel-version.txt"
 
 exit;

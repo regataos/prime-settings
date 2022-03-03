@@ -285,10 +285,20 @@ else
 fi
 }
 
+# Capture OpenGL version
+function opengl_version() {
+	echo $(glxinfo | grep -i "OpenGL version string" | cut -d":" -f 2- | awk '{print $1}')
+}
+
 # Capture Vulkan version
 function vulkan_version() {
 	echo $(vulkaninfo | grep "Vulkan Instance Version") > "/tmp/regataos-prime/vulkan-version.txt"
 	sed -i '/WARNING/d' "/tmp/regataos-prime/vulkan-version.txt"
+}
+
+# Capture kernel version
+function kernel_version() {
+	echo $(uname -r | cut -d"-" -f -1)
 }
 
 # Capture Mesa version and identify driver for Mesa
@@ -374,7 +384,11 @@ case $1 in
          ;;
    "-mesa-version") mesa_version
          ;;
+   "-opengl-version") opengl_version
+         ;;
    "-vulkan-version") vulkan_version
+         ;;
+   "-kernel-version") kernel_version
          ;;
    "-cpu-use") cpu_use
          ;;

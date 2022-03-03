@@ -133,7 +133,9 @@ $(document).ready(function() {
     $(".cpu").text("Modelo da CPU");
     $(".igpu-name").text("Gráficos integrados");
     $(".mesa-driver").text("Versão do Mesa Driver");
+    $(".opengl-version").text("Versão da API OpenGL");
     $(".vulkan-version").text("Versão da API Vulkan");
+    $(".kernel-version").text("Versão do Kernel Linux");
     $(".more-info").text("Mais detalhes sobre o sistema");
     $(".more-info-desc").text("Centro de informações do sistema");
 });

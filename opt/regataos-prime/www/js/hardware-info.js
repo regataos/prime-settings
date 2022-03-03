@@ -35,9 +35,17 @@ $(document).ready(function() {
 	var mesa_version = fs.readFileSync("/tmp/regataos-prime/config/system-info/mesa-version.txt", "utf8");
 	document.getElementById("mesa-version").innerHTML=mesa_version;
 
+	// Capture OpenGL version
+	var opengl_version = fs.readFileSync("/tmp/regataos-prime/config/system-info/opengl-version.txt", "utf8");
+	document.getElementById("gl-version").innerHTML=opengl_version;
+
 	// Capture Vulkan version
 	var vulkan_version = fs.readFileSync("/tmp/regataos-prime/config/system-info/vulkan-version.txt", "utf8");
 	document.getElementById("vk-version").innerHTML=vulkan_version;
+
+	// Capture Kernel version
+	var kernel_version = fs.readFileSync("/tmp/regataos-prime/config/system-info/kernel-version.txt", "utf8");
+	document.getElementById("linux-version").innerHTML=kernel_version;
 });
 }
 
