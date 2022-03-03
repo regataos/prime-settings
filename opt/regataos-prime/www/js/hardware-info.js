@@ -34,6 +34,10 @@ $(document).ready(function() {
 	// Capture MESA version
 	var mesa_version = fs.readFileSync("/tmp/regataos-prime/config/system-info/mesa-version.txt", "utf8");
 	document.getElementById("mesa-version").innerHTML=mesa_version;
+
+	// Capture Vulkan version
+	var vulkan_version = fs.readFileSync("/tmp/regataos-prime/config/system-info/vulkan-version.txt", "utf8");
+	document.getElementById("vk-version").innerHTML=vulkan_version;
 });
 }
 

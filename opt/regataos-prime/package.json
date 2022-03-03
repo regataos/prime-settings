@@ -1,6 +1,6 @@
 {
-  "name": "Graphical settings",
-  "description": "Graphical settings for Regata OS",
+  "name": "Maximum-Q",
+  "description": "Graphics settings, hardware usage and more",
   "version": "0.1.0",
   "main": "www/index.html",
   "inject_js_start": "www/js/jquery.min.js",

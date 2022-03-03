@@ -13,6 +13,9 @@ vram_size=$(/bin/bash /opt/regataos-prime/scripts/hardware-info -vram-size)
 nv_version=$(echo $(nvidia-smi -i 0 --query-gpu=driver_version --format=csv,noheader))
 mesa_version=$(/bin/bash /opt/regataos-prime/scripts/hardware-info -mesa-version)
 
+/bin/bash /opt/regataos-prime/scripts/hardware-info -vulkan-version
+vulkan_version=$(cat "/tmp/regataos-prime/vulkan-version.txt" | awk '{print $4}')
+
 echo "Check out some information about your system:" > /tmp/regataos-prime/prime-info.txt
 echo "" >> /tmp/regataos-prime/prime-info.txt
 
@@ -28,5 +31,6 @@ echo "- Graphic chipset: $dgpu" >> /tmp/regataos-prime/prime-info.txt
 echo "- Video memory size: $vram_size" >> /tmp/regataos-prime/prime-info.txt
 echo "- NVIDIA driver version: $nv_version" >> /tmp/regataos-prime/prime-info.txt
 echo "- Mesa version: $mesa_version" >> /tmp/regataos-prime/prime-info.txt
+echo "- Vulkan version: $vulkan_version" >> /tmp/regataos-prime/prime-info.txt
 
 cp -f /tmp/regataos-prime/prime-info.txt $HOME/system-info.txt

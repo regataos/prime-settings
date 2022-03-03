@@ -274,99 +274,107 @@ app_executable_snap="$(grep -R '"executable":' $i | awk '{print $4}' | sed 's/"\
 
 installed_apps=$(cat /opt/regataos-store/installed-apps/installed-apps.txt)
 if [[ $installed_apps == *"$app_name"* ]]; then
-if [[ $enable_dgpu != *"none"* ]]; then
-	if [[ $(echo $package_manager) == *"zypper"* ]]; then
-	echo "$package_name"
+	if [[ $enable_dgpu != *"none"* ]]; then
+		if [[ $(echo $package_manager) == *"zypper"* ]]; then
+		echo "$package_name"
 
-		if test ! -e "/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt"; then
-    		desktop_file=$(rpm -ql $package_name | grep ".desktop" | head -1 | tail -1 | sed 's/.txt//');
+			if test ! -e "/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt"; then
+				desktop_file=$(rpm -ql $package_name | grep ".desktop" | head -1 | tail -1 | sed 's/.txt//');
 
-        	if [ ! -z $desktop_file ];then
-            	icon_name=$(grep -r "Icon=" "$desktop_file" | cut -d"=" -f 2-);
+				if [ ! -z $desktop_file ];then
+					icon_name=$(grep -r "Icon=" "$desktop_file" | cut -d"=" -f 2-);
 
-            	search_icon_directory_svg=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | egrep "svg" | sed '/symbolic/d' | head -1 | tail -1);
-            	search_icon_directory_png1=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | head -1 | tail -1);
-            	search_icon_directory_png2=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | tail -1 | head -1);
+					search_icon_directory_svg=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | egrep "svg" | sed '/symbolic/d' | head -1 | tail -1);
+					search_icon_directory_png1=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | head -1 | tail -1);
+					search_icon_directory_png2=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | tail -1 | head -1);
 
-            	if [ -z $search_icon_directory_svg ];then
-            		size_icon_png1=$(identify -verbose $search_icon_directory_png1 | grep Geometry | awk '{print $2}' | cut -d"x" -f -1)
-            		size_icon_png2=$(identify -verbose $search_icon_directory_png2 | grep Geometry | awk '{print $2}' | cut -d"x" -f -1)
+					if [ -z $search_icon_directory_svg ];then
+						size_icon_png1=$(identify -verbose $search_icon_directory_png1 | grep Geometry | awk '{print $2}' | cut -d"x" -f -1)
+						size_icon_png2=$(identify -verbose $search_icon_directory_png2 | grep Geometry | awk '{print $2}' | cut -d"x" -f -1)
 
-                	if [ $(echo $size_icon_png1) -gt $(echo $size_icon_png2) ]; then
-                    	search_icon_directory=$(echo $search_icon_directory_png1)
+						if [ $(echo $size_icon_png1) -gt $(echo $size_icon_png2) ]; then
+							search_icon_directory=$(echo $search_icon_directory_png1)
 
-                	elif [ $(echo $size_icon_png2) -gt $(echo $size_icon_png1) ]; then
-                    	search_icon_directory=$(echo $search_icon_directory_png2)
+						elif [ $(echo $size_icon_png2) -gt $(echo $size_icon_png1) ]; then
+							search_icon_directory=$(echo $search_icon_directory_png2)
 
-                	elif [ $(echo $size_icon_png1) -ge $(echo $size_icon_png2) ]; then
-                    	search_icon_directory=$(echo $search_icon_directory_png2)
+						elif [ $(echo $size_icon_png1) -ge $(echo $size_icon_png2) ]; then
+							search_icon_directory=$(echo $search_icon_directory_png2)
 
-                	elif [ $(echo $size_icon_png2) -ge $(echo $size_icon_png1) ]; then
-                    	search_icon_directory=$(echo $search_icon_directory_png2)
+						elif [ $(echo $size_icon_png2) -ge $(echo $size_icon_png1) ]; then
+							search_icon_directory=$(echo $search_icon_directory_png2)
 
-                	else
-                    	search_icon_directory="/usr/share/icons/breeze-dark/apps/48/ktip.svg"
-                	fi
+						else
+							search_icon_directory="/usr/share/icons/breeze-dark/apps/48/ktip.svg"
+						fi
 
-            	else
-                	search_icon_directory=$(echo $search_icon_directory_svg)
-            	fi
+					else
+						search_icon_directory=$(echo $search_icon_directory_svg)
+					fi
 
-				# File where the application icon directory will be stored
-				app_icon_dir="/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt"
-            	echo "file://$search_icon_directory" > "$app_icon_dir";
+					# File where the application icon directory will be stored
+					app_icon_dir="/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt"
+					echo "file://$search_icon_directory" > "$app_icon_dir";
 
-				# If the file is saved with two lines, this could be a problem. If necessary, remove the last row.
-				if [ $(find $app_icon_dir -type f -exec wc -l {} + | awk '{print $1}') -ge 2 ]; then
-					sed -i '$ d' "$app_icon_dir";
+					# If the file is saved with two lines, this could be a problem. If necessary, remove the last row.
+					if [ $(find $app_icon_dir -type f -exec wc -l {} + | awk '{print $1}') -ge 2 ]; then
+						sed -i '$ d' "$app_icon_dir";
+					fi
 				fi
-        	fi
-		fi
-
-	elif [[ $(echo $package_manager) == *"snap"* ]]; then
-		# Locate the Snap app .desktop file
-		search_desktop_snap_file=$(grep -r $(echo "$app_executable_snap" | sed 's/snap run //') "/var/lib/snapd/desktop/applications/" | sed '/mimeinfo/d' | grep .desktop | head -1 | tail -1 | cut -d":" -f -1 | sed '/^$/d')
-
-		# Get the name of the .desktop file from the Snap app
-		desktop_file=$(echo "$search_desktop_snap_file" | sed 's/\// /g' | awk '{print $6}')
-
-		if test ! -e "/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt"; then
-			# Find the directory for the Snap app icon
-			search_desktop_snap_icon=$(grep -r "Icon=" $(echo $search_desktop_snap_file) | cut -d"=" -f 2-)
-			echo "file://$search_desktop_snap_icon" > "/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt";
-		fi
-	else
-		echo "Nothing to do..."
-	fi
-
-	if [[ $enable_dgpu == *"deactivate"* ]]; then
-		if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) == *"$app_name"* ]]; then
-			check_app
-
-		else
-			if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) != *"$app_name"* ]]; then
-				echo "$app_name" >> "/tmp/regataos-prime/config/run-without-dgpu.conf"
-				sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
 			fi
 
-			check_app
+		elif [[ $(echo $package_manager) == *"snap"* ]]; then
+			# Locate the Snap app .desktop file
+			search_desktop_snap_file=$(grep -r $(echo "$app_executable_snap" | sed 's/snap run //') "/var/lib/snapd/desktop/applications/" | sed '/mimeinfo/d' | grep .desktop | head -1 | tail -1 | cut -d":" -f -1 | sed '/^$/d')
+
+			# Get the name of the .desktop file from the Snap app
+			desktop_file=$(echo "$search_desktop_snap_file" | sed 's/\// /g' | awk '{print $6}')
+
+			if test ! -e "/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt"; then
+				# Find the directory for the Snap app icon
+				search_desktop_snap_icon=$(grep -r "Icon=" $(echo $search_desktop_snap_file) | cut -d"=" -f 2-)
+				echo "file://$search_desktop_snap_icon" > "/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt";
+			fi
+		else
+			echo "Nothing to do..."
 		fi
 
-	else
-		if  [[ $enable_dgpu == *"activate "* ]]; then
-			if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) == *"$app_name"* ]]; then
+		if [[ $enable_dgpu == *"deactivate"* ]]; then
+			echo "$app_name deactivate"
+			if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) == *"$app_name"* ]]; then
 				check_app
 
 			else
-				if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) != *"$app_name"* ]]; then
-					echo "$app_name" >> "/tmp/regataos-prime/config/run-with-dgpu.conf"
-					sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
+				if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) != *"$app_name"* ]]; then
+					echo "$app_name" >> "/tmp/regataos-prime/config/run-without-dgpu.conf"
+					sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
 				fi
 
 				check_app
 			fi
+
+		else
+			if [[ $enable_dgpu == *"activate"* ]]; then
+				echo "$app_name activate"
+				if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) == *"$app_name"* ]]; then
+					check_app
+
+				else
+					if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) != *"$app_name"* ]]; then
+						echo "$app_name" >> "/tmp/regataos-prime/config/run-with-dgpu.conf"
+						sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
+						echo "$app_name activated"
+					else
+						echo "$app_name activated"
+					fi
+
+					check_app
+				fi
+			fi
 		fi
 	fi
 fi
-fi
 done
+
+# We're finished!
+exit 0

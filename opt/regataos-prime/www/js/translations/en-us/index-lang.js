@@ -1,7 +1,7 @@
 // English language translation
 $(document).ready(function() {
 	// Window title
-	$("title").text("Graphical settings");
+	$("title").text("Maximum-Q");
 
 	// Side bar
 	//Back button and more
@@ -133,6 +133,7 @@ $(document).ready(function() {
     $(".cpu").text("CPU model");
     $(".igpu-name").text("Integrated graphics");
     $(".mesa-driver").text("Mesa Driver version");
+    $(".vulkan-version").text("Vulkan API Version");
     $(".more-info").text("More details about the system");
     $(".more-info-desc").text("System information center");
 });

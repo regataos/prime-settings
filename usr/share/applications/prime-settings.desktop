@@ -1,29 +1,29 @@
 [Desktop Entry]
-Name=Graphical settings
-Name[en_US]=Graphical settings
-Name[pt_BR]=Configurações gráficas
-Name[pt_PT]=Configurações gráficas
-Name[es]=Configuraciones gráficas
+Name=Maximum-Q
+Name[en_US]=Maximum-Q
+Name[pt_BR]=Maximum-Q
+Name[pt_PT]=Maximum-Q
+Name[es]=Maximum-Q
 
-Comment=Graphics settings and GPU usage
-Comment[en_US]=Graphics settings and GPU usage
-Comment[pt_BR]=Configurações gráficas e uso da GPU
-Comment[pt_PT]=Configurações gráficas e uso da GPU
-Comment[es]=Configuración de gráficos y uso de GPU
+Comment=Graphics settings, hardware usage and more
+Comment[en_US]=Graphics settings, hardware usage and more
+Comment[pt_BR]=Configurações gráficas, uso do hardware e mais
+Comment[pt_PT]=Configurações gráficas, uso do hardware e mais
+Comment[es]=Configuración de gráficos, uso de hardware y más
 
-GenericName=Graphics settings and GPU usage
-GenericName[en_US]=Graphics settings and GPU usage
-GenericName[pt_BR]=Configurações gráficas e uso da GPU
-GenericName[pt_PT]=Configurações gráficas e uso da GPU
-GenericName[es]=Configuración de gráficos y uso de GPU
+GenericName=Graphics settings, hardware usage and more
+GenericName[en_US]=Graphics settings, hardware usage and more
+GenericName[pt_BR]=Configurações gráficas, uso do hardware e mais
+GenericName[pt_PT]=Configurações gráficas, uso do hardware e mais
+GenericName[es]=Configuración de gráficos, uso de hardware y más
 
 Exec=bash -x prime-settings
-Icon=regataos-gs
+Icon=Max-q
 Categories=Settings;
 MimeType=
 Path=
 StartupNotify=true
-StartupWMClass=Graphical settings
+StartupWMClass=Maximum-Q
 Terminal=false
 TerminalOptions=
 Type=Application

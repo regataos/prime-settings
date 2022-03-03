@@ -285,6 +285,12 @@ else
 fi
 }
 
+# Capture Vulkan version
+function vulkan_version() {
+	echo $(vulkaninfo | grep "Vulkan Instance Version") > "/tmp/regataos-prime/vulkan-version.txt"
+	sed -i '/WARNING/d' "/tmp/regataos-prime/vulkan-version.txt"
+}
+
 # Capture Mesa version and identify driver for Mesa
 function mesa_version() {
 mesa_driver=$(glxinfo | grep -i 'OpenGL vendor string' | awk '{print $4}')
@@ -367,6 +373,8 @@ case $1 in
    "-capture-dgpu") capture_dgpu
          ;;
    "-mesa-version") mesa_version
+         ;;
+   "-vulkan-version") vulkan_version
          ;;
    "-cpu-use") cpu_use
          ;;

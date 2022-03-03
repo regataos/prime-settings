@@ -29,6 +29,11 @@ function use_powersave() {
 		cpu_governor="powersave"
 		save_governor_settings
 
+	elif [[ $(cpupower frequency-info | grep ondemand) == *"ondemand"* ]]; then
+		cpupower frequency-set -g ondemand
+		cpu_governor="ondemand"
+		save_governor_settings
+
 	else
 		cpupower frequency-set -g schedutil
 		cpu_governor="schedutil"
