@@ -1,9 +1,9 @@
 [Desktop Entry]
-Name=Maximum-Q
-Name[en_US]=Maximum-Q
-Name[pt_BR]=Maximum-Q
-Name[pt_PT]=Maximum-Q
-Name[es]=Maximum-Q
+Name=Max-Q
+Name[en_US]=Max-Q
+Name[pt_BR]=Max-Q
+Name[pt_PT]=Max-Q
+Name[es]=Max-Q
 
 Comment=Graphics settings, hardware usage and more
 Comment[en_US]=Graphics settings, hardware usage and more
@@ -23,7 +23,7 @@ Categories=Settings;
 MimeType=
 Path=
 StartupNotify=true
-StartupWMClass=Maximum-Q
+StartupWMClass=Max-Q
 Terminal=false
 TerminalOptions=
 Type=Application
