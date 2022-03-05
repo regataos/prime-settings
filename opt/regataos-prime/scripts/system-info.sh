@@ -3,24 +3,32 @@
 sleep 3;
 
 # Detect system language
-if test -e "$HOME/.config/plasma-localerc" ; then
-    language=$(grep -r LANG "$HOME/.config/plasma-localerc")
+user=$(users | awk '{print $1}')
 
-elif test -e "$HOME/.config/user-dirs.locale" ; then
-    language=$(grep -r LANG "$HOME/.config/user-dirs.locale")
+if test -e "/home/$user/.config/plasma-localerc" ; then
+    language=$(grep -r LANG "/home/$user/.config/plasma-localerc")
+
+elif test -e "/home/$user/.config/user-dirs.locale" ; then
+    language=$(cat "/home/$user/.config/user-dirs.locale")
 
 else
     language=$(echo $LANG)
 fi
 
 # Configure application language
-if [[ $language == *"pt"* ]]; then
+if [[ $language == *"pt_BR"* ]]; then
 	rm -rf "/opt/regataos-prime/www/js/translations/language"
 	rm -rf "/opt/regataos-prime/scripts/notify"
 	ln -sf /opt/regataos-prime/www/js/translations/pt-br /opt/regataos-prime/www/js/translations/language
 	ln -sf /opt/regataos-prime/scripts/notifications/notify-pt /opt/regataos-prime/scripts/notify
 
-elif [[ $language == *"en"* ]]; then
+elif [[ $language == *"pt_PT"* ]]; then
+	rm -rf "/opt/regataos-prime/www/js/translations/language"
+	rm -rf "/opt/regataos-prime/scripts/notify"
+	ln -sf /opt/regataos-prime/www/js/translations/pt-br /opt/regataos-prime/www/js/translations/language
+	ln -sf /opt/regataos-prime/scripts/notifications/notify-pt /opt/regataos-prime/scripts/notify
+
+elif [[ $language == *"en_US"* ]]; then
 	rm -rf "/opt/regataos-prime/www/js/translations/language"
 	rm -rf "/opt/regataos-prime/scripts/notify"
 	ln -sf /opt/regataos-prime/www/js/translations/en-us /opt/regataos-prime/www/js/translations/language
