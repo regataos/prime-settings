@@ -1,7 +1,7 @@
 // English language translation
 $(document).ready(function() {
 	// Window title
-	$("title").text("Maximum-Q");
+	$("title").text("Max-Q");
 
 	// Side bar
 	//Back button and more
