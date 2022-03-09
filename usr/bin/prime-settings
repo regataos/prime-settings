@@ -65,14 +65,17 @@ if test ! -e "/tmp/regataos-prime/config" ; then
 	chmod 777 /tmp/regataos-prime/*
 fi
 
+# Check the apps
+sudo /opt/regataos-prime/scripts/apps-hybrid-graphics
+
 # Display hardware information
 # sudo /opt/regataos-prime/scripts/system-info.sh start
 cat /tmp/regataos-prime/prime-info.txt
 
 if [[ $(glxinfo | grep vendor) == *"Intel"* ]]; then
-	regataosprime --disable-gpu /opt/regataos-prime & sleep 1; /opt/regataos-prime/scripts/detect-system-info.sh start & /opt/regataos-prime/scripts/intel-gpu-frequency & /opt/regataos-prime/scripts/intel-gpu-usage & sudo /opt/regataos-prime/scripts/apps-hybrid-graphics
+	regataosprime --disable-gpu /opt/regataos-prime & sleep 1; /opt/regataos-prime/scripts/detect-system-info.sh start & /opt/regataos-prime/scripts/intel-gpu-frequency & /opt/regataos-prime/scripts/intel-gpu-usage
 else
-	regataosprime /opt/regataos-prime & sleep 1; /opt/regataos-prime/scripts/detect-system-info.sh start & /opt/regataos-prime/scripts/intel-gpu-frequency & /opt/regataos-prime/scripts/intel-gpu-usage & sudo /opt/regataos-prime/scripts/apps-hybrid-graphics
+	regataosprime /opt/regataos-prime & sleep 1; /opt/regataos-prime/scripts/detect-system-info.sh start & /opt/regataos-prime/scripts/intel-gpu-frequency & /opt/regataos-prime/scripts/intel-gpu-usage
 fi
 
 # Clear
