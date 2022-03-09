@@ -50,7 +50,11 @@ if [[ $(echo $package_manager) == *"zypper"* ]]; then
 	fi
 
 	# Enable or disable running applications with the dGPU
-	if [[ $(grep -R "$app_name=on" /tmp/regataos-prime/config/run-without-dgpu.conf) == *"$app_name=on"* ]]; then
+	#If laptop with hybrid graphics is not detected, disable running apps with "regataos-dgpu" option.
+	if test -e "/tmp/regataos-prime/not-hybrid-graphics.txt"; then
+		sed -i 's/Exec=regataos-dgpu /Exec=/' "$apps_dir/$desktop_file" "$desktop_dir/$desktop_file" "$apps_local_home_dir/$desktop_file" "$apps_local_dir/$desktop_file"
+
+	elif [[ $(grep -R "$app_name=on" /tmp/regataos-prime/config/run-without-dgpu.conf) == *"$app_name=on"* ]]; then
 		# Run app with the dGPU
 		if [[ $(grep -r "regataos-dgpu" "$apps_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
 			sed -i 's/Exec=/Exec=regataos-dgpu /' "$apps_dir/$desktop_file"
@@ -177,7 +181,11 @@ if [[ $(echo $package_manager) == *"zypper"* ]]; then
 
 elif [[ $(echo $package_manager) == *"snap"* ]]; then
 	# Enable or disable running applications with the dGPU
-	if [[ $(grep -R "$app_name=on" /tmp/regataos-prime/config/run-without-dgpu.conf) == *"$app_name=on"* ]]; then
+	#If laptop with hybrid graphics is not detected, disable running apps with "regataos-dgpu" option.
+	if test -e "/tmp/regataos-prime/not-hybrid-graphics.txt"; then
+		sed -i 's/Exec=regataos-dgpu /Exec=/' "$apps_dir/$desktop_file" "$desktop_dir/$desktop_file" "$apps_local_home_dir/$desktop_file" "$apps_local_dir/$desktop_file"
+
+	elif [[ $(grep -R "$app_name=on" /tmp/regataos-prime/config/run-without-dgpu.conf) == *"$app_name=on"* ]]; then
 		# Run app with the dGPU
 		if [[ $(grep -r "regataos-dgpu" "$snap_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
 			sed -i 's/Exec=/Exec=regataos-dgpu /' "$snap_dir/$desktop_file"
@@ -271,19 +279,20 @@ package_name="$(grep -R '"package":' $i | awk '{print $2}' | sed 's/"\|,//g')";
 package_manager="$(grep -R '"package_manager":' $i | awk '{print $2}' | sed 's/"\|,//g')";
 enable_dgpu="$(grep -R '"dgpu":' $i | awk '{print $2}' | sed 's/"\|,//g')";
 app_executable_snap="$(grep -R '"executable":' $i | awk '{print $4}' | sed 's/"\|,\|snap run //g')";
-
 installed_apps=$(cat /opt/regataos-store/installed-apps/installed-apps.txt)
+
 if [[ $installed_apps == *"$app_name"* ]]; then
 	if [[ $enable_dgpu != *"none"* ]]; then
+
+		# Capture the app icon to display on Max-Q.
 		if [[ $(echo $package_manager) == *"zypper"* ]]; then
-		echo "$package_name"
+			echo "$package_name"
 
 			if test ! -e "/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt"; then
 				desktop_file=$(rpm -ql $package_name | grep ".desktop" | head -1 | tail -1 | sed 's/.txt//');
 
 				if [ ! -z $desktop_file ];then
 					icon_name=$(grep -r "Icon=" "$desktop_file" | cut -d"=" -f 2-);
-
 					search_icon_directory_svg=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | egrep "svg" | sed '/symbolic/d' | head -1 | tail -1);
 					search_icon_directory_png1=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | head -1 | tail -1);
 					search_icon_directory_png2=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | tail -1 | head -1);
@@ -339,18 +348,17 @@ if [[ $installed_apps == *"$app_name"* ]]; then
 			echo "Nothing to do..."
 		fi
 
+		# Add or remove apps from the list of software running with the dGPU of laptops with hybrid graphics.
 		if [[ $enable_dgpu == *"deactivate"* ]]; then
 			echo "$app_name deactivate"
 			if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) == *"$app_name"* ]]; then
 				check_app
-
 			else
 				if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) != *"$app_name"* ]]; then
 					echo "$app_name" >> "/tmp/regataos-prime/config/run-without-dgpu.conf"
 					sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
 				fi
-
-				check_app
+			check_app
 			fi
 
 		else
@@ -358,17 +366,17 @@ if [[ $installed_apps == *"$app_name"* ]]; then
 				echo "$app_name activate"
 				if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) == *"$app_name"* ]]; then
 					check_app
-
 				else
-					if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) != *"$app_name"* ]]; then
-						echo "$app_name" >> "/tmp/regataos-prime/config/run-with-dgpu.conf"
-						sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
-						echo "$app_name activated"
-					else
-						echo "$app_name activated"
+					if test ! -e "/tmp/regataos-prime/not-hybrid-graphics.txt"; then
+						if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) != *"$app_name"* ]]; then
+							echo "$app_name" >> "/tmp/regataos-prime/config/run-with-dgpu.conf"
+							sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
+							echo "$app_name activated"
+						else
+							echo "$app_name activated"
+						fi
 					fi
-
-					check_app
+				check_app
 				fi
 			fi
 		fi
