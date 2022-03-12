@@ -42,8 +42,12 @@ if [[ $(echo $package_manager) == *"zypper"* ]]; then
 
 	if [ -z $desktop_file_dir ]; then
 		check_fake_desktop_file=$(rpm -ql $package_name | grep ".desktop")
-		desktop_file=$(cat $check_fake_desktop_file | head -5 | tail -1 | cut -d"=" -f 2- | sed 's/\// /g' | sed 's/local //' | awk '{print $4}')
-		echo "$desktop_file"
+		if ! [ -z $check_fake_desktop_file ]; then
+			desktop_file=$(cat $check_fake_desktop_file | head -5 | tail -1 | cut -d"=" -f 2- | sed 's/\// /g' | sed 's/local //' | awk '{print $4}')
+			echo "$desktop_file"
+		else
+			echo 'No ".desktop" file for '"$package_name"' package.'
+		fi
 	else
 		desktop_file=$(echo $desktop_file_dir)
 		echo "$desktop_file"
@@ -51,7 +55,10 @@ if [[ $(echo $package_manager) == *"zypper"* ]]; then
 
 	# Enable or disable running applications with the dGPU
 	#If laptop with hybrid graphics is not detected, disable running apps with "regataos-dgpu" option.
-	if test -e "/tmp/regataos-prime/not-hybrid-graphics.txt"; then
+	if [ -z $desktop_file ]; then
+		echo "Nothing to do..."
+
+	elif test -e "/tmp/regataos-prime/not-hybrid-graphics.txt"; then
 		sed -i 's/Exec=regataos-dgpu /Exec=/' "$apps_dir/$desktop_file" "$desktop_dir/$desktop_file" "$apps_local_home_dir/$desktop_file" "$apps_local_dir/$desktop_file"
 
 	elif [[ $(grep -R "$app_name=on" /tmp/regataos-prime/config/run-without-dgpu.conf) == *"$app_name=on"* ]]; then
