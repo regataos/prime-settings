@@ -4,7 +4,8 @@
 
 #Capture the discrete GPU video memory (VRAM) size
 function vram_size() {
-	if test -e /usr/bin/nvidia-xconfig ; then
+	detect_driver=$(lshw -class display | grep "driver")
+	if [[ $detect_driver == *"nvidia"* ]]; then
 		vram_total=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader | sed 's/ MiB/MB/')
 		echo "$vram_total"
 	else
@@ -15,7 +16,8 @@ function vram_size() {
 
 #Capture the discrete GPU video memory (VRAM) frequency
 function vram_freq() {
-	if test -e /usr/bin/nvidia-xconfig ; then
+	detect_driver=$(lshw -class display | grep "driver")
+	if [[ $detect_driver == *"nvidia"* ]]; then
 		vram_freq=$(nvidia-smi --query-gpu=clocks.mem --format=csv,noheader | sed 's/ MHz/MHz/')
 		echo "$vram_freq"
 	else
@@ -34,7 +36,8 @@ function vram_freq() {
 
 #Capture the discrete GPU video memory (VRAM) usage
 function vram_usage() {
-	if test -e /usr/bin/nvidia-xconfig ; then
+	detect_driver=$(lshw -class display | grep "driver")
+	if [[ $detect_driver == *"nvidia"* ]]; then
 		vram_usage=$(nvidia-smi --query-gpu=utilization.memory --format=csv,noheader | awk '{print $1}')
 		echo "$vram_usage"
 	else
@@ -46,7 +49,7 @@ function vram_usage() {
 		elif [[ $dgpu == *"Intel"* ]]; then
 			echo "0"
 		else
-			echo "No data"
+			echo "0"
 		fi
 	fi
 }
@@ -55,7 +58,8 @@ function vram_usage() {
 
 #Capture the discrete GPU usage
 function gpu_usage() {
-	if test -e /usr/bin/nvidia-xconfig ; then
+	detect_driver=$(lshw -class display | grep "driver")
+	if [[ $detect_driver == *"nvidia"* ]]; then
 		gpu_usage=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader | awk '{print $1}')
 		echo "$gpu_usage"
 	else
@@ -75,14 +79,15 @@ function gpu_usage() {
 			fi
 
 		else
-			echo "No data"
+			echo "0"
 		fi
 	fi
 }
 
 #Capture the discrete GPU temp
 function gpu_temp() {
-	if test -e /usr/bin/nvidia-xconfig ; then
+	detect_driver=$(lshw -class display | grep "driver")
+	if [[ $detect_driver == *"nvidia"* ]]; then
 		gpu_temp=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader)
 		echo "$gpu_temp"°C
 	else
@@ -93,7 +98,6 @@ function gpu_temp() {
 
 		elif [[ $dgpu == *"Intel"* ]]; then
 			echo "No data"
-
 		else
 			echo "No data"
 		fi
@@ -102,7 +106,8 @@ function gpu_temp() {
 
 #Capture the discrete GPU frequency
 function gpu_freq() {
-	if test -e /usr/bin/nvidia-xconfig ; then
+	detect_driver=$(lshw -class display | grep "driver")
+	if [[ $detect_driver == *"nvidia"* ]]; then
 		gpu_freq=$(nvidia-smi -q -d CLOCK | grep Graphics | head -1 | tail -1 | awk '{print $3}')
 		echo "$gpu_freq"MHz
 	else
@@ -116,7 +121,7 @@ function gpu_freq() {
 			echo "$gpu_freq"MHz
 
 		else
-			echo "No data"
+			echo "0"MHz
 		fi
 	fi
 }
@@ -150,7 +155,8 @@ if test -e /tmp/regataos-prime/use-hybrid-graphics.txt ; then
 		# The dGPU appears to be an AMD APU. Check the primary GPU
 		dgpu1=$(inxi -G | egrep -i "Card-1|Device-1")
 		if [[ $dgpu1 == *"NVIDIA"* ]]; then
-			if test -e /usr/bin/nvidia-xconfig ; then
+			detect_driver=$(lshw -class display | grep "driver")
+			if [[ $detect_driver == *"nvidia"* ]]; then
 				dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
 			else
 				dgpu_model=$(echo $dgpu1 | cut -d: -f 3-)
@@ -158,7 +164,8 @@ if test -e /tmp/regataos-prime/use-hybrid-graphics.txt ; then
 			echo "NVIDIA $dgpu_model"
 
 		elif [[ $dgpu1 == *"GeForce"* ]]; then
-			if test -e /usr/bin/nvidia-xconfig ; then
+			detect_driver=$(lshw -class display | grep "driver")
+			if [[ $detect_driver == *"nvidia"* ]]; then
 				dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
 			else
 				dgpu_model=$(echo $dgpu1 | cut -d: -f 3-)
@@ -180,7 +187,8 @@ if test -e /tmp/regataos-prime/use-hybrid-graphics.txt ; then
 		# The dGPU appears to be an AMD APU. Check the primary GPU
 		dgpu1=$(inxi -G | egrep -i "Card-1|Device-1")
 		if [[ $dgpu1 == *"NVIDIA"* ]]; then
-			if test -e /usr/bin/nvidia-xconfig ; then
+			detect_driver=$(lshw -class display | grep "driver")
+			if [[ $detect_driver == *"nvidia"* ]]; then
 				dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
 			else
 				dgpu_model=$(echo $dgpu1 | cut -d: -f 3-)
@@ -188,7 +196,8 @@ if test -e /tmp/regataos-prime/use-hybrid-graphics.txt ; then
 			echo "NVIDIA $dgpu_model"
 
 		elif [[ $dgpu1 == *"GeForce"* ]]; then
-			if test -e /usr/bin/nvidia-xconfig ; then
+			detect_driver=$(lshw -class display | grep "driver")
+			if [[ $detect_driver == *"nvidia"* ]]; then
 				dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
 			else
 				dgpu_model=$(echo $dgpu1 | cut -d: -f 3-)
@@ -217,7 +226,8 @@ if test -e /tmp/regataos-prime/use-hybrid-graphics.txt ; then
 		echo "$dgpu_model"
 
 	elif [[ $dgpu2 == *"NVIDIA"* ]]; then
-		if test -e /usr/bin/nvidia-xconfig ; then
+		detect_driver=$(lshw -class display | grep "driver")
+		if [[ $detect_driver == *"nvidia"* ]]; then
 			dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
 		else
 			dgpu1=$(inxi -G | egrep -i "Card-1|Device-1" | cut -d":" -f 3- | cut -d"[" -f 2- | cut -d"]" -f -1)
@@ -226,7 +236,8 @@ if test -e /tmp/regataos-prime/use-hybrid-graphics.txt ; then
 		echo "$dgpu_model"
 
 	elif [[ $dgpu2 == *"GeForce"* ]]; then
-		if test -e /usr/bin/nvidia-xconfig ; then
+		detect_driver=$(lshw -class display | grep "driver")
+		if [[ $detect_driver == *"nvidia"* ]]; then
 			dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
 		else
 			dgpu1=$(inxi -G | egrep -i "Card-1|Device-1" | cut -d":" -f 3- | cut -d"[" -f 2- | cut -d"]" -f -1)
@@ -259,7 +270,8 @@ else
 		echo "$dgpu_model"
 
 	elif [[ $dgpu == *"NVIDIA"* ]]; then
-		if test -e /usr/bin/nvidia-xconfig ; then
+		detect_driver=$(lshw -class display | grep "driver")
+		if [[ $detect_driver == *"nvidia"* ]]; then
 			dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
 		else
 			dgpu_model=$(echo NVIDIA $dgpu1)
@@ -267,7 +279,8 @@ else
 		echo "$dgpu_model"
 
 	elif [[ $dgpu == *"GeForce"* ]]; then
-		if test -e /usr/bin/nvidia-xconfig ; then
+		detect_driver=$(lshw -class display | grep "driver")
+		if [[ $detect_driver == *"nvidia"* ]]; then
 			dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
 		else
 			dgpu_model=$(echo NVIDIA $dgpu1)
