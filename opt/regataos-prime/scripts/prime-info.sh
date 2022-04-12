@@ -16,7 +16,9 @@ opengl_version=$(/bin/bash /opt/regataos-prime/scripts/hardware-info -opengl-ver
 kernel_version=$(/bin/bash /opt/regataos-prime/scripts/hardware-info -kernel-version)
 
 /bin/bash /opt/regataos-prime/scripts/hardware-info -vulkan-version
-vulkan_version=$(cat "/tmp/regataos-prime/vulkan-version.txt" | awk '{print $4}')
+if test -e "/tmp/regataos-prime/vulkan-version.txt"; then
+    vulkan_version=$(cat "/tmp/regataos-prime/vulkan-version.txt" | awk '{print $4}')
+fi
 
 echo "Check out some information about your system:" > /tmp/regataos-prime/prime-info.txt
 echo "" >> /tmp/regataos-prime/prime-info.txt

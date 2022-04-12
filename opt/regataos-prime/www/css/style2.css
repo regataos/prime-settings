@@ -663,6 +663,13 @@ opacity: 1;
     	overflow: hidden;
 	}
 
+	.amf-text {
+		max-width: 18ch;
+		text-overflow: ellipsis;
+    	white-space: nowrap;
+    	overflow: hidden;
+	}
+
 	.info-item {
 		max-width: 27ch;
 		text-overflow: ellipsis;

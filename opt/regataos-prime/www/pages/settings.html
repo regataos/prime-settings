@@ -80,6 +80,19 @@
 				<span class="enabled unlockwidgets-on"></span>
 				<span class="disabled unlockwidgets-off"></span>
 			</li>
+			<li id="amf-toggle">
+				<div class="text-app amf-text">Enable AMD AMF</div>
+				<div class="switch__container" id="amf1">
+					<input id="switch-shadow-app amf" class="switch switch--shadow-app switch-on-amf" type="checkbox" onclick="window.config_option='amf'; amf_config();">
+					<label for="switch-shadow-app amf"></label>
+				</div>
+				<div class="switch__container" id="amf2">
+					<input id="switch-shadow2-app amf" class="switch switch--shadow2-app switch-off-amf" type="checkbox" onclick="window.config_option='amf'; amf_config();">
+					<label for="switch-shadow2-app amf"></label>
+				</div>
+				<span class="enabled amf-on"></span>
+				<span class="disabled amf-off"></span>
+			</li>
 			<li id="tearfree-toggle">
 				<div class="text-app pst-text">Prevent Screen Tearing</div>
 				<div class="switch__container">

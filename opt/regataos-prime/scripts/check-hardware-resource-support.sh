@@ -96,3 +96,21 @@ else
 		fi
 	fi
 fi
+
+# If necessary, configure amf
+if [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"amf=off"* ]]; then
+	sudo /opt/regataos-prime/scripts/enable-amd-amf -amf-off
+
+else
+	# Check if the "amf" option is present in the configuration file
+	if [[ $(grep -r "amf=" "/tmp/regataos-prime/config/regataos-prime.conf") != *"amf="* ]]; then
+		echo "amf=off" >> "$HOME/.config/regataos-prime/regataos-prime.conf"
+		sed -i '/^$/d' "$HOME/.config/regataos-prime/regataos-prime.conf"
+		sudo /opt/regataos-prime/scripts/enable-amd-amf -amf-off
+
+	else
+		if [[ $(grep -r "amf=" "/tmp/regataos-prime/config/regataos-prime.conf") == *"amf=on"* ]]; then
+			sudo /opt/regataos-prime/scripts/enable-amd-amf -amf-on
+		fi
+	fi
+fi

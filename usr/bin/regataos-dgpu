@@ -9,7 +9,17 @@ if test ! -e "/tmp/regataos-prime" ; then
 	mkdir -p "/tmp/regataos-prime/"
 fi
 
-export binary_file=$(echo "$@" | sed 's/ %f//')
+# Capture the binary to verify the software is running
+binary_file=$(echo "$@" | sed 's/ %f\| %F\| %u\| %U//')
+if [[ $(echo $binary_file) == *"--"* ]]; then
+	export binary_file=$(echo $binary_file | sed 's|/| |g' | sed 's/run-amf //' | cut -d"-" -f -1 | awk '{print $NF}')
+else
+	export binary_file=$(echo $binary_file | sed 's|/| |g' | sed 's/run-amf //' | awk '{print $NF}')
+fi
+
+echo ""
+echo "Running: "'"'$binary_file'"'""
+echo ""
 
 # Verifying that the NVIDIA driver is installed.
 if test -e /usr/bin/nvidia-xconfig ; then

@@ -379,6 +379,14 @@ li.button-vk:active {
 	display: none;
 }
 
+/* Enable AMD AMF */
+#amf1 {
+	display: none;
+}
+#amf-on {
+	display: none;
+}
+
 /* Responsive CSS */
 @media screen and (max-width: 1280px) {
 #cpugovernor1 {

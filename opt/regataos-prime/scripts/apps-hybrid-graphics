@@ -286,9 +286,9 @@ desktop_file=$(rpm -ql $package_name | grep ".desktop" | head -1 | tail -1 | sed
 
 if [ ! -z $desktop_file ];then
 	icon_name=$(grep -r "Icon=" "$desktop_file" | cut -d"=" -f 2-);
-	search_icon_directory_svg=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | egrep "svg" | sed '/symbolic/d' | head -1 | tail -1);
-	search_icon_directory_png1=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | head -1 | tail -1);
-	search_icon_directory_png2=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | tail -1 | head -1);
+	search_icon_directory_svg=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/apps/48/ /usr/share/icons/breeze-dark/apps/48/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | egrep "svg" | sed '/symbolic/d' | head -1 | tail -1);
+	search_icon_directory_png1=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/apps/48/ /usr/share/icons/breeze-dark/apps/48/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | head -1 | tail -1);
+	search_icon_directory_png2=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/apps/48/ /usr/share/icons/breeze-dark/apps/48/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | tail -1 | head -1);
 
 	if [ -z $search_icon_directory_svg ];then
 		size_icon_png1=$(identify -verbose $search_icon_directory_png1 | grep Geometry | awk '{print $2}' | cut -d"x" -f -1)
@@ -323,6 +323,7 @@ if [ ! -z $desktop_file ];then
 	# File where the application icon directory will be stored
 	app_icon_dir="/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt"
 	echo "file://$search_icon_directory" > "$app_icon_dir";
+	sed -i 's/-error//' "$app_icon_dir";
 
 	# If the file is saved with two lines, this could be a problem. If necessary, remove the last row.
 	if [ $(find $app_icon_dir -type f -exec wc -l {} + | awk '{print $1}') -ge 2 ]; then
@@ -359,6 +360,8 @@ if [[ $installed_apps == *"$app_name"* ]]; then
 				check_icon_file=$(cat /opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt)
 				if [[ $(echo $check_icon_file) != *"file:///"* ]]; then
 					capture_icon
+				else
+					sed -i 's/-error//' "/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt";
 				fi
 			else
 				capture_icon
@@ -377,12 +380,14 @@ if [[ $installed_apps == *"$app_name"* ]]; then
 					# Find the directory for the Snap app icon
 					search_desktop_snap_icon=$(grep -r "Icon=" $(echo $search_desktop_snap_file) | cut -d"=" -f 2-)
 					echo "file://$search_desktop_snap_icon" > "/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt";
+					sed -i 's/-error//' "$app_icon_dir";
 				fi
 
 			else
 				# Find the directory for the Snap app icon
 				search_desktop_snap_icon=$(grep -r "Icon=" $(echo $search_desktop_snap_file) | cut -d"=" -f 2-)
 				echo "file://$search_desktop_snap_icon" > "/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt";
+				sed -i 's/-error//' "$app_icon_dir";
 			fi
 		else
 			echo "Nothing to do..."

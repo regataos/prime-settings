@@ -23,6 +23,7 @@ Requires: xclip
 Requires: radeontop
 Requires: radeontop-lang
 Requires: sensors
+Requires: procps
 Conflicts: suse-prime
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-build
@@ -109,10 +110,64 @@ else
 	rm -f "/usr/share/kservices5/ServiceMenus/prime-gpu.desktop"
 fi
 
-# Update system info
-sudo /opt/regataos-prime/scripts/system-info.sh start
+# For Prime Settings system info
+/opt/regataos-prime/scripts/system-info.sh start
 
 update-desktop-database
+
+# Prepare the system for AMD AMF
+#Some variables
+ubuntu_version="22.10"
+amf_amdgpu_pro="amf-amdgpu-pro_1.4.24-1395274_amd64.deb"
+vulkan_amdgpu_pro="vulkan-amdgpu-pro_22.10-1395274_amd64.deb"
+
+#Create directory to receive AMDGPU-PRO files
+amdgpu_pro_dir="/opt/amdgpu-pro"
+
+if test ! -e "$amdgpu_pro_dir/amd-amf"; then
+  mkdir -p "$amdgpu_pro_dir/amd-amf"
+fi
+
+if test ! -e "$amdgpu_pro_dir/amd-vulkan"; then
+  mkdir -p "$amdgpu_pro_dir/amd-vulkan"
+fi
+
+#Download the AMDGPU-PRO files
+#AMD AMF
+if test ! -e "$amdgpu_pro_dir/amd-amf/$amf_amdgpu_pro"; then
+  wget --no-check-certificate -O "$amdgpu_pro_dir/amd-amf/$amf_amdgpu_pro" \
+  "https://repo.radeon.com/amdgpu/$ubuntu_version/ubuntu/pool/proprietary/a/amf-amdgpu-pro/$amf_amdgpu_pro"
+
+  #Prepare AMDGPU-PRO files
+  cd "/$amdgpu_pro_dir/amd-amf/"
+  ar -x "$amf_amdgpu_pro"
+  tar xfv data.tar.xz
+
+  #Clear cache
+  rm -f "$amdgpu_pro_dir/amd-amf/control.tar.xz"
+  rm -f "$amdgpu_pro_dir/amd-amf/data.tar.xz"
+  rm -f "$amdgpu_pro_dir/amd-amf/debian-binary"
+fi
+
+#AMD Vulkan
+if test ! -e "$amdgpu_pro_dir/amd-vulkan/$vulkan_amdgpu_pro"; then
+  wget --no-check-certificate -O "$amdgpu_pro_dir/amd-vulkan/$vulkan_amdgpu_pro" \
+  "https://repo.radeon.com/amdgpu/$ubuntu_version/ubuntu/pool/proprietary/v/vulkan-amdgpu-pro/$vulkan_amdgpu_pro"
+
+  #Prepare AMDGPU-PRO files
+  cd "/$amdgpu_pro_dir/amd-vulkan/"
+  ar -x "$vulkan_amdgpu_pro"
+  tar xfv data.tar.xz
+
+  #Prepare ICD files for AMDGPU-PRO Vulkan driver
+  cp -f "/$amdgpu_pro_dir/amd-vulkan/opt/amdgpu-pro/etc/vulkan/icd.d/amd_icd64.json" "/$amdgpu_pro_dir/amd-vulkan/amd_icd64.json"
+  sed -i 's|/opt/amdgpu-pro/lib/x86_64-linux-gnu/|/opt/amdgpu-pro/amd-vulkan/opt/amdgpu-pro/lib/x86_64-linux-gnu/|g' /$amdgpu_pro_dir/amd-vulkan/amd_icd64.json
+
+  #Clear cache
+  rm -f "$amdgpu_pro_dir/amd-vulkan/control.tar.xz"
+  rm -f "$amdgpu_pro_dir/amd-vulkan/data.tar.xz"
+  rm -f "$amdgpu_pro_dir/amd-vulkan/debian-binary"
+fi
 
 %clean
 

@@ -26,7 +26,7 @@ gpu_usage();
 
 setInterval(function() {
 	gpu_usage();
-}, 1000);
+}, 2000);
 
 //Capture the discrete GPU temp
 function gpu_temp() {
@@ -42,7 +42,7 @@ gpu_temp();
 
 setInterval(function() {
 	gpu_temp();
-}, 1000);
+}, 2000);
 
 //Capture the discrete GPU frequency
 function gpu_freq() {
@@ -58,7 +58,7 @@ gpu_freq();
 
 setInterval(function() {
 	gpu_freq();
-}, 1000);
+}, 2000);
 
 // Capture information about using VRAM
 //Capture total amount of RAM
@@ -72,10 +72,6 @@ function vram_size() {
 	});
 }
 vram_size();
-
-setInterval(function() {
-	vram_size();
-}, 1000);
 
 //Capture the discrete GPU video memory (VRAM) frequency
 function vram_freq() {
@@ -91,7 +87,7 @@ vram_freq();
 
 setInterval(function() {
 	vram_freq();
-}, 1000);
+}, 2000);
 
 //Capture the discrete GPU video memory (VRAM) usage
 function vram_usage() {
@@ -111,7 +107,7 @@ vram_usage();
 
 setInterval(function() {
 	vram_usage();
-}, 1000);
+}, 2000);
 
 // Capture information about using CPU
 function cpu_use() {
@@ -120,11 +116,6 @@ function cpu_use() {
 	exec(command, (error, stdout, stderr) => {
 	});
 }
-cpu_use();
-
-setInterval(function() {
-	cpu_use();
-}, 1000);
 
 function cpu_usage() {
 const fs = require('fs');
@@ -140,11 +131,11 @@ if (err) throw err;
 	}
 }); 
 }
-cpu_usage();
 
 setInterval(function() {
+	cpu_use();
 	cpu_usage();
-}, 1000);
+}, 2000);
 
 function cpu_freq() {
 	const exec = require('child_process').exec;
@@ -159,7 +150,7 @@ cpu_freq();
 
 setInterval(function() {
 	cpu_freq();
-}, 1000);
+}, 2000);
 
 function cpu_temp() {
 	const exec = require('child_process').exec;
@@ -174,7 +165,7 @@ cpu_temp();
 
 setInterval(function() {
 	cpu_temp();
-}, 1000);
+}, 2000);
 
 // Capture information about using RAM memory
 function ram_total() {
@@ -212,7 +203,7 @@ ram_usage();
 
 setInterval(function() {
 	ram_usage();
-}, 1000);
+}, 2000);
 
 function ram_use() {
 	const exec = require('child_process').exec;
@@ -228,4 +219,4 @@ ram_use();
 
 setInterval(function() {
 	ram_use();
-}, 1000);
+}, 2000);

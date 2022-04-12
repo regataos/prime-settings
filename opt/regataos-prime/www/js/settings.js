@@ -28,7 +28,7 @@ function run_config_option() {
 		$("." + config_option + "-off").css("display", "none")
 	}
 	});
-	}, 200);
+	}, 500);
 }
 
 // Choose gpu to render
@@ -267,7 +267,7 @@ function compositor_config() {
 		$("." + config_option + "-off").css("display", "none")
 	}
 	});
-	}, 500);
+	}, 1000);
 }
 
 // Configuration option to unlock widgets
@@ -298,5 +298,36 @@ function unlock_widgets_config() {
 		$("." + config_option + "-off").css("display", "none")
 	}
 	});
-	}, 500);
+	}, 1000);
+}
+
+// Configuration option to AMF
+function amf_config() {
+	const fs = require('fs');
+	const exec = require('child_process').exec;
+
+	var command = "/opt/regataos-prime/scripts/settings-options -" + config_option;
+	console.log(command);
+	exec(command,function(error,call,errlog){
+	});
+
+	setTimeout(function() {
+	fs.readFile('/tmp/regataos-prime/config/regataos-prime.conf', (err, data) => {
+	if (err) throw err;
+	var check_configs = data
+
+	if ((check_configs.indexOf(config_option + "=on") > -1) == "1") {
+		$("." + config_option + "-on").css("display", "block")
+		$("." + config_option + "-off").css("display", "none")
+
+	} else if ((check_configs.indexOf(config_option) > -1) == "1") {
+		$("." + config_option + "-on").css("display", "none")
+		$("." + config_option + "-off").css("display", "block")
+
+	} else {
+		$("." + config_option + "-on").css("display", "none")
+		$("." + config_option + "-off").css("display", "block")
+	}
+	});
+	}, 1000);
 }

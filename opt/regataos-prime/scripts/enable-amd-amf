@@ -1,0 +1,40 @@
+#!/bin/bash
+
+DESKTOP_FILES=(
+"/usr/share/applications/com.obsproject.Studio.desktop"
+"/usr/share/applications/org.kde.kdenlive.desktop"
+"/usr/share/applications/org.shotcut.Shotcut.desktop"
+"/usr/share/applications/simplescreenrecorder.desktop"
+)
+
+function enableAMF() {
+    for desktopFile in "${DESKTOP_FILES[@]}"; do
+        if [[ $(cat $desktopFile) != *"run-amf"* ]]; then
+            if [[ $(cat $desktopFile) == *"regataos-dgpu"* ]]; then
+                sed -i 's/Exec=regataos-dgpu /Exec=regataos-dgpu run-amf /' "$desktopFile"
+                sed -i 's/TryExec=regataos-dgpu /TryExec=regataos-dgpu run-amf /' "$desktopFile"
+            else
+                sed -i 's/Exec=/Exec=run-amf /' "$desktopFile"
+                sed -i 's/TryExec=/TryExec=run-amf /' "$desktopFile"
+            fi
+        fi
+    done
+}
+
+function disableAMF() {
+    for desktopFile in "${DESKTOP_FILES[@]}"; do
+        if [[ $(cat $desktopFile) == *"run-amf"* ]]; then
+            sed -i 's/run-amf //' "$desktopFile"
+        fi
+    done
+}
+
+case $1 in
+   "-amf-on") enableAMF
+        ;;
+   "-amf-off") disableAMF
+        ;;
+   *) echo "Invalid option!"
+        exit 1
+        ;;
+esac

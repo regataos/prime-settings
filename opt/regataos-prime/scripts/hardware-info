@@ -305,8 +305,13 @@ function opengl_version() {
 
 # Capture Vulkan version
 function vulkan_version() {
-	echo $(vulkaninfo | grep "Vulkan Instance Version") > "/tmp/regataos-prime/vulkan-version.txt"
-	sed -i '/WARNING/d' "/tmp/regataos-prime/vulkan-version.txt"
+	vulkan_test=$(vulkaninfo)
+    if [[ $vulkan_test == *"Instance Extensions"* ]]; then
+        if [[ $vulkan_test != *"Vulkan support is incomplete"* ]]; then
+			echo $(vulkaninfo | grep "Vulkan Instance Version") > "/tmp/regataos-prime/vulkan-version.txt"
+			sed -i '/WARNING/d' "/tmp/regataos-prime/vulkan-version.txt"
+		fi
+	fi
 }
 
 # Capture kernel version

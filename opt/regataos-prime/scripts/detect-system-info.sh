@@ -38,9 +38,11 @@ echo $(/bin/bash /opt/regataos-prime/scripts/hardware-info -opengl-version) > "/
 
 #Capture Vulkan version
 /bin/bash /opt/regataos-prime/scripts/hardware-info -vulkan-version
-echo $(cat "/tmp/regataos-prime/vulkan-version.txt" | awk '{print $4}') > "/home/$user/.config/regataos-prime/system-info/vulkan-version.txt"
+if test -e "/tmp/regataos-prime/vulkan-version.txt"; then
+    echo $(cat "/tmp/regataos-prime/vulkan-version.txt" | awk '{print $4}') > "/home/$user/.config/regataos-prime/system-info/vulkan-version.txt"
+fi
 
 #Capture Kernel version
 echo $(/bin/bash /opt/regataos-prime/scripts/hardware-info -kernel-version) > "/home/$user/.config/regataos-prime/system-info/kernel-version.txt"
 
-exit;
+exit 0;

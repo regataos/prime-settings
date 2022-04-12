@@ -97,6 +97,11 @@ $(document).ready(function() {
     $(".unlockwidgets-on").text("Blocked widgets");
     $(".unlockwidgets-off").text("Unlocked widgets");
 
+    //AMD AMF
+    $(".amf-text").text("Enable AMD AMF");
+    $(".amf-on").text("AMD AMF enabled");
+    $(".amf-off").text("AMD AMF disabled");
+
     // Performance
     //Session title performance
     $(".page-performance-title").text("Performance");

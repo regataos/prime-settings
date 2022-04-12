@@ -281,6 +281,36 @@ function check_option_unlock_widgets() {
 }
 check_option_unlock_widgets();
 
+// Check AMD AMF Configuration
+function check_option_amf() {
+	const fs = require('fs');
+
+	fs.readFile('/tmp/regataos-prime/config/regataos-prime.conf', (err, data) => {
+	if (err) throw err;
+	var check_amf = data
+
+	if ((check_amf.indexOf("amf=on") > -1) == "1") {
+		$("#amf1").css("display", "block");
+		$("#amf2").css("display", "none");
+		$(".amf-on").css("display", "block");
+		$(".amf-off").css("display", "none");
+
+	} else if ((check_amf.indexOf("amf=off") > -1) == "1") {
+		$("#amf1").css("display", "none");
+		$("#amf2").css("display", "block");
+		$(".amf-on").css("display", "none");
+		$(".amf-off").css("display", "block");
+
+	} else {
+		$("#amf1").css("display", "none");
+		$("#amf2").css("display", "block");
+		$(".amf-on").css("display", "none");
+		$(".amf-off").css("display", "block");
+	}
+	});
+}
+check_option_amf();
+
 setInterval(function() {
 	option_choose_gpu_desc();
 	check_freesync();

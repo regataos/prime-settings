@@ -130,6 +130,41 @@ function unlock_widgets() {
 	fi
 }
 
+# Configuration option to amf
+function configure_amf() {
+	# Check if the "amf" option is present in the configuration file
+	if [[ $(grep -r "amf=" "/tmp/regataos-prime/config/regataos-prime.conf") != *"amf="* ]]; then
+		echo "amf=off" >> "$HOME/.config/regataos-prime/regataos-prime.conf"
+		sed -i '/^$/d' "$HOME/.config/regataos-prime/regataos-prime.conf"
+	fi
+
+	# Enable or Disable AMD AMF
+	if [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"amf=on"* ]]; then
+		sed -i 's/\(amf=on\)/amf=off/' "/tmp/regataos-prime/config/regataos-prime.conf"
+		sudo /opt/regataos-prime/scripts/enable-amd-amf -amf-off
+
+		# Show notify on desktop
+		sleep 2
+		/bin/bash /opt/regataos-prime/scripts/notify -amf-off
+
+	elif [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"amf=off"* ]]; then
+		sed -i 's/\(amf=off\)/amf=on/' "/tmp/regataos-prime/config/regataos-prime.conf"
+		sudo /opt/regataos-prime/scripts/enable-amd-amf -amf-on
+
+		# Show notify on desktop
+		sleep 2
+		/bin/bash /opt/regataos-prime/scripts/notify -amf-on
+
+	else
+		sed -i 's/\(amf=on\)/amf=off/' "/tmp/regataos-prime/config/regataos-prime.conf"
+		sudo /opt/regataos-prime/scripts/enable-amd-amf -amf-on
+
+		# Show notify on desktop
+		sleep 2
+		/bin/bash /opt/regataos-prime/scripts/notify -amf-off
+	fi
+}
+
 case $1 in
    "-tearfree") tearfree
          ;;
@@ -140,6 +175,8 @@ case $1 in
    "-compositor") compositor
          ;;
    "-unlockwidgets") unlock_widgets
+         ;;
+   "-amf") configure_amf
          ;;
    *) echo "Invalid option!"
       exit 1
