@@ -8,16 +8,20 @@
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link rel="stylesheet" type="text/css" href="css/responsive.css">
 	<script type="text/javascript" src="js/jquery.min.js"></script>
-	<script type="text/javascript" src="js/index.js"></script>
-    <script type="text/javascript" src="js/translations/language/index-lang.js"></script>
 </head>
 <body>
+    <div id="loadscreen"></div>
+    <script>
+        setInterval(function () {
+            document.getElementById("loadscreen").style.display= "none";
+        }, 1200);
+    </script>
 
 	<div class="sidebar">
-	<div class="hide-sidebar" onclick="hide_sidebar();">
+	<div class="hide-sidebar" onclick="hide_sidebar(true);">
 		<img class="icones-menu" title="Apenas ícones" style="height: 16px;" src="images/img-sidebar/hide-sidebar.png"/>
 	</div>
-	<div class="show-sidebar" onclick="show_sidebar();">
+	<div class="show-sidebar" onclick="show_sidebar(true);">
 		<img class="icones-menu" title="Icones e textos" style="height: 16px;" src="images/img-sidebar/hide-sidebar.png"/>
 	</div>
 		<ul class="ul-sidebar">
@@ -49,7 +53,9 @@
 	</div>
 
 	<div class="div-iframe">
-        <iframe src="" allowfullscreen frameborder="0" class="iframe" id="main-iframe"></iframe>
+        <iframe onload="detect_iframe_url();" src="" allowfullscreen frameborder="0" class="iframe" id="main-iframe"></iframe>
     </div>
+    <script type="text/javascript" src="js/translations/language/index-lang.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
 </body>
 </html>
