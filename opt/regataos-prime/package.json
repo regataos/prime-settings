@@ -1,10 +1,8 @@
 {
   "name": "Max-Q",
-  "description": "Graphics settings, hardware usage and more",
+  "description": "Graphics settings, hardware usage and more...",
   "version": "0.1.0",
   "main": "www/index.html",
-  "inject_js_start": "www/js/jquery.min.js",
-  "inject_js_end": "",
   "window": {
     "toolbar": false,
     "position": "center",
