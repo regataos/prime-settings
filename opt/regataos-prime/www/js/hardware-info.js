@@ -19,7 +19,7 @@ function system_information() {
 	document.getElementById("nvdriver-version").innerHTML = nvdriver_version;
 
 	// Capture the discrete GPU video memory (VRAM) size
-	const vram_size = fs.readFileSync("/tmp/regataos-prime/config/system-info/vram-size.txt", "utf8");
+	const vram_size = fs.readFileSync("/tmp/regataos-prime/config/system-info/total-vram-size.txt", "utf8");
 	document.getElementById("vram-size").innerHTML = vram_size;
 
 	// Capture iGPU
