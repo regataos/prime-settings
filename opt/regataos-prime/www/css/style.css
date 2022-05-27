@@ -20,7 +20,7 @@ body{
 	width: 100%;
 	height: 100%;
 	position: absolute;
-	background-color: #2a2f35;
+	background-color: #171a21;
 	z-index: 40000;
     animation-name: initEffect;
     animation-duration: 1.2s;
