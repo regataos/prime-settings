@@ -40,7 +40,7 @@ function hide_sidebar(saveConfig) {
     document.querySelector(".hide-sidebar").style.display = "none";
     document.querySelector(".show-sidebar").style.display = "flex";
     document.querySelector(".div-iframe").style.marginLeft = "56px";
-    document.querySelector(".iframe").style.width = "calc(100% - 68px)";
+    document.querySelector(".iframe").style.width = "calc(100% - 56px)";
 
     if (saveConfig == true) {
         hide_sidebar_shell();

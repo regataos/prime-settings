@@ -14,20 +14,20 @@ function check_apps() {
 					const without_dgpu = fs.readFileSync("/tmp/regataos-prime/config/run-without-dgpu.conf", "utf8");
 
 					if ((without_dgpu.indexOf(apps[i].nickname + "=on") > -1) == "1") {
-						document.querySelector(`.switch-off-${apps[i].nickname} label`).style.display = "none";
-						document.querySelector(`.switch-on-${apps[i].nickname} label`).style.display = "block";
+						document.querySelector(`.switch-off-${apps[i].nickname} + label`).style.display = "none";
+						document.querySelector(`.switch-on-${apps[i].nickname} + label`).style.display = "block";
 						document.querySelector(`.${apps[i].nickname}-off`).style.display = "none";
 						document.querySelector(`.${apps[i].nickname}-on`).style.display = "block";
 
 					} else if ((without_dgpu.indexOf(apps[i].nickname) > -1) == "1") {
-						document.querySelector(`.switch-off-${apps[i].nickname} label`).style.display = "block";
-						document.querySelector(`.switch-on-${apps[i].nickname} label`).style.display = "none";
+						document.querySelector(`.switch-off-${apps[i].nickname} + label`).style.display = "block";
+						document.querySelector(`.switch-on-${apps[i].nickname} + label`).style.display = "none";
 						document.querySelector(`.${apps[i].nickname}-off`).style.display = "block";
 						document.querySelector(`.${apps[i].nickname}-on`).style.display = "none";
 
 					} else {
-						document.querySelector(`.switch-off-${apps[i].nickname} label`).style.display = "none";
-						document.querySelector(`.switch-on-${apps[i].nickname} label`).style.display = "block";
+						document.querySelector(`.switch-off-${apps[i].nickname} + label`).style.display = "none";
+						document.querySelector(`.switch-on-${apps[i].nickname} + label`).style.display = "block";
 						document.querySelector(`.${apps[i].nickname}-off`).style.display = "none";
 						document.querySelector(`.${apps[i].nickname}-on`).style.display = "block";
 					}
@@ -55,20 +55,20 @@ function check_external_apps() {
 					const without_dgpu = fs.readFileSync("/tmp/regataos-prime/config/run-without-dgpu.conf", "utf8");
 
 					if ((without_dgpu.indexOf(apps[i].app_nickname + "=on") > -1) == "1") {
-						document.querySelector(`.switch-off-${apps[i].app_nickname} label`).style.display = "none";
-						document.querySelector(`.switch-on-${apps[i].app_nickname} label`).style.display = "block";
+						document.querySelector(`.switch-off-${apps[i].app_nickname} + label`).style.display = "none";
+						document.querySelector(`.switch-on-${apps[i].app_nickname} + label`).style.display = "block";
 						document.querySelector(`.${apps[i].app_nickname}-off`).style.display = "none";
 						document.querySelector(`.${apps[i].app_nickname}-on`).style.display = "block";
 
 					} else if ((without_dgpu.indexOf(apps[i].app_nickname) > -1) == "1") {
-						document.querySelector(`.switch-off-${apps[i].app_nickname} label`).style.display = "block";
-						document.querySelector(`.switch-on-${apps[i].app_nickname} label`).style.display = "none";
+						document.querySelector(`.switch-off-${apps[i].app_nickname} + label`).style.display = "block";
+						document.querySelector(`.switch-on-${apps[i].app_nickname} + label`).style.display = "none";
 						document.querySelector(`.${apps[i].app_nickname}-off`).style.display = "block";
 						document.querySelector(`.${apps[i].app_nickname}-on`).style.display = "none";
 
 					} else {
-						document.querySelector(`.switch-off-${apps[i].app_nickname} label`).style.display = "none";
-						document.querySelector(`.switch-on-${apps[i].app_nickname} label`).style.display = "block";
+						document.querySelector(`.switch-off-${apps[i].app_nickname} + label`).style.display = "none";
+						document.querySelector(`.switch-on-${apps[i].app_nickname} + label`).style.display = "block";
 						document.querySelector(`.${apps[i].app_nickname}-off`).style.display = "none";
 						document.querySelector(`.${apps[i].app_nickname}-on`).style.display = "block";
 					}

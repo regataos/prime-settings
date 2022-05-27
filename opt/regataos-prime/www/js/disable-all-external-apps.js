@@ -139,8 +139,8 @@ function check_external_apps_status() {
 						document.getElementById("switch-shadow-" + apps[i].app_nickname).checked = false;
 						document.getElementById("switch-shadow2-" + apps[i].app_nickname).checked = true;
 
-						document.querySelector(`.switch-off-${apps[i].app_nickname} label`).style.display = "none";
-						document.querySelector(`.switch-on-${apps[i].app_nickname} label`).style.display = "block";
+						document.querySelector(`.switch-off-${apps[i].app_nickname} + label`).style.display = "none";
+						document.querySelector(`.switch-on-${apps[i].app_nickname} + label`).style.display = "block";
 						document.querySelector(`.${apps[i].app_nickname}-off`).style.display = "none";
 						document.querySelector(`.${apps[i].app_nickname}-on`).style.display = "block";
 
@@ -148,8 +148,8 @@ function check_external_apps_status() {
 						document.getElementById("switch-shadow-" + apps[i].app_nickname).checked = true;
 						document.getElementById("switch-shadow2-" + apps[i].app_nickname).checked = false;
 
-						document.querySelector(`.switch-off-${apps[i].app_nickname} label`).style.display = "block";
-						document.querySelector(`.switch-on-${apps[i].app_nickname} label`).style.display = "none";
+						document.querySelector(`.switch-off-${apps[i].app_nickname} + label`).style.display = "block";
+						document.querySelector(`.switch-on-${apps[i].app_nickname} + label`).style.display = "none";
 						document.querySelector(`.${apps[i].app_nickname}-off`).style.display = "block";
 						document.querySelector(`.${apps[i].app_nickname}-on`).style.display = "none";
 
@@ -157,8 +157,8 @@ function check_external_apps_status() {
 						document.getElementById("switch-shadow-" + apps[i].app_nickname).checked = false;
 						document.getElementById("switch-shadow2-" + apps[i].app_nickname).checked = true;
 
-						document.querySelector(`.switch-off-${apps[i].app_nickname} label`).style.display = "none";
-						document.querySelector(`.switch-on-${apps[i].app_nickname} label`).style.display = "block";
+						document.querySelector(`.switch-off-${apps[i].app_nickname} + label`).style.display = "none";
+						document.querySelector(`.switch-on-${apps[i].app_nickname} + label`).style.display = "block";
 						document.querySelector(`.${apps[i].app_nickname}-off`).style.display = "none";
 						document.querySelector(`.${apps[i].app_nickname}-on`).style.display = "block";
 					}

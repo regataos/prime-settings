@@ -209,8 +209,8 @@ function check_apps_status() {
 								document.getElementById("switch-shadow-" + apps[i].nickname).checked = false;
 								document.getElementById("switch-shadow2-" + apps[i].nickname).checked = true;
 
-								document.querySelector(`.switch-off-${apps[i].nickname} label`).style.display = "none";
-								document.querySelector(`.switch-on-${apps[i].nickname} label`).style.display = "block";
+								document.querySelector(`.switch-off-${apps[i].nickname} + label`).style.display = "none";
+								document.querySelector(`.switch-on-${apps[i].nickname} + label`).style.display = "block";
 								document.querySelector(`.${apps[i].nickname}-off`).style.display = "none";
 								document.querySelector(`.${apps[i].nickname}-on`).style.display = "block";
 
@@ -218,8 +218,8 @@ function check_apps_status() {
 								document.getElementById("switch-shadow-" + apps[i].nickname).checked = true;
 								document.getElementById("switch-shadow2-" + apps[i].nickname).checked = false;
 
-								document.querySelector(`.switch-off-${apps[i].nickname} label`).style.display = "block";
-								document.querySelector(`.switch-on-${apps[i].nickname} label`).style.display = "none";
+								document.querySelector(`.switch-off-${apps[i].nickname} + label`).style.display = "block";
+								document.querySelector(`.switch-on-${apps[i].nickname} + label`).style.display = "none";
 								document.querySelector(`.${apps[i].nickname}-off`).style.display = "block";
 								document.querySelector(`.${apps[i].nickname}-on`).style.display = "none";
 
@@ -227,8 +227,8 @@ function check_apps_status() {
 								document.getElementById("switch-shadow-" + apps[i].nickname).checked = false;
 								document.getElementById("switch-shadow2-" + apps[i].nickname).checked = true;
 
-								document.querySelector(`.switch-off-${apps[i].nickname} label`).style.display = "none";
-								document.querySelector(`.switch-on-${apps[i].nickname} label`).style.display = "block";
+								document.querySelector(`.switch-off-${apps[i].nickname} + label`).style.display = "none";
+								document.querySelector(`.switch-on-${apps[i].nickname} + label`).style.display = "block";
 								document.querySelector(`.${apps[i].nickname}-off`).style.display = "none";
 								document.querySelector(`.${apps[i].nickname}-on`).style.display = "block";
 							}

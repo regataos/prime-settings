@@ -26,9 +26,9 @@ function hide_elements() {
 		const optionPrimeOn = document.querySelector("li.primeon");
 
 		if (!err) {
-			optionPrimeOn.getElementsByClassName.display = "inline-block";
+			optionPrimeOn.style.display = "inline-block";
 		} else
-			optionPrimeOn.getElementsByClassName.display = "none";
+			optionPrimeOn.style.display = "none";
 	});
 }
 hide_elements();

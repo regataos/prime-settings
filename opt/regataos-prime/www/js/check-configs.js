@@ -226,6 +226,7 @@ function check_cpu_governor() {
 		}
 	});
 }
+check_cpu_governor();
 
 // Check the configuration for the KWin compositor
 function check_option_compositor() {

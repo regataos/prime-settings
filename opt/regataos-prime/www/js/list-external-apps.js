@@ -67,7 +67,7 @@ function apps_external_list() {
 						//Add app details within the newly created block
 						new_app_blocks.innerHTML = ' \
 						<div class="icon-app" style="background-image:url(' + apps[i].app_icon + ');"></div> \
-						<div class="remove-app-buttom" title="Remover" onclick="window.appname=' + appname + '; window.desktop=' + desktop + '; remove_external_app();" style="background-image:url(../images/close.png); background-repeat: no-repeat; background-size: 12px 12px;"></div> \
+						<div class="remove-app-buttom" onclick="window.appname=' + appname + '; window.desktop=' + desktop + '; remove_external_app();" style="background-image:url(../images/close.png); background-repeat: no-repeat; background-size: 12px 12px;"></div> \
 						<div class="text-app app-name">' + apps[i].app_name + '</div> \
 						<div class="switch__container"> \
 							<input id="switch-shadow-' + apps[i].app_nickname + '" class="switch switch--shadow-app switch-on-' + apps[i].app_nickname + '" type="checkbox" onclick="window.appname=' + appname + '; window.desktop=' + desktop + '; action_external_apps();"> \

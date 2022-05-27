@@ -7,9 +7,7 @@
 	<link rel="stylesheet" type="text/css" href="../css/style2.css">
 	<link rel="stylesheet" type="text/css" href="../css/pop-up.css">
 	<link rel="stylesheet" type="text/css" href="../css/buttom-switch-all-apps.css">
-	<link rel="stylesheet" type="text/css" href="../css/style-buttom-switch/buttom-switch-external-apps.css">
 	<link rel="stylesheet" type="text/css" href="../css/buttom-switch-apps.css">
-	<script type="text/javascript" src="../js/fas-icons.js"></script>
 	<script type="text/javascript" src="../js/check-configs.js"></script>
 	<script type="text/javascript" src="../js/settings.js"></script>
 	<script type="text/javascript" src="../js/actions-apps.js"></script>
@@ -78,7 +76,7 @@
 					<span class='desc-option-blocks'></span>
 				</div>
 				</label>
-				<input type="file" id="add-apps" name="files[]" />
+				<input onchange="getDesktopFile()" type="file" id="add-apps" name="files[]" />
 			</li>
 			<li class="fake-item">
 			</li>
@@ -90,11 +88,11 @@
 			</li>
 		</ul>
 		<ul class="apps-bottom2 main-ul"></ul>
+		<script type="text/javascript" src="../js/translations/language/apps-lang.js"></script>
 		<script type="text/javascript" src="../js/list-external-apps.js"></script>
 		<script type="text/javascript" src="../js/list-apps.js"></script>
 		<script type="text/javascript" src="../js/check-apps.js"></script>
 	</div>
 	</div>
-    <script type="text/javascript" src="../js/translations/language/index-lang.js"></script>
 </body>
 </html>
