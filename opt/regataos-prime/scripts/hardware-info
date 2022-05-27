@@ -1,27 +1,14 @@
 #!/bin/bash
 
 # Capture information about using VRAM
-
-#Capture the discrete GPU video memory (VRAM) size
-function vram_size() {
-	detect_driver=$(lshw -class display | grep "driver")
-	if [[ $detect_driver == *"nvidia"* ]]; then
-		vram_total=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader | sed 's/ MiB/MB/')
-		echo "$vram_total"
-	else
-		vram_total=$(DRI_PRIME=1 glxinfo | egrep -i 'device|memory' | grep 'Video memory' | head -n 1 | awk '{print $3}')
-		echo "$vram_total"
-	fi
-}
-
 #Capture the discrete GPU video memory (VRAM) frequency
 function vram_freq() {
-	detect_driver=$(lshw -class display | grep "driver")
+	detect_driver=$(cat "/tmp/regataos-prime/config/system-info/graphics-driver.txt")
 	if [[ $detect_driver == *"nvidia"* ]]; then
 		vram_freq=$(nvidia-smi --query-gpu=clocks.mem --format=csv,noheader | sed 's/ MHz/MHz/')
 		echo "$vram_freq"
 	else
-		dgpu=$(glxinfo | grep vendor)
+		dgpu=$(cat "/tmp/regataos-prime/config/system-info/opengl-vendor.txt")
 		if [[ $dgpu == *"AMD"* ]]; then
 			vram_freq=$(cat /sys/class/drm/card0/device/pp_dpm_mclk | grep '*' | awk '{print $2}')
 			echo "$vram_freq"
@@ -36,12 +23,12 @@ function vram_freq() {
 
 #Capture the discrete GPU video memory (VRAM) usage
 function vram_usage() {
-	detect_driver=$(lshw -class display | grep "driver")
+	detect_driver=$(cat "/tmp/regataos-prime/config/system-info/graphics-driver.txt")
 	if [[ $detect_driver == *"nvidia"* ]]; then
 		vram_usage=$(nvidia-smi --query-gpu=utilization.memory --format=csv,noheader | awk '{print $1}')
 		echo "$vram_usage"
 	else
-		dgpu=$(glxinfo | grep vendor)
+		dgpu=$(cat "/tmp/regataos-prime/config/system-info/opengl-vendor.txt")
 		if [[ $dgpu == *"AMD"* ]]; then
 			vram_usage=$(tail -2 /tmp/regataos-prime/radeontop.log | awk '{print $27}' | head -1 | tail -1 | cut -d'.' -f -1)
 			echo "$vram_usage"
@@ -55,15 +42,14 @@ function vram_usage() {
 }
 
 # Capture information about using GPU
-
 #Capture the discrete GPU usage
 function gpu_usage() {
-	detect_driver=$(lshw -class display | grep "driver")
+	detect_driver=$(cat "/tmp/regataos-prime/config/system-info/graphics-driver.txt")
 	if [[ $detect_driver == *"nvidia"* ]]; then
 		gpu_usage=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader | awk '{print $1}')
 		echo "$gpu_usage"
 	else
-		dgpu=$(glxinfo | grep vendor)
+		dgpu=$(cat "/tmp/regataos-prime/config/system-info/opengl-vendor.txt")
 		if [[ $dgpu == *"AMD"* ]]; then
 			gpu_usage=$(tail -2 /tmp/regataos-prime/radeontop.log | awk '{print $5}' | head -1 | tail -1 | cut -d'.' -f -1)
 			echo "$gpu_usage"
@@ -86,12 +72,12 @@ function gpu_usage() {
 
 #Capture the discrete GPU temp
 function gpu_temp() {
-	detect_driver=$(lshw -class display | grep "driver")
+	detect_driver=$(cat "/tmp/regataos-prime/config/system-info/graphics-driver.txt")
 	if [[ $detect_driver == *"nvidia"* ]]; then
 		gpu_temp=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader)
 		echo "$gpu_temp"°C
 	else
-		dgpu=$(glxinfo | grep vendor)
+		dgpu=$(cat "/tmp/regataos-prime/config/system-info/opengl-vendor.txt")
 		if [[ $dgpu == *"AMD"* ]]; then
 			gpu_temp=$(cat /sys/class/drm/card0/device/hwmon/hwmon*/temp1_input | awk '{ foo = $1 / 1000 ; print foo }')
 			echo "$gpu_temp"°C
@@ -106,12 +92,12 @@ function gpu_temp() {
 
 #Capture the discrete GPU frequency
 function gpu_freq() {
-	detect_driver=$(lshw -class display | grep "driver")
+	detect_driver=$(cat "/tmp/regataos-prime/config/system-info/graphics-driver.txt")
 	if [[ $detect_driver == *"nvidia"* ]]; then
 		gpu_freq=$(nvidia-smi -q -d CLOCK | grep Graphics | head -1 | tail -1 | awk '{print $3}')
 		echo "$gpu_freq"MHz
 	else
-		dgpu=$(glxinfo | grep vendor)
+		dgpu=$(cat "/tmp/regataos-prime/config/system-info/opengl-vendor.txt")
 		if [[ $dgpu == *"AMD"* ]]; then
 			gpu_freq=$(cat /sys/class/drm/card0/device/pp_dpm_sclk | grep '*' | awk '{print $2}')
 			echo "$gpu_freq"
@@ -146,156 +132,155 @@ function capture_igpu() {
 
 # Capture discrete GPU
 function capture_dgpu() {
-if test -e /tmp/regataos-prime/use-hybrid-graphics.txt ; then
+	if test -e /tmp/regataos-prime/use-hybrid-graphics.txt; then
+		# Capture dGPU
+		dgpu2=$(inxi -G | egrep -i "Card-2|Device-2")
 
-	# Capture dGPU
-	dgpu2=$(inxi -G | egrep -i "Card-2|Device-2")
+		if [[ $dgpu2 == *"Picasso"* ]]; then
+			# The dGPU appears to be an AMD APU. Check the primary GPU
+			dgpu1=$(inxi -G | egrep -i "Card-1|Device-1")
+			if [[ $dgpu1 == *"NVIDIA"* ]]; then
+				detect_driver=$(cat "/tmp/regataos-prime/config/system-info/graphics-driver.txt")
+				if [[ $detect_driver == *"nvidia"* ]]; then
+					dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
+				else
+					dgpu_model=$(echo $dgpu1 | cut -d: -f 3-)
+				fi
+				echo "NVIDIA $dgpu_model"
 
-	if [[ $dgpu2 == *"Picasso"* ]]; then
-		# The dGPU appears to be an AMD APU. Check the primary GPU
-		dgpu1=$(inxi -G | egrep -i "Card-1|Device-1")
-		if [[ $dgpu1 == *"NVIDIA"* ]]; then
-			detect_driver=$(lshw -class display | grep "driver")
-			if [[ $detect_driver == *"nvidia"* ]]; then
-				dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
+			elif [[ $dgpu1 == *"GeForce"* ]]; then
+				detect_driver=$(cat "/tmp/regataos-prime/config/system-info/graphics-driver.txt")
+				if [[ $detect_driver == *"nvidia"* ]]; then
+					dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
+				else
+					dgpu_model=$(echo $dgpu1 | cut -d: -f 3-)
+				fi
+				echo "NVIDIA $dgpu_model"
+
+			elif [[ $dgpu1 == *"AMD"* ]]; then
+				dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
+				dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
+				echo "$dgpu_model"
+
 			else
-				dgpu_model=$(echo $dgpu1 | cut -d: -f 3-)
+				dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
+				dgpu_model=$(echo $dgpu | sed 's/Mesa DRI Intel(R) //' | cut -d"(" -f -1)
+				echo "$dgpu_model"
 			fi
-			echo "NVIDIA $dgpu_model"
 
-		elif [[ $dgpu1 == *"GeForce"* ]]; then
-			detect_driver=$(lshw -class display | grep "driver")
-			if [[ $detect_driver == *"nvidia"* ]]; then
-				dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
+		elif [[ $dgpu2 == *"RAVEN"* ]]; then
+			# The dGPU appears to be an AMD APU. Check the primary GPU
+			dgpu1=$(inxi -G | egrep -i "Card-1|Device-1")
+			if [[ $dgpu1 == *"NVIDIA"* ]]; then
+				detect_driver=$(cat "/tmp/regataos-prime/config/system-info/graphics-driver.txt")
+				if [[ $detect_driver == *"nvidia"* ]]; then
+					dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
+				else
+					dgpu_model=$(echo $dgpu1 | cut -d: -f 3-)
+				fi
+				echo "NVIDIA $dgpu_model"
+
+			elif [[ $dgpu1 == *"GeForce"* ]]; then
+				detect_driver=$(cat "/tmp/regataos-prime/config/system-info/graphics-driver.txt")
+				if [[ $detect_driver == *"nvidia"* ]]; then
+					dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
+				else
+					dgpu_model=$(echo $dgpu1 | cut -d: -f 3-)
+				fi
+				echo "NVIDIA $dgpu_model"
+
+			elif [[ $dgpu1 == *"AMD"* ]]; then
+				dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
+				dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
+				echo "$dgpu_model"
+
 			else
-				dgpu_model=$(echo $dgpu1 | cut -d: -f 3-)
+				dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
+				dgpu_model=$(echo $dgpu | sed 's/Mesa DRI Intel(R) //' | cut -d"(" -f -1)
+				echo "$dgpu_model"
 			fi
-			echo "NVIDIA $dgpu_model"
 
-		elif [[ $dgpu1 == *"AMD"* ]]; then
+		elif [[ $dgpu2 == *"AMD"* ]]; then
 			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
 			dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
 			echo "$dgpu_model"
 
-		else
-			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-			dgpu_model=$(echo $dgpu | sed 's/Mesa DRI Intel(R) //' | cut -d"(" -f -1)
-			echo "$dgpu_model"
-		fi
-
-	elif [[ $dgpu2 == *"RAVEN"* ]]; then
-		# The dGPU appears to be an AMD APU. Check the primary GPU
-		dgpu1=$(inxi -G | egrep -i "Card-1|Device-1")
-		if [[ $dgpu1 == *"NVIDIA"* ]]; then
-			detect_driver=$(lshw -class display | grep "driver")
-			if [[ $detect_driver == *"nvidia"* ]]; then
-				dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
-			else
-				dgpu_model=$(echo $dgpu1 | cut -d: -f 3-)
-			fi
-			echo "NVIDIA $dgpu_model"
-
-		elif [[ $dgpu1 == *"GeForce"* ]]; then
-			detect_driver=$(lshw -class display | grep "driver")
-			if [[ $detect_driver == *"nvidia"* ]]; then
-				dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
-			else
-				dgpu_model=$(echo $dgpu1 | cut -d: -f 3-)
-			fi
-			echo "NVIDIA $dgpu_model"
-
-		elif [[ $dgpu1 == *"AMD"* ]]; then
+		elif [[ $dgpu2 == *"Radeon"* ]]; then
 			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
 			dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
 			echo "$dgpu_model"
 
-		else
-			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-			dgpu_model=$(echo $dgpu | sed 's/Mesa DRI Intel(R) //' | cut -d"(" -f -1)
+		elif [[ $dgpu2 == *"NVIDIA"* ]]; then
+			detect_driver=$(cat "/tmp/regataos-prime/config/system-info/graphics-driver.txt")
+			if [[ $detect_driver == *"nvidia"* ]]; then
+				dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
+			else
+				dgpu1=$(inxi -G | egrep -i "Card-1|Device-1" | cut -d":" -f 3- | cut -d"[" -f 2- | cut -d"]" -f -1)
+				dgpu_model=$(echo NVIDIA $dgpu1 | cut -d: -f 3-)
+			fi
 			echo "$dgpu_model"
-		fi
 
-	elif [[ $dgpu2 == *"AMD"* ]]; then
-		dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-		dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
-		echo "$dgpu_model"
+		elif [[ $dgpu2 == *"GeForce"* ]]; then
+			detect_driver=$(cat "/tmp/regataos-prime/config/system-info/graphics-driver.txt")
+			if [[ $detect_driver == *"nvidia"* ]]; then
+				dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
+			else
+				dgpu1=$(inxi -G | egrep -i "Card-1|Device-1" | cut -d":" -f 3- | cut -d"[" -f 2- | cut -d"]" -f -1)
+				dgpu_model=$(echo NVIDIA $dgpu1 | cut -d: -f 3-)
+			fi
+			echo "$dgpu_model"
 
-	elif [[ $dgpu2 == *"Radeon"* ]]; then
-		dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-		dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
-		echo "$dgpu_model"
+		elif [[ $dgpu == *"Intel"* ]]; then
+			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
+			dgpu_model=$(echo $dgpu | sed 's/Mesa DRI Intel(R) //' | cut -d"(" -f -1 | cut -d"," -f -1)
+			echo "Intel $dgpu_model"
 
-	elif [[ $dgpu2 == *"NVIDIA"* ]]; then
-		detect_driver=$(lshw -class display | grep "driver")
-		if [[ $detect_driver == *"nvidia"* ]]; then
-			dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
 		else
-			dgpu1=$(inxi -G | egrep -i "Card-1|Device-1" | cut -d":" -f 3- | cut -d"[" -f 2- | cut -d"]" -f -1)
-			dgpu_model=$(echo NVIDIA $dgpu1 | cut -d: -f 3-)
+			echo "Not detected graphics"
 		fi
-		echo "$dgpu_model"
-
-	elif [[ $dgpu2 == *"GeForce"* ]]; then
-		detect_driver=$(lshw -class display | grep "driver")
-		if [[ $detect_driver == *"nvidia"* ]]; then
-			dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
-		else
-			dgpu1=$(inxi -G | egrep -i "Card-1|Device-1" | cut -d":" -f 3- | cut -d"[" -f 2- | cut -d"]" -f -1)
-			dgpu_model=$(echo NVIDIA $dgpu1 | cut -d: -f 3-)
-		fi
-		echo "$dgpu_model"
-
-	elif [[ $dgpu == *"Intel"* ]]; then
-		dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-		dgpu_model=$(echo $dgpu | sed 's/Mesa DRI Intel(R) //' | cut -d"(" -f -1 | cut -d"," -f -1)
-		echo "Intel $dgpu_model"
 
 	else
-		echo "Not detected graphics"
-	fi
+		# The "PRIME" feature does not appear to be supported by the hardware, capture discrete GPU
+		dgpu=$(inxi -G | egrep -i "Card|Device")
+		dgpu1=$(inxi -G | egrep -i "Card|Device" | cut -d":" -f 3- | cut -d"[" -f 2- | cut -d"]" -f -1)
 
-else
-	# The "PRIME" feature does not appear to be supported by the hardware, capture discrete GPU
-	dgpu=$(inxi -G | egrep -i "Card|Device")
-	dgpu1=$(inxi -G | egrep -i "Card|Device" | cut -d":" -f 3- | cut -d"[" -f 2- | cut -d"]" -f -1)
+		if [[ $dgpu == *"AMD"* ]]; then
+			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
+			dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
+			echo "$dgpu_model"
 
-	if [[ $dgpu == *"AMD"* ]]; then
-		dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-		dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
-		echo "$dgpu_model"
+		elif [[ $dgpu == *"Radeon"* ]]; then
+			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
+			dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
+			echo "$dgpu_model"
 
-	elif [[ $dgpu == *"Radeon"* ]]; then
-		dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-		dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
-		echo "$dgpu_model"
+		elif [[ $dgpu == *"NVIDIA"* ]]; then
+			detect_driver=$(cat "/tmp/regataos-prime/config/system-info/graphics-driver.txt")
+			if [[ $detect_driver == *"nvidia"* ]]; then
+				dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
+			else
+				dgpu_model=$(echo NVIDIA $dgpu1)
+			fi
+			echo "$dgpu_model"
 
-	elif [[ $dgpu == *"NVIDIA"* ]]; then
-		detect_driver=$(lshw -class display | grep "driver")
-		if [[ $detect_driver == *"nvidia"* ]]; then
-			dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
+		elif [[ $dgpu == *"GeForce"* ]]; then
+			detect_driver=$(cat "/tmp/regataos-prime/config/system-info/graphics-driver.txt")
+			if [[ $detect_driver == *"nvidia"* ]]; then
+				dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
+			else
+				dgpu_model=$(echo NVIDIA $dgpu1)
+			fi
+			echo "$dgpu_model"
+
+		elif [[ $dgpu == *"Intel"* ]]; then
+			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
+			dgpu_model=$(echo $dgpu | sed 's/Mesa DRI Intel(R) //' | cut -d"(" -f -1 | cut -d"," -f -1)
+			echo "Intel $dgpu_model"
+
 		else
-			dgpu_model=$(echo NVIDIA $dgpu1)
+			echo "Not detected graphics"
 		fi
-		echo "$dgpu_model"
-
-	elif [[ $dgpu == *"GeForce"* ]]; then
-		detect_driver=$(lshw -class display | grep "driver")
-		if [[ $detect_driver == *"nvidia"* ]]; then
-			dgpu_model=$(nvidia-smi --query-gpu=name --format=csv,noheader)
-		else
-			dgpu_model=$(echo NVIDIA $dgpu1)
-		fi
-		echo "$dgpu_model"
-
-	elif [[ $dgpu == *"Intel"* ]]; then
-		dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-		dgpu_model=$(echo $dgpu | sed 's/Mesa DRI Intel(R) //' | cut -d"(" -f -1 | cut -d"," -f -1)
-		echo "Intel $dgpu_model"
-
-	else
-		echo "Not detected graphics"
 	fi
-fi
 }
 
 # Capture OpenGL version
@@ -306,9 +291,9 @@ function opengl_version() {
 # Capture Vulkan version
 function vulkan_version() {
 	vulkan_test=$(vulkaninfo)
-    if [[ $vulkan_test == *"Instance Extensions"* ]]; then
-        if [[ $vulkan_test != *"Vulkan support is incomplete"* ]]; then
-			echo $(vulkaninfo | grep "Vulkan Instance Version") > "/tmp/regataos-prime/vulkan-version.txt"
+	if [[ $vulkan_test == *"Instance Extensions"* ]]; then
+		if [[ $vulkan_test != *"Vulkan support is incomplete"* ]]; then
+			echo $(vulkaninfo | grep "Vulkan Instance Version") >"/tmp/regataos-prime/vulkan-version.txt"
 			sed -i '/WARNING/d' "/tmp/regataos-prime/vulkan-version.txt"
 		fi
 	fi
@@ -321,98 +306,116 @@ function kernel_version() {
 
 # Capture Mesa version and identify driver for Mesa
 function mesa_version() {
-mesa_driver=$(glxinfo | grep -i 'OpenGL vendor string' | awk '{print $4}')
-mesa_version=$(glxinfo | grep -i 'OpenGL version string' | awk '{print $8}')
+	mesa_driver=$(glxinfo | grep -i 'OpenGL vendor string' | awk '{print $4}')
+	mesa_version=$(glxinfo | grep -i 'OpenGL version string' | awk '{print $8}')
 
-if [[ $(echo $mesa_driver) == *"Intel"* ]]; then
-	echo "$mesa_version (Intel)"
+	if [[ $(echo $mesa_driver) == *"Intel"* ]]; then
+		echo "$mesa_version (Intel)"
 
-elif [[ $(echo $mesa_driver) == *"intel"* ]]; then
-	echo "$mesa_version (Intel)"
+	elif [[ $(echo $mesa_driver) == *"intel"* ]]; then
+		echo "$mesa_version (Intel)"
 
-elif [[ $(echo $mesa_driver) == *"Iris"* ]]; then
-	echo "$mesa_version (Intel Iris)"
+	elif [[ $(echo $mesa_driver) == *"Iris"* ]]; then
+		echo "$mesa_version (Intel Iris)"
 
-elif [[ $(echo $mesa_driver) == *"iris"* ]]; then
-	echo "$mesa_version (Intel Iris)"
+	elif [[ $(echo $mesa_driver) == *"iris"* ]]; then
+		echo "$mesa_version (Intel Iris)"
 
-elif [[ $(echo $mesa_driver) == *"i915"* ]]; then
-	echo "$mesa_version (Intel)"
+	elif [[ $(echo $mesa_driver) == *"i915"* ]]; then
+		echo "$mesa_version (Intel)"
 
-elif [[ $(echo $mesa_driver) == *"i965"* ]]; then
-	echo "$mesa_version (Intel)"
+	elif [[ $(echo $mesa_driver) == *"i965"* ]]; then
+		echo "$mesa_version (Intel)"
 
-elif [[ $(echo $mesa_driver) == *"modesetting"* ]]; then
-	echo "$mesa_version (modesetting)"
+	elif [[ $(echo $mesa_driver) == *"modesetting"* ]]; then
+		echo "$mesa_version (modesetting)"
 
-elif [[ $(echo $mesa_driver) == *"AMD"* ]]; then
-	echo "$mesa_version (AMDGPU)"
+	elif [[ $(echo $mesa_driver) == *"AMD"* ]]; then
+		echo "$mesa_version (AMDGPU)"
 
-elif [[ $(echo $mesa_driver) == *"amdgpu"* ]]; then
-	echo "$mesa_version (AMDGPU)"
+	elif [[ $(echo $mesa_driver) == *"amdgpu"* ]]; then
+		echo "$mesa_version (AMDGPU)"
 
-elif [[ $(echo $mesa_driver) == *"radeon"* ]]; then
-	echo "$mesa_version (Radeon)"
+	elif [[ $(echo $mesa_driver) == *"radeon"* ]]; then
+		echo "$mesa_version (Radeon)"
 
-elif [[ $(echo $mesa_driver) == *"nouveau"* ]]; then
-	echo "$mesa_version (Nouveau)"
+	elif [[ $(echo $mesa_driver) == *"nouveau"* ]]; then
+		echo "$mesa_version (Nouveau)"
 
-elif [[ $(echo $mesa_driver) == *"nvidia"* ]]; then
-	mesa_repo=$(grep -r "mainRepositoryName" "/usr/share/regataos/regataos-base-version.txt" | cut -d"=" -f 2-)
-	mesa_version=$(grep -R 'srcpackage:Mesa' /var/cache/zypp/solv/$(echo "$mesa_repo") | awk '{print $2}' | cut -d'-' -f -1 | head -1 | tail -1)
-	echo "$mesa_version"
+	elif [[ $(echo $mesa_driver) == *"nvidia"* ]]; then
+		mesa_repo=$(grep -r "mainRepositoryName" "/usr/share/regataos/regataos-base-version.txt" | cut -d"=" -f 2-)
+		mesa_version=$(grep -R 'srcpackage:Mesa' /var/cache/zypp/solv/$(echo "$mesa_repo") | awk '{print $2}' | cut -d'-' -f -1 | head -1 | tail -1)
+		echo "$mesa_version"
 
-elif [[ $(echo $mesa_driver) == *"NVIDIA"* ]]; then
-	mesa_repo=$(grep -r "mainRepositoryName" "/usr/share/regataos/regataos-base-version.txt" | cut -d"=" -f 2-)
-	mesa_version=$(grep -R 'srcpackage:Mesa' /var/cache/zypp/solv/$(echo "$mesa_repo") | awk '{print $2}' | cut -d'-' -f -1 | head -1 | tail -1)
-	echo "$mesa_version"
+	elif [[ $(echo $mesa_driver) == *"NVIDIA"* ]]; then
+		mesa_repo=$(grep -r "mainRepositoryName" "/usr/share/regataos/regataos-base-version.txt" | cut -d"=" -f 2-)
+		mesa_version=$(grep -R 'srcpackage:Mesa' /var/cache/zypp/solv/$(echo "$mesa_repo") | awk '{print $2}' | cut -d'-' -f -1 | head -1 | tail -1)
+		echo "$mesa_version"
 
-else
-	echo "Not detected driver for Mesa"
-fi
+	else
+		echo "Not detected driver for Mesa"
+	fi
 }
 
 function cpu_use() {
-    cpu_use=$(awk '{u=$2+$4; t=$2+$4+$5; if (NR==1){u1=u; t1=t;} else print ($2+$4-u1) * 100 / (t-t1) ; }' <(grep 'cpu ' /proc/stat) <(sleep 1;grep 'cpu ' /proc/stat) | cut -d'.' -f -1);
-    echo "$cpu_use" > "/tmp/regataos-prime/cpu-usage.log"
+	cpu_use=$(awk '{u=$2+$4; t=$2+$4+$5; if (NR==1){u1=u; t1=t;} else print ($2+$4-u1) * 100 / (t-t1) ; }' <(grep 'cpu ' /proc/stat) <(
+		sleep 1
+		grep 'cpu ' /proc/stat
+	) | cut -d'.' -f -1)
+	echo "$cpu_use" >"/tmp/regataos-prime/cpu-usage.log"
 }
 
 function cpu_freq() {
-    cpu_freq=$(lscpu |awk -F : '($1=="CPU MHz") {printf "%3.2fGHz\n", $2/1000}')
-    echo $cpu_freq
+	cpu_freq=$(lscpu | awk -F : '($1=="CPU MHz") {printf "%3.2fGHz\n", $2/1000}')
+	echo $cpu_freq
 }
 
 # Run options
 case $1 in
-   "-gpu-usage") gpu_usage
-         ;;
-   "-gpu-temp") gpu_temp
-         ;;
-   "-gpu-freq") gpu_freq
-         ;;
-   "-vram-size") vram_size
-         ;;
-   "-vram-freq") vram_freq
-         ;;
-   "-vram-usage") vram_usage
-         ;;
-   "-capture-igpu") capture_igpu
-         ;;
-   "-capture-dgpu") capture_dgpu
-         ;;
-   "-mesa-version") mesa_version
-         ;;
-   "-opengl-version") opengl_version
-         ;;
-   "-vulkan-version") vulkan_version
-         ;;
-   "-kernel-version") kernel_version
-         ;;
-   "-cpu-use") cpu_use
-         ;;
-   "-cpu-freq") cpu_freq
-         ;;
-   *) echo "Invalid option!"
-      exit 1
-      ;;
+"-gpu-usage")
+	gpu_usage
+	;;
+"-gpu-temp")
+	gpu_temp
+	;;
+"-gpu-freq")
+	gpu_freq
+	;;
+"-vram-size")
+	vram_size
+	;;
+"-vram-freq")
+	vram_freq
+	;;
+"-vram-usage")
+	vram_usage
+	;;
+"-capture-igpu")
+	capture_igpu
+	;;
+"-capture-dgpu")
+	capture_dgpu
+	;;
+"-mesa-version")
+	mesa_version
+	;;
+"-opengl-version")
+	opengl_version
+	;;
+"-vulkan-version")
+	vulkan_version
+	;;
+"-kernel-version")
+	kernel_version
+	;;
+"-cpu-use")
+	cpu_use
+	;;
+"-cpu-freq")
+	cpu_freq
+	;;
+*)
+	echo "Invalid option!"
+	exit 1
+	;;
 esac
