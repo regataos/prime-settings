@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "main": "www/index.html",
   "window": {
+    "show": false,
     "toolbar": false,
     "position": "center",
     "width": 1366,
