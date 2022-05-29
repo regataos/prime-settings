@@ -8,6 +8,12 @@
 	<link rel="stylesheet" type="text/css" href="../css/style-system/buttom-system.css">
 </head>
 <body>
+    <div id="loadscreen"></div>
+    <script>
+        setTimeout(function () {
+            document.getElementById("loadscreen").style.display= "none";
+        }, 1200);
+    </script>
 
 	<div class="div1">
 		<div id="title" class="hdiv1 page-system-title">System</div>
@@ -59,9 +65,9 @@
 			</li>
 		</ul>
 		<script type="text/javascript" src="../js/translations/language/system-lang.js"></script>
+		<script type="text/javascript" src="../js/check-system.js"></script>
 		<script type="text/javascript" src="../js/hardware-info.js"></script>
 		<script type="text/javascript" src="../js/system.js"></script>
-		<script type="text/javascript" src="../js/check-system.js"></script>
 	</div>
 	</div>
 </body>

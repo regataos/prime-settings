@@ -94,6 +94,7 @@
 	font-size: 13px;
 	font-weight: 600;
 	color: #adabab;
+	margin-top: 3px;
 }
 .disabled {
 	position: absolute;
@@ -102,4 +103,5 @@
 	font-size: 13px;
 	font-weight: 600;
 	color: #adabab;
+	margin-top: 3px;
 }

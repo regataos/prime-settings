@@ -22,7 +22,6 @@ function gpu_usage() {
 		}
 	});
 }
-gpu_usage();
 
 setInterval(function () {
 	gpu_usage();
@@ -38,7 +37,6 @@ function gpu_temp() {
 		}
 	});
 }
-gpu_temp();
 
 setInterval(function () {
 	gpu_temp();
@@ -54,7 +52,6 @@ function gpu_freq() {
 		}
 	});
 }
-gpu_freq();
 
 setInterval(function () {
 	gpu_freq();
@@ -80,7 +77,6 @@ function vram_freq() {
 		}
 	});
 }
-vram_freq();
 
 setInterval(function () {
 	vram_freq();
@@ -100,7 +96,6 @@ function vram_usage() {
 		}
 	});
 }
-vram_usage();
 
 setInterval(function () {
 	vram_usage();
@@ -143,7 +138,6 @@ function cpu_freq() {
 		}
 	});
 }
-cpu_freq();
 
 setInterval(function () {
 	cpu_freq();
@@ -158,7 +152,6 @@ function cpu_temp() {
 		}
 	});
 }
-cpu_temp();
 
 setInterval(function () {
 	cpu_temp();
@@ -196,8 +189,6 @@ function ram_usage() {
 	});
 }
 
-ram_usage();
-
 setInterval(function () {
 	ram_usage();
 }, 1000);
@@ -211,8 +202,6 @@ function ram_use() {
 		}
 	});
 }
-
-ram_use();
 
 setInterval(function () {
 	ram_use();

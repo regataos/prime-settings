@@ -4,69 +4,79 @@ function check_system() {
 	const exec = require('child_process').exec;
 
 	// Check Prime support
-	fs.access('/tmp/regataos-prime/use-hybrid-graphics.txt', (err) => {
-		if (!err) {
-			// Check NVIDIA driver
-			fs.access('/usr/bin/nvidia-xconfig', (err) => {
-				if (!err) {
-					document.getElementById("use-nvidia").style.display = "block";
-					document.getElementById("use-nvidia-click").style.display = "block";
-					return;
-				} else {
-					document.getElementById("use-nvidia").style.display = "none";
-					document.getElementById("use-nvidia-click").style.display = "none";
-				}
-			});
-
-			document.getElementById("primeon").style.display = "block";
-			return;
-
-		} else {
-			// Check NVIDIA driver
-			fs.access('/usr/bin/nvidia-xconfig', (err) => {
-				if (!err) {
-					document.getElementById("use-nvidia").style.display = "block";
-					document.getElementById("use-nvidia-click").style.display = "block";
-					return;
-				} else {
-					document.getElementById("use-nvidia").style.display = "none";
-					document.getElementById("use-nvidia-click").style.display = "none";
-				}
-			});
-
-			document.getElementById("primeon").style.display = "none";
-		}
-	});
+	const useHybridGraphics = document.getElementById("primeon");
+	const useHybridGraphicsExists = document.body.contains(useHybridGraphics);
+	if (useHybridGraphicsExists) {
+		fs.access('/tmp/regataos-prime/use-hybrid-graphics.txt', (err) => {
+			if (!err) {
+				useHybridGraphics.style.display = "block";
+				return;
+			} else {
+				useHybridGraphics.style.display = "none";
+			}
+		});
+	}
 
 	// Check support for Vulkan
-	fs.access("/tmp/regataos-prime/vulkan-version.txt", (err) => {
-		if (!err) {
-			document.getElementById("vulkan-supported").style.display = "block"
-			return;
-		} else {
-			document.getElementById("vulkan-supported").style.display = "none"
-		}
-	});
+	const vulkanSupported = document.getElementById("primeon");
+	const vulkanSupportedExists = document.body.contains(vulkanSupported);
+	if (vulkanSupportedExists) {
+		fs.access("/tmp/regataos-prime/vulkan-version.txt", (err) => {
+			if (!err) {
+				vulkanSupported.style.display = "block";
+				return;
+			} else {
+				vulkanSupported.style.display = "none";
+			}
+		});
+	}
+
+	// Check NVIDIA driver
+	const useNvidiaClick = document.getElementById("use-nvidia-click");
+	const useNvidiaClickExists = document.body.contains(useNvidiaClick);
+	if (useNvidiaClickExists) {
+		fs.access('/usr/bin/nvidia-xconfig', (err) => {
+			if (!err) {
+				useNvidiaClick.style.display = "block";
+				return;
+			} else {
+				useNvidiaClick.style.display = "none";
+			}
+		});
+	}
+
+	const checkNvidiaDriver = document.getElementById("use-nvidia");
+	const checkNvidiaDriverExists = document.body.contains(checkNvidiaDriver);
+	if (checkNvidiaDriverExists) {
+		fs.access('/usr/bin/nvidia-xconfig', (err) => {
+			if (!err) {
+				checkNvidiaDriver.style.display = "block";
+				return;
+			} else {
+				checkNvidiaDriver.style.display = "none";
+			}
+		});
+	}
 
 	// Check support for AMD AMF
-	fs.access("/tmp/regataos-prime/vulkan-version.txt", (err) => {
-		if (!err) {
-			const command_line = "glxinfo | grep -i 'OpenGL vendor' | cut -d':' -f 2- | awk '{print $1}'";
-			exec(command_line, (error, stdout, stderr) => {
-				if (stdout) {
-					if ((stdout.indexOf("AMD") > -1) == "1") {
-						document.getElementById("amf-toggle").style.display = "block"
-					} else {
-						document.getElementById("amf-toggle").style.display = "none"
-					}
+	const amfToggle = document.getElementById("amf-toggle");
+	const amfToggleExists = document.body.contains(amfToggle)
+	if (amfToggleExists) {
+		fs.access("/tmp/regataos-prime/vulkan-version.txt", (err) => {
+			if (!err) {
+				const openglVendor = fs.readFileSync("/tmp/regataos-prime/config/system-info/opengl-vendor.txt", "utf8");
+
+				if ((openglVendor.indexOf("AMD") > -1) == "1") {
+					amfToggle.style.display = "block";
+				} else {
+					amfToggle.style.display = "none";
 				}
-			});
-			return;
 
-		} else {
-			document.getElementById("amf-toggle").style.display = "none"
-		}
-	});
+				return;
+			} else {
+				amfToggle.style.display = "none";
+			}
+		});
+	}
 }
-
-check_system()
+check_system();

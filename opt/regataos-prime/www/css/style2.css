@@ -1,6 +1,17 @@
 @font-face{
     font-family: "Oxygen";
-    src: url('fonts/Oxygen.otf') format('truetype');
+	font-display: block;
+	font-style: normal;
+	font-weight: normal;
+    src: url('fonts/oxygen/Oxygen-Regular.ttf') format('truetype');
+}
+
+@font-face{
+    font-family: "Roboto";
+	font-display: block;
+	font-style: normal;
+	font-weight: normal;
+    src: url('fonts/roboto/Roboto-Regular.ttf') format('truetype');
 }
 
 body {
@@ -16,14 +27,24 @@ body {
 	user-select: none;
 }
 
-/* Display content when everything is ready */
 #loadscreen {
 	display: block;
+    opacity: 1;
 	width: 100%;
 	height: 100%;
 	position: absolute;
 	background-color: #171a21;
-	z-index: 10000;
+	z-index: 40000;
+    animation-name: initEffect;
+    animation-duration: 1.2s;
+}
+
+@keyframes initEffect {
+    from {
+        opacity: 1;
+    } to {
+        opacity: 0;
+    }
 }
 
 /* pages css */
@@ -247,6 +268,7 @@ label.label-add {
 	font-size: 13px;
 	font-weight: 600;
 	color: #adabab;
+	margin-top: 3px;
 }
 
 /* remove external apps buttom */
@@ -277,6 +299,7 @@ li#buttom-click:active {
 	font-size: 13px;
 	font-weight: 600;
 	color: #adabab;
+	margin-top: 3px;
 }
 
 .info-item {
@@ -290,6 +313,7 @@ li#buttom-click:active {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	margin-top: 3px;
 }
 
 /* CSS nvidia-driver */

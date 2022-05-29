@@ -92,6 +92,7 @@
 	font-size: 13px;
 	font-weight: 600;
 	color: #adabab;
+	margin-top: 3px;
 }
 .reverse-prime-off {
 	position: absolute;
@@ -100,6 +101,7 @@
 	font-size: 13px;
 	font-weight: 600;
 	color: #adabab;
+	margin-top: 3px;
 }
 
 /* GPU used text */
@@ -110,6 +112,7 @@
 	font-size: 13px;
 	font-weight: 600;
 	color: #adabab;
+	margin-top: 3px;
 }
 .render-dgpu-desc {
 	position: absolute;
@@ -118,6 +121,7 @@
 	font-size: 13px;
 	font-weight: 600;
 	color: #adabab;
+	margin-top: 3px;
 }
 
 /* select CPU governor */
@@ -276,6 +280,7 @@ li#selecte-gpu {
 	font-size: 13px;
 	font-weight: 600;
 	color: #adabab;
+	margin-top: 3px;
 }
 .freesync-off {
 	position: absolute;
@@ -284,6 +289,7 @@ li#selecte-gpu {
 	font-size: 13px;
 	font-weight: 600;
 	color: #adabab;
+	margin-top: 3px;
 }
 
 /* run dGPU test */
@@ -291,10 +297,11 @@ li#selecte-gpu {
     width: 140px;
     height: 20px;
     cursor: pointer;
+	border-radius: 8px;
     padding-top: 10px;
     padding-left: 15px;
     padding-right: 15px;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
 }
 
 li.button-gl {

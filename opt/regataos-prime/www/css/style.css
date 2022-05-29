@@ -1,9 +1,20 @@
 @font-face{
     font-family: "Oxygen";
-    src: url('fonts/Oxygen.otf') format('truetype');
+    font-display: block;
+	font-style: normal;
+	font-weight: normal;
+    src: url('fonts/oxygen/Oxygen-Regular.ttf') format('truetype');
 }
 
-body{
+@font-face{
+    font-family: "Roboto";
+    font-display: block;
+	font-style: normal;
+	font-weight: normal;
+    src: url('fonts/roboto/Roboto-Regular.ttf') format('truetype');
+}
+
+body {
     font-family: Oxygen;
     font-weight: 300;
 	background-color: #171a21;
