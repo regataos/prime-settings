@@ -30,8 +30,8 @@ document.querySelector(".run-tests-info").innerHTML = "Rode simples teste com Op
 //Popup
 document.querySelector(".popup-title-settings").innerHTML = "Testar a GPU dedicada";
 document.querySelector(".popup-desc-settings").innerHTML = "Execute simples testes com a GPU dedicada do seu dispositivo usando as seguintes opções:";
-document.querySelector(".button-gl").innerHTML = "Teste com o OpenGL";
-document.querySelector(".button-vk").innerHTML = "Teste com a Vulkan";
+document.querySelector(".button-gl").innerHTML = "Testar com OpenGL";
+document.querySelector(".button-vk").innerHTML = "Testar com Vulkan";
 
 //FreeSync
 document.querySelector(".freesync-on").innerHTML = "FreeSync ativado";
