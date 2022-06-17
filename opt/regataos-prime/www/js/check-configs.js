@@ -70,8 +70,8 @@ function check_freesync() {
 			document.getElementById("switch-shadow-freesync").checked = false;
 
 		} else if (freesync_off == '1') {
-			document.querySelector(".freesync-off").style.display = "block";
 			document.querySelector(".freesync-on").style.display = "none";
+			document.querySelector(".freesync-off").style.display = "block";
 			document.querySelector(".switch--shadow-freesync + label").style.display = "none";
 			document.querySelector(".switch--shadow2-freesync + label").style.display = "block";
 			document.getElementById("switch-shadow2-freesync").checked = false;
@@ -168,7 +168,7 @@ function check_tearfree() {
 
 		if ((check_configs.indexOf("tearfree=on") > -1) == "1") {
 			document.querySelector(".switch-on-tearfree + label").style.display = "block";
-			document.querySelector(".switch-on-tearfree + label").style.display = "none";
+			document.querySelector(".switch-off-tearfree + label").style.display = "none";
 			document.querySelector(".tearfree-on").style.display = "block";
 			document.querySelector(".tearfree-off").style.display = "none";
 
