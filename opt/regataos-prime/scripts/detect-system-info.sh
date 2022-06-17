@@ -16,7 +16,7 @@ echo $(grep -r PRETTY_NAME /etc/os-release | cut -d= -f 2 | sed 's/"//g') >"/hom
 echo $(free -h | grep -i Mem | awk '{print $2}' | sed 's/Mi/MB/' | sed 's/Gi/GB/') >"/home/$user/.config/regataos-prime/system-info/ram-total.txt"
 
 #Capture the CPU model
-echo $(lscpu | grep -i model | tail -n 1 | cut -d':' -f 2 | sed 's/^ \+//') >"/home/$user/.config/regataos-prime/system-info/cpu-model.txt"
+echo $(lscpu | grep -i "model name" | tail -n 1 | cut -d':' -f 2 | sed 's/^ \+//') >"/home/$user/.config/regataos-prime/system-info/cpu-model.txt"
 
 #Capture NVIDIA driver version
 detect_driver=$(cat "/tmp/regataos-prime/config/system-info/graphics-driver.txt")
