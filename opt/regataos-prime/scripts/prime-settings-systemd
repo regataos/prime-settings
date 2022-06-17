@@ -1,0 +1,20 @@
+#!/bin/bash
+
+cd /
+
+while :
+do
+
+# Wait until the environment loads.
+ps -C "plasmashell" > /dev/null
+if [ $? = 0 ]; then
+	sleep 5
+	sudo /opt/regataos-prime/scripts/system-info.sh &
+	sudo /opt/regataos-prime/scripts/apps-hybrid-graphics &
+	/bin/bash /opt/regataos-prime/scripts/check-hardware-resource-support.sh &
+	/opt/regataos-prime/scripts/detect-system-info.sh start
+	break
+fi
+
+   sleep 1
+done

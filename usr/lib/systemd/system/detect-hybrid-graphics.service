@@ -3,7 +3,7 @@ Description=PRIME is a technology used to manage hybrid graphics found on recent
 Before=display-manager.service
 
 [Service]
-ExecStart=/opt/regataos-prime/scripts/detect-hybrid-graphics
+ExecStart=/bin/bash /opt/regataos-prime/scripts/detect-hybrid-graphics
 
 [Install]
 WantedBy=graphical.target

@@ -1,0 +1,9 @@
+[Unit]
+Description=Enable dGPU for apps
+Before=display-manager.service
+
+[Service]
+ExecStart=/bin/bash /opt/regataos-prime/scripts/prime-settings-systemd
+
+[Install]
+WantedBy=graphical.target

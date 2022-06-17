@@ -3,7 +3,7 @@ Description=Check and apply cpu governor configuration
 Before=display-manager.service
 
 [Service]
-ExecStart=/opt/regataos-prime/scripts/set-configs-on-boot
+ExecStart=/bin/bash /opt/regataos-prime/scripts/set-configs-on-boot
 
 [Install]
 WantedBy=graphical.target
