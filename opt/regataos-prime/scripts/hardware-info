@@ -381,9 +381,6 @@ case $1 in
 "-gpu-freq")
 	gpu_freq
 	;;
-"-vram-size")
-	vram_size
-	;;
 "-vram-freq")
 	vram_freq
 	;;

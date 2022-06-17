@@ -70,12 +70,14 @@ fi
 function checkApps_dGPU() {
 	sudo /opt/regataos-prime/scripts/apps-hybrid-graphics
 }
+
 if test -e "/tmp/regataos-prime/use-hybrid-graphics.txt"; then
 	if [[ $(glxinfo | grep vendor) == *"Intel"* ]]; then
 		checkApps_dGPU &
 		sleep 1
 		regataosprime --disable-gpu /opt/regataos-prime &
 		/opt/regataos-prime/scripts/detect-system-info.sh start &
+		/opt/regataos-prime/scripts/check-hardware-resource-support.sh start &
 		/opt/regataos-prime/scripts/intel-gpu-frequency &
 		/opt/regataos-prime/scripts/intel-gpu-usage
 	else
@@ -83,6 +85,7 @@ if test -e "/tmp/regataos-prime/use-hybrid-graphics.txt"; then
 		sleep 1
 		regataosprime /opt/regataos-prime &
 		/opt/regataos-prime/scripts/detect-system-info.sh start &
+		/opt/regataos-prime/scripts/check-hardware-resource-support.sh start &
 		/opt/regataos-prime/scripts/intel-gpu-frequency &
 		/opt/regataos-prime/scripts/intel-gpu-usage
 	fi
@@ -91,11 +94,13 @@ else
 	if [[ $(glxinfo | grep vendor) == *"Intel"* ]]; then
 		regataosprime --disable-gpu /opt/regataos-prime &
 		/opt/regataos-prime/scripts/detect-system-info.sh start &
+		/opt/regataos-prime/scripts/check-hardware-resource-support.sh start &
 		/opt/regataos-prime/scripts/intel-gpu-frequency &
 		/opt/regataos-prime/scripts/intel-gpu-usage
 	else
 		regataosprime /opt/regataos-prime &
 		/opt/regataos-prime/scripts/detect-system-info.sh start &
+		/opt/regataos-prime/scripts/check-hardware-resource-support.sh start &
 		/opt/regataos-prime/scripts/intel-gpu-frequency &
 		/opt/regataos-prime/scripts/intel-gpu-usage
 	fi

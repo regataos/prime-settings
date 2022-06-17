@@ -15,8 +15,10 @@ function system_information() {
 	document.getElementById("cpu-model").innerHTML = cpu_model;
 
 	// Capture NVIDIA driver version
-	const nvdriver_version = fs.readFileSync("/tmp/regataos-prime/config/system-info/nvdriver-version.txt", "utf8");
-	document.getElementById("nvdriver-version").innerHTML = nvdriver_version;
+	if (fs.existsSync("/tmp/regataos-prime/config/system-info/nvdriver-version.txt")) {
+		const nvdriver_version = fs.readFileSync("/tmp/regataos-prime/config/system-info/nvdriver-version.txt", "utf8");
+		document.getElementById("nvdriver-version").innerHTML = nvdriver_version;
+	}
 
 	// Capture the discrete GPU video memory (VRAM) size
 	const vram_size = fs.readFileSync("/tmp/regataos-prime/config/system-info/total-vram-size.txt", "utf8");

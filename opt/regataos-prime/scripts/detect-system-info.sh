@@ -19,10 +19,10 @@ echo $(free -h | grep -i Mem | awk '{print $2}' | sed 's/Mi/MB/' | sed 's/Gi/GB/
 echo $(lscpu | grep -i model | tail -n 1 | cut -d':' -f 2 | sed 's/^ \+//') >"/home/$user/.config/regataos-prime/system-info/cpu-model.txt"
 
 #Capture NVIDIA driver version
-echo $(nvidia-smi -i 0 --query-gpu=driver_version --format=csv,noheader) >"/home/$user/.config/regataos-prime/system-info/nvdriver-version.txt"
-
-#Capture the discrete GPU video memory (VRAM) size
-echo $(/bin/bash /opt/regataos-prime/scripts/hardware-info -vram-size) >"/home/$user/.config/regataos-prime/system-info/vram-size.txt"
+detect_driver=$(cat "/tmp/regataos-prime/config/system-info/graphics-driver.txt")
+if [[ $detect_driver == *"nvidia"* ]]; then
+    echo $(nvidia-smi -i 0 --query-gpu=driver_version --format=csv,noheader) >"/home/$user/.config/regataos-prime/system-info/nvdriver-version.txt"
+fi
 
 #Capture iGPU
 echo $(/bin/bash /opt/regataos-prime/scripts/hardware-info -capture-igpu) >"/home/$user/.config/regataos-prime/system-info/igpu-model.txt"
