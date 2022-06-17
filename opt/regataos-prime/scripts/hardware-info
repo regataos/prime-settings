@@ -366,8 +366,8 @@ function cpu_use() {
 }
 
 function cpu_freq() {
-	cpu_freq=$(lscpu | awk -F : '($1=="CPU MHz") {printf "%3.2fGHz\n", $2/1000}')
-	echo $cpu_freq
+	cpu_freq=$(cat /proc/cpuinfo | grep -i mhz | awk '{print $4}' | cut -d'.' -f -1 | head -1)
+	echo "$cpu_freq"MHz
 }
 
 # Run options
