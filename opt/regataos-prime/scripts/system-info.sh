@@ -6,7 +6,11 @@ sleep 3;
 user=$(users | awk '{print $1}')
 
 if test -e "/home/$user/.config/plasma-localerc" ; then
-    language=$(grep -r LANG "/home/$user/.config/plasma-localerc")
+	language=$(grep -r LANGUAGE= "/home/$user/.config/plasma-localerc" | cut -d"=" -f 2- | cut -d":" -f -1)
+
+	if [ -z $language ]; then
+    	language=$(grep -r LANG= "/home/$user/.config/plasma-localerc" | cut -d"=" -f 2-)
+	fi
 
 elif test -e "/home/$user/.config/user-dirs.locale" ; then
     language=$(cat "/home/$user/.config/user-dirs.locale")
