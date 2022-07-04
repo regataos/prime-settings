@@ -18,7 +18,7 @@ function gpu_usage() {
 			document.getElementById("gpu-usage-number").innerHTML = "0";
 		} else {
 			document.getElementById("gpu-usage").style.strokeDashoffset = "calc(440 - (440 * " + stdout + ") / 100)";
-			document.getElementById("gpu-usage-number").innerHTML = stdout;
+			document.getElementById("gpu-usage-number").innerHTML = stdout.trim();
 		}
 	});
 }
@@ -92,7 +92,7 @@ function vram_usage() {
 			document.getElementById("vram-usage-number").innerHTML = "0";
 		} else {
 			document.getElementById("vram-usage").style.strokeDashoffset = "calc(440 - (440 * " + stdout + ") / 100)";
-			document.getElementById("vram-usage-number").innerHTML = stdout;
+			document.getElementById("vram-usage-number").innerHTML = stdout.trim();
 		}
 	});
 }
@@ -119,7 +119,7 @@ function cpu_usage() {
 			document.getElementById("cpu-usage-number").innerHTML = "0";
 		} else {
 			document.getElementById("cpu-usage").style.strokeDashoffset = "calc(440 - (440 * " + data + ") / 100)";
-			document.getElementById("cpu-usage-number").innerHTML = data;
+			document.getElementById("cpu-usage-number").innerHTML = data.trim();
 		}
 	});
 }
@@ -184,7 +184,7 @@ function ram_usage() {
 			document.getElementById("ram-usage-number").innerHTML = "0";
 		} else {
 			document.getElementById("ram-usage").style.strokeDashoffset = "calc(440 - (440 * " + stdout + ") / 100)";
-			document.getElementById("ram-usage-number").innerHTML = stdout;
+			document.getElementById("ram-usage-number").innerHTML = stdout.trim();
 		}
 	});
 }
