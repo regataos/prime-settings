@@ -110,16 +110,15 @@ function cpu_use() {
 }
 
 function cpu_usage() {
-	const fs = require('fs');
-	fs.readFile("/tmp/regataos-prime/cpu-usage.log", (err, usageCpu) => {
-		if (err) throw err;
-		const data = usageCpu
-		if (data.length <= 1) {
+	const exec = require('child_process').exec;
+	const command = "cat /tmp/regataos-prime/cpu-usage.log";
+	exec(command, (error, stdout, stderr) => {
+		if (stdout.length <= 1) {
 			document.getElementById("cpu-usage").style.strokeDashoffset = "calc(440 - (440 * 0) / 100)";
 			document.getElementById("cpu-usage-number").innerHTML = "0";
 		} else {
-			document.getElementById("cpu-usage").style.strokeDashoffset = "calc(440 - (440 * " + data + ") / 100)";
-			document.getElementById("cpu-usage-number").innerHTML = data.trim();
+			document.getElementById("cpu-usage").style.strokeDashoffset = "calc(440 - (440 * " + stdout + ") / 100)";
+			document.getElementById("cpu-usage-number").innerHTML = stdout.trim();
 		}
 	});
 }
