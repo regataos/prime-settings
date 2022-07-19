@@ -10,8 +10,13 @@ function vram_freq() {
 	else
 		dgpu=$(cat "/tmp/regataos-prime/config/system-info/opengl-vendor.txt")
 		if [[ $dgpu == *"AMD"* ]]; then
-			vram_freq=$(cat /sys/class/drm/card0/device/pp_dpm_mclk | grep '*' | awk '{print $2}')
-			echo "$vram_freq"
+			if test -e /sys/class/drm/card0/device/pp_dpm_mclk; then
+				vram_freq=$(cat /sys/class/drm/card0/device/pp_dpm_mclk | grep '*' | awk '{print $2}')
+				echo "$vram_freq"
+			else
+				vram_freq=$(cat /sys/class/drm/card1/device/pp_dpm_mclk | grep '*' | awk '{print $2}')
+				echo "$vram_freq"
+			fi
 
 		elif [[ $dgpu == *"Intel"* ]]; then
 			echo "No data"
@@ -76,11 +81,17 @@ function gpu_temp() {
 	if [[ $detect_driver == *"nvidia"* ]]; then
 		gpu_temp=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader)
 		echo "$gpu_temp"°C
+
 	else
 		dgpu=$(cat "/tmp/regataos-prime/config/system-info/opengl-vendor.txt")
 		if [[ $dgpu == *"AMD"* ]]; then
-			gpu_temp=$(cat /sys/class/drm/card0/device/hwmon/hwmon*/temp1_input | awk '{ foo = $1 / 1000 ; print foo }')
-			echo "$gpu_temp"°C
+			if test -e /sys/class/drm/card0/device/hwmon/hwmon*/temp1_input; then
+				gpu_temp=$(cat /sys/class/drm/card0/device/hwmon/hwmon*/temp1_input | awk '{ foo = $1 / 1000 ; print foo }')
+				echo "$gpu_temp"°C
+			else
+				gpu_temp=$(cat /sys/class/drm/card1/device/hwmon/hwmon*/temp1_input | awk '{ foo = $1 / 1000 ; print foo }')
+				echo "$gpu_temp"°C
+			fi
 
 		elif [[ $dgpu == *"Intel"* ]]; then
 			echo "No data"
@@ -99,8 +110,13 @@ function gpu_freq() {
 	else
 		dgpu=$(cat "/tmp/regataos-prime/config/system-info/opengl-vendor.txt")
 		if [[ $dgpu == *"AMD"* ]]; then
-			gpu_freq=$(cat /sys/class/drm/card0/device/pp_dpm_sclk | grep '*' | awk '{print $2}')
-			echo "$gpu_freq"
+			if test -e /sys/class/drm/card0/device/pp_dpm_sclk; then
+				gpu_freq=$(cat /sys/class/drm/card0/device/pp_dpm_sclk | grep '*' | awk '{print $2}')
+				echo "$gpu_freq"
+			else
+				gpu_freq=$(cat /sys/class/drm/card1/device/pp_dpm_sclk | grep '*' | awk '{print $2}')
+				echo "$gpu_freq"
+			fi
 
 		elif [[ $dgpu == *"Intel"* ]]; then
 			gpu_freq=$(cat /tmp/regataos-prime/intel_gpu_freq.log)
