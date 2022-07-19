@@ -1,0 +1,14 @@
+[Unit]
+Description=Initial setup for Prime Settings
+PartOf=graphical-session.target
+After=plasma-core.target
+
+[Service]
+Type=simple
+ExecStartPre=/bin/sleep 10
+ExecStart=/opt/regataos-prime/scripts/check-hardware-resource-support.sh
+RemainAfterExit=true
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
