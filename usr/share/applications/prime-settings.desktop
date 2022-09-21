@@ -1,34 +1,34 @@
 [Desktop Entry]
+Encoding=UTF-8
+Version=1.0
 Name=Max-Q
 Name[en_US]=Max-Q
+Name[en_GB]=Max-Q
 Name[pt_BR]=Max-Q
 Name[pt_PT]=Max-Q
+Name[pt]=Max-Q
 Name[es]=Max-Q
 
 Comment=Graphics settings, hardware usage and more
 Comment[en_US]=Graphics settings, hardware usage and more
+Comment[en_GB]=Graphics settings, hardware usage and more
 Comment[pt_BR]=Configurações gráficas, uso do hardware e mais
 Comment[pt_PT]=Configurações gráficas, uso do hardware e mais
+Comment[pt]=Configurações gráficas, uso do hardware e mais
 Comment[es]=Configuración de gráficos, uso de hardware y más
 
 GenericName=Graphics settings, hardware usage and more
 GenericName[en_US]=Graphics settings, hardware usage and more
+GenericName[en_GB]=Graphics settings, hardware usage and more
 GenericName[pt_BR]=Configurações gráficas, uso do hardware e mais
 GenericName[pt_PT]=Configurações gráficas, uso do hardware e mais
+GenericName[pt]=Configurações gráficas, uso do hardware e mais
 GenericName[es]=Configuración de gráficos, uso de hardware y más
 
 Exec=bash -x prime-settings
 Icon=Max-q
 Categories=Settings;
-MimeType=
-Path=
 StartupNotify=true
 StartupWMClass=Max-Q
 Terminal=false
-TerminalOptions=
 Type=Application
-X-DBUS-ServiceName=
-X-DBUS-StartupType=
-X-KDE-Protocols=skype
-X-KDE-SubstituteUID=false
-X-KDE-Username=

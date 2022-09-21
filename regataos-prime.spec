@@ -1,5 +1,5 @@
 Name: regataos-prime
-Version: 22.0
+Version: 22.2
 Release: 0
 Url: https://github.com/regataos/prime-settings
 Summary: PRIME for Regata OS.
@@ -55,25 +55,19 @@ else
 fi
 
 # Create regataosprime executable
-if test ! -e /opt/magma/regataosprime ; then
-	cp -f /opt/magma/magma /opt/magma/regataosprime
-fi
-if test ! -e /usr/bin/regataosprime ; then
-	ln -sf /opt/magma/regataosprime /usr/bin/regataosprime
+rm -f "/opt/magma/regataosprime"
+cp -f "/opt/magma/nw" "/opt/magma/regataosprime"
+
+if test ! -e "/usr/bin/regataosprime"; then
+	ln -sf "/opt/magma/regataosprime" "/usr/bin/regataosprime"
 fi
 
 # Start systemd service
-%service_add_post detect-hybrid-graphics.service
-systemctl enable  detect-hybrid-graphics.service || true
-systemctl stop    detect-hybrid-graphics.service || true
-systemctl start   detect-hybrid-graphics.service || true
-systemctl restart detect-hybrid-graphics.service || true
-
-%service_add_post set-configs-on-boot.service
-systemctl enable  set-configs-on-boot.service || true
-systemctl stop    set-configs-on-boot.service || true
-systemctl start   set-configs-on-boot.service || true
-systemctl restart set-configs-on-boot.service || true
+systemctl daemon-reload
+systemctl enable --now prime-settings-systemd.service
+systemctl enable --now detect-hybrid-graphics.service
+systemctl enable --now set-configs-on-boot.service
+systemctl --global enable check-hardware-resource-support.service
 
 if test -e /tmp/regataos-prime/use-hybrid-graphics.txt ; then
 	# Open apps with hybrid graphics manually

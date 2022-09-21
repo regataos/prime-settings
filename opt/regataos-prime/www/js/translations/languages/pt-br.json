@@ -1,0 +1,136 @@
+[
+    {
+        "index": {
+            "windowTitle":"Max-Q",
+            "sideBar": {
+                "showMenu": "Ícones e textos",
+                "hideMenu": "Apenas ícones",
+                "applications": "Aplicativos",
+                "settings": "Configurações",
+                "performance": "Desempenho",
+                "system": "Sistema"
+            },
+            "status": {
+                "performance": "Alta performance",
+                "powersaving": "Economia de energia"
+            },
+            "buttonTop": {
+                "close": "Fechar"
+            }
+        },
+        "appsPage": {
+            "title": "Aplicativos",
+            "description": "Escolha quais aplicativos devem ser executados com a GPU dedicada do seu dispositivo.",
+            "buttonAllApps": {
+                "enableApps": "Ativar para todos os aplicativos",
+                "disableApps": "Desativar para todos os aplicativos"
+            },
+            "addApp": {
+                "title": "Adicionar aplicativo",
+                "tip": "Use esta opção para adicionar mais aplicativos na lista para executar com a dGPU do seu dispositivo.",
+                "description": "Adicione mais aplicativos na lista"
+            }
+        },
+        "settingsPage": {
+            "title": "Configurações",
+            "description": "Escolha a melhor configuração para a sua GPU dedicada, configure a tela e execute simples testes.",
+            "selectGpu": {
+                "title": "Renderizar com GPU:",
+                "integrated": "Integrada",
+                "dedicated": "Dedicada",
+                "energySaving": "Economia de energia",
+                "performance": "Alta performance"
+            },
+            "displaySettings": {
+                "title": "Configurações de tela",
+                "description": "Gerencie e configure monitores e telas"
+            },
+            "nvidiaSettings": {
+                "title": "Configurações do NVIDIA Driver",
+                "description": "Escolha a melhor configuração para a sua GPU"
+            },
+            "runTests": {
+                "title": "Testar a GPU dedicada",
+                "description": "Rode simples teste com OpenGL ou Vulkan"
+            },
+            "popUpTests": {
+                "title": "Testar a GPU dedicada",
+                "description": "Execute simples testes com a GPU dedicada do seu dispositivo usando as seguintes opções:",
+                "buttonOpengl": "Testar com OpenGL",
+                "buttonVulkan": "Testar com Vulkan"
+            },
+            "tearing": {
+                "title": "Prevenir Screen Tearing",
+                "on": "Ativado",
+                "off": "Desativado"
+            },
+            "freesync": {
+                "title": "Radeon FreeSync",
+                "on": "FreeSync ativado",
+                "off": "FreeSync desativado"
+            },
+            "cpuPower": {
+                "title": "CPU Power:",
+                "balanced": "Equilibrado"
+            },
+            "compositor": {
+                "title": "Efeitos da área de trabalho",
+                "on": "Compositor ativado",
+                "off": "Compositor desativado"
+            },
+            "unlockWidgets": {
+                "title": "Bloquear widgets",
+                "on": "Widgets bloqueados",
+                "off": "Widgets desbloqueados"
+            },
+            "amdAmf": {
+                "title": "Ativar o AMD AMF",
+                "on": "AMD AMF ativado",
+                "off": "AMD AMF desativado"
+            }
+        },
+        "performancePage": {
+            "title": "Desempenho",
+            "description": "Verifique informações sobre o consumo de recursos do hardware.",
+            "blocksTitle": {
+                "ram": "Uso da RAM",
+                "cpu": "Uso da CPU",
+                "vram": "Uso da VRAM",
+                "gpu": "Uso da GPU"
+
+            },
+            "blocksDesc": {
+                "temperature": "Temperatura",
+                "frequency": "Frequência",
+                "memorySize": "Tamanho",
+                "totalMemory": "Tamanho",
+                "inUse": "Em uso"
+            }
+        },
+        "systemPage": {
+            "title": "Sistema",
+            "description": "Confira mais informações sobre o hardware e software.",
+            "copyButton": {
+                "title": "Copiar tudo",
+                "description": "Copiar as informações para a área de transferência."
+            },
+            "moreInfo": {
+                "title": "Mais detalhes sobre o sistema",
+                "description": "Centro de informações do sistema"
+            },
+            "systemInfo": {
+                "nvidia": "Versão do NVIDIA Driver",
+                "dgpu": "Chipset gráfico",
+                "vram": "Tamanho da memória de vídeo",
+                "osName": "Sistema operacional",
+                "ram": "Memória do sistema",
+                "cpu": "Modelo da CPU",
+                "igpu": "Gráficos integrados",
+                "mesa": "Versão do Mesa Driver",
+                "opengl": "Versão da API OpenGL",
+                "vulkan": "Versão da API Vulkan",
+                "linux": "Versão do Kernel Linux"
+            }
+        }
+    }
+]

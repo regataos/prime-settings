@@ -54,8 +54,8 @@ function apps_list() {
 								<input id="switch-shadow2-' + apps[i].nickname + '" class="switch switch--shadow2-app switch-off-' + apps[i].nickname + '" type="checkbox" onclick="window.appname=' + appname + '; window.package=' + package + '; window.package_manager=' + package_manager + '; window.executable=' + executable + '; action_apps();"> \
 								<label for="switch-shadow2-' + apps[i].nickname + '"></label> \
 							</div> \
-							<span class="' + apps[i].nickname + '-on performance">Alta performance</span> \
-							<span class="' + apps[i].nickname + '-off powersaving">Economia de energia</span>';
+							<span class="' + apps[i].nickname + '-on performance"></span> \
+							<span class="' + apps[i].nickname + '-off powersaving"></span>';
 
 							//Finally, create the new blocks dynamically
 							all_blocks.appendChild(new_app_blocks);

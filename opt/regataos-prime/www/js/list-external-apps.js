@@ -51,6 +51,7 @@ function apps_external_list() {
 
 							//Finally, create the new blocks dynamically
 							all_blocks.appendChild(new_app_blocks);
+							translation_app_status();
 						}
 
 					} else {
@@ -77,8 +78,8 @@ function apps_external_list() {
 							<input id="switch-shadow2-' + apps[i].app_nickname + '" class="switch switch--shadow2-app switch-off-' + apps[i].app_nickname + '" type="checkbox" onclick="window.appname=' + appname + '; window.desktop=' + desktop + '; action_external_apps();"> \
 							<label for="switch-shadow2-' + apps[i].app_nickname + '" class="label-apps-off"></label> \
 						</div> \
-						<span class="' + apps[i].app_nickname + '-on performance">Alta performance</span> \
-						<span class="' + apps[i].app_nickname + '-off powersaving">Economia de energia</span>';
+						<span class="' + apps[i].app_nickname + '-on performance"></span> \
+						<span class="' + apps[i].app_nickname + '-off powersaving"></span>';
 
 						//Finally, create the new blocks dynamically
 						all_blocks.appendChild(new_app_blocks);
