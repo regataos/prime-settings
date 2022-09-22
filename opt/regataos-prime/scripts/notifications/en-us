@@ -1,0 +1,141 @@
+#!/bin/bash
+
+# Max-Q notification system
+
+# Configure the dGPU manufacturer's logo
+if test -e /usr/bin/nvidia-xconfig ; then
+	logo_gpu="nvidia-dgpu"
+else
+	logo_gpu="amd-dgpu"
+fi
+
+# Notify the user that a restart is required
+function restart_system() {
+	notify-send -i chronometer-reset -u normal -a 'Max-Q' "Restart the Regata OS" \
+	"A restart is required for the changes to take effect in the Regata OS."
+}
+
+# Notify when dGPU is disabled or enabled for all applications
+function disable_run_dgpu() {
+	if test -e /usr/bin/nvidia-xconfig ; then
+		logo_gpu="nvidia-dgpu-off"
+	else
+		logo_gpu="amd-dgpu-off"
+	fi
+
+	notify-send -i $logo_gpu -u normal -a 'Max-Q' "Do not render with the dGPU" \
+	"Do not render the applications listed in Max-Q with the dGPU."
+}
+
+function enable_run_dgpu() {
+	notify-send -i $logo_gpu -u normal -a 'Max-Q' "Render with the dGPU" \
+	"Render the applications listed in Max-Q with the dGPU."
+}
+
+# Running app or game with dGPU
+function running_with_dgpu() {
+	if test -e /usr/bin/nvidia-xconfig ; then
+		notify-send -i $logo_gpu -u normal -a 'Max-Q' "Rendering with dGPU" \
+		"Using the NVIDIA GPU for graphical rendering."
+	else
+		notify-send -i $logo_gpu -u normal -a 'Max-Q' "Rendering with dGPU" \
+		"Using the AMD GPU for graphical rendering."
+	fi
+}
+
+# Notify copy of information to the clipboard
+function copy_info() {
+	notify-send -i klipper -u normal -a 'Max-Q' "Copied information" \
+	"Information copied to clipboard."
+}
+
+# Enable/Disable TearFree
+function tearfree_on() {
+	notify-send -i video-display -u normal -a 'Max-Q' "Prevent Screen Tearing" \
+	'Prevent the Tearing phenomenon to avoid "broken image" on the screen.'
+}
+
+function tearfree_off() {
+	notify-send -i video-display -u normal -a 'Max-Q' "Do not prevent Screen Tearing" \
+	'The Tearing phenomenon results in "broken image" on the screen.'
+}
+
+# CPU governor
+function cpu_powersave() {
+	notify-send -i preferences-system-power-management -u normal -a 'Max-Q' "Balanced" \
+	"Balancing performance and power consumption."
+}
+
+function cpu_performance() {
+	notify-send -i preferences-system-power-management -u normal -a 'Max-Q' "High performance" \
+	"Prioritize performance; can consume more energy."
+}
+
+# KWin compositor
+function compositor_on() {
+	notify-send -i preferences-system-windows-effect-logout -u normal -a 'Max-Q' "Effects activated" \
+	"Desktop effects have been enabled."
+}
+
+function compositor_off() {
+	notify-send -i preferences-system-windows-effect-login -u normal -a 'Max-Q' "Effects Disabled" \
+	"Desktop effects have been disabled; reduces GPU usage."
+}
+
+# Widgets unlocked
+function unlockwidgets_on() {
+	notify-send -i lock -u normal -a 'Max-Q' "Blocked widgets" \
+	"Desktop widgets have been locked."
+}
+
+function unlockwidgets_off() {
+	notify-send -i unlock -u normal -a 'Max-Q' "Unlocked widgets" \
+	"Desktop widgets have been unlocked."
+}
+
+# AMD AMF
+function amf_on() {
+	notify-send -i amd-dgpu -u normal -a 'Max-Q' "AMD AMF enabled" \
+	"AMD AMF has been enabled for supported apps."
+}
+
+function amf_off() {
+	notify-send -i amd-dgpu-off -u normal -a 'Max-Q' "AMD AMF disabled" \
+	"AMD AMF is disabled."
+}
+
+case $1 in
+   "-restart") restart_system
+        ;;
+   "-disable-run-dgpu") disable_run_dgpu
+        ;;
+   "-enable-run-dgpu") enable_run_dgpu
+        ;;
+   "-running-with-dgpu") running_with_dgpu
+        ;;
+   "-copy-info") copy_info
+        ;;
+   "-tearfree-on") tearfree_on
+        ;;
+   "-tearfree-off") tearfree_off
+        ;;
+   "-cpu-powersave") cpu_powersave
+        ;;
+   "-cpu-performance") cpu_performance
+        ;;
+   "-compositor-on") compositor_on
+        ;;
+   "-compositor-off") compositor_off
+        ;;
+   "-unlockwidgets-on") unlockwidgets_on
+        ;;
+   "-unlockwidgets-off") unlockwidgets_off
+        ;;
+   "-amf-on") amf_on
+        ;;
+   "-amf-off") amf_off
+        ;;
+   *) echo "Invalid option!"
+    	exit 1
+    	;;
+esac

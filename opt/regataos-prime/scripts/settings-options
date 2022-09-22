@@ -4,37 +4,24 @@
 user=$(users | awk '{print $1}')
 
 if test -e "/home/$user/.config/plasma-localerc" ; then
-	language=$(grep -r LANGUAGE= "/home/$user/.config/plasma-localerc" | cut -d"=" -f 2- | cut -d":" -f -1)
+	language=$(grep -r LANGUAGE= "/home/$user/.config/plasma-localerc" | cut -d"=" -f 2- | cut -d":" -f -1 | tr [A-Z] [a-z] | sed 's/_/-/')
 
 	if [ -z $language ]; then
-    	language=$(grep -r LANG= "/home/$user/.config/plasma-localerc" | cut -d"=" -f 2-)
+    	language=$(grep -r LANG= "/home/$user/.config/plasma-localerc" | cut -d"=" -f 2- | cut -d"." -f -1 | tr [A-Z] [a-z] | sed 's/_/-/')
 	fi
 
 elif test -e "/home/$user/.config/user-dirs.locale" ; then
-    language=$(cat "/home/$user/.config/user-dirs.locale")
+    language=$(cat "/home/$user/.config/user-dirs.locale" | tr [A-Z] [a-z] | sed 's/_/-/')
 
 else
-    language=$(echo $LANG)
+    language=$(echo $LANG | tr [A-Z] [a-z] | sed 's/_/-/' | cut -d"." -f -1)
 fi
 
 # Configure application language
-if [[ $language == *"pt_BR"* ]]; then
-	scriptNotify="/opt/regataos-prime/scripts/notifications/notify-pt"
-
-elif [[ $language == *"pt_PT"* ]]; then
-	scriptNotify="/opt/regataos-prime/scripts/notifications/notify-pt"
-
-elif [[ $language == *"pt"* ]]; then
-	scriptNotify="/opt/regataos-prime/scripts/notifications/notify-pt"
-
-elif [[ $language == *"en_US"* ]]; then
-	scriptNotify="/opt/regataos-prime/scripts/notifications/notify-en"
-
-elif [[ $language == *"en_GB"* ]]; then
-	scriptNotify="/opt/regataos-prime/scripts/notifications/notify-en"
-
+if test -e "/opt/regataos-prime/scripts/notifications/$language"
+	scriptNotify="/opt/regataos-prime/scripts/notifications/$language"
 else
-	scriptNotify="/opt/regataos-prime/scripts/notifications/notify-en"
+	scriptNotify="/opt/regataos-prime/scripts/notifications/en-us"
 fi
 
 # Enable/Disable TearFree
