@@ -104,9 +104,6 @@ else
 	rm -f "/usr/share/kservices5/ServiceMenus/prime-gpu.desktop"
 fi
 
-# For Prime Settings system info
-/opt/regataos-prime/scripts/system-info.sh start
-
 update-desktop-database
 
 # Prepare the system for AMD AMF
