@@ -1,7 +1,7 @@
 #!/bin/bash
 
 os_name=$(grep -r PRETTY_NAME /etc/os-release | cut -d= -f 2 | sed 's/"//g')
-cpu_model=$(lscpu | grep -i model | tail -n 1 | cut -d':' -f 2 | sed 's/^ \+//')
+cpu_model=$(lscpu | grep -i "model name" | tail -n 1 | cut -d':' -f 2 | sed 's/^ \+//')
 ram_total=$(free -h | grep -i Mem | awk '{print $2}' | sed 's/Mi/MB/' | sed 's/Gi/GB/')
 
 if test -e "/tmp/regataos-prime/use-hybrid-graphics.txt"; then

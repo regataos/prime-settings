@@ -1,5 +1,42 @@
 #!/bin/bash
 
+# Detect system language
+user=$(users | awk '{print $1}')
+
+if test -e "/home/$user/.config/plasma-localerc" ; then
+	language=$(grep -r LANGUAGE= "/home/$user/.config/plasma-localerc" | cut -d"=" -f 2- | cut -d":" -f -1)
+
+	if [ -z $language ]; then
+    	language=$(grep -r LANG= "/home/$user/.config/plasma-localerc" | cut -d"=" -f 2-)
+	fi
+
+elif test -e "/home/$user/.config/user-dirs.locale" ; then
+    language=$(cat "/home/$user/.config/user-dirs.locale")
+
+else
+    language=$(echo $LANG)
+fi
+
+# Configure application language
+if [[ $language == *"pt_BR"* ]]; then
+	scriptNotify="/opt/regataos-prime/scripts/notifications/notify-pt"
+
+elif [[ $language == *"pt_PT"* ]]; then
+	scriptNotify="/opt/regataos-prime/scripts/notifications/notify-pt"
+
+elif [[ $language == *"pt"* ]]; then
+	scriptNotify="/opt/regataos-prime/scripts/notifications/notify-pt"
+
+elif [[ $language == *"en_US"* ]]; then
+	scriptNotify="/opt/regataos-prime/scripts/notifications/notify-en"
+
+elif [[ $language == *"en_GB"* ]]; then
+	scriptNotify="/opt/regataos-prime/scripts/notifications/notify-en"
+
+else
+	scriptNotify="/opt/regataos-prime/scripts/notifications/notify-en"
+fi
+
 # Enable/Disable TearFree
 function tearfree() {
 	if [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"tearfree=on"* ]]; then
@@ -15,7 +52,7 @@ function tearfree() {
 		xrandr --output $screen --set TearFree off
 
 		# Show notify on desktop
-		/bin/bash /opt/regataos-prime/scripts/notify -tearfree-off
+		/bin/bash $scriptNotify -tearfree-off
 
 	elif [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"tearfree=off"* ]]; then
 		sed -i 's/\(tearfree=off\)/tearfree=on/' "/tmp/regataos-prime/config/regataos-prime.conf"
@@ -30,7 +67,7 @@ function tearfree() {
 		xrandr --output $screen --set TearFree on
 
 		# Show notify on desktop
-		/bin/bash /opt/regataos-prime/scripts/notify -tearfree-on
+		/bin/bash $scriptNotify -tearfree-on
 
 	else
 		echo "Option not found in the file with configuration options."
@@ -46,7 +83,7 @@ function enable_freesync() {
 	sed -i 's/\(freesync=off\)/freesync=on/' "/tmp/regataos-prime/config/regataos-prime.conf"
 
 	# Show notify on desktop
-	/bin/bash /opt/regataos-prime/scripts/notify -tearfree-on
+	/bin/bash $scriptNotify -tearfree-on
 }
 
 function disable_freesync() {
@@ -57,7 +94,7 @@ function disable_freesync() {
 	sed -i 's/\(freesync=on\)/freesync=off/' "/tmp/regataos-prime/config/regataos-prime.conf"
 
 	# Show notify on desktop
-	/bin/bash /opt/regataos-prime/scripts/notify -tearfree-off
+	/bin/bash $scriptNotify -tearfree-off
 }
 
 # Configuration option for KWin compositing
@@ -75,7 +112,7 @@ function compositor() {
 
 		# Show notify on desktop
 		sleep 2
-		/bin/bash /opt/regataos-prime/scripts/notify -compositor-off
+		/bin/bash $scriptNotify -compositor-off
 
 	elif [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"compositor=off"* ]]; then
 		sed -i 's/\(compositor=off\)/compositor=on/' "/tmp/regataos-prime/config/regataos-prime.conf"
@@ -83,7 +120,7 @@ function compositor() {
 
 		# Show notify on desktop
 		sleep 2
-		/bin/bash /opt/regataos-prime/scripts/notify -compositor-on
+		/bin/bash $scriptNotify -compositor-on
 
 	else
 		sed -i 's/\(compositor=on\)/compositor=off/' "/tmp/regataos-prime/config/regataos-prime.conf"
@@ -91,7 +128,7 @@ function compositor() {
 
 		# Show notify on desktop
 		sleep 2
-		/bin/bash /opt/regataos-prime/scripts/notify -compositor-off
+		/bin/bash $scriptNotify -compositor-off
 	fi
 }
 
@@ -110,7 +147,7 @@ function unlock_widgets() {
 
 		# Show notify on desktop
 		sleep 2
-		/bin/bash /opt/regataos-prime/scripts/notify -unlockwidgets-off
+		/bin/bash $scriptNotify -unlockwidgets-off
 
 	elif [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"unlockwidgets=off"* ]]; then
 		sed -i 's/\(unlockwidgets=off\)/unlockwidgets=on/' "/tmp/regataos-prime/config/regataos-prime.conf"
@@ -118,7 +155,7 @@ function unlock_widgets() {
 
 		# Show notify on desktop
 		sleep 2
-		/bin/bash /opt/regataos-prime/scripts/notify -unlockwidgets-on
+		/bin/bash $scriptNotify -unlockwidgets-on
 
 	else
 		sed -i 's/\(unlockwidgets=on\)/unlockwidgets=off/' "/tmp/regataos-prime/config/regataos-prime.conf"
@@ -126,7 +163,7 @@ function unlock_widgets() {
 
 		# Show notify on desktop
 		sleep 2
-		/bin/bash /opt/regataos-prime/scripts/notify -unlockwidgets-off
+		/bin/bash $scriptNotify -unlockwidgets-off
 	fi
 }
 
@@ -145,7 +182,7 @@ function configure_amf() {
 
 		# Show notify on desktop
 		sleep 2
-		/bin/bash /opt/regataos-prime/scripts/notify -amf-off
+		/bin/bash $scriptNotify -amf-off
 
 	elif [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"amf=off"* ]]; then
 		sed -i 's/\(amf=off\)/amf=on/' "/tmp/regataos-prime/config/regataos-prime.conf"
@@ -153,7 +190,7 @@ function configure_amf() {
 
 		# Show notify on desktop
 		sleep 2
-		/bin/bash /opt/regataos-prime/scripts/notify -amf-on
+		/bin/bash $scriptNotify -amf-on
 
 	else
 		sed -i 's/\(amf=on\)/amf=off/' "/tmp/regataos-prime/config/regataos-prime.conf"
@@ -161,8 +198,17 @@ function configure_amf() {
 
 		# Show notify on desktop
 		sleep 2
-		/bin/bash /opt/regataos-prime/scripts/notify -amf-off
+		/bin/bash $scriptNotify -amf-off
 	fi
+}
+
+function copy_info() {
+	/bin/bash /opt/regataos-prime/scripts/prime-info.sh
+	cat /tmp/regataos-prime/prime-info.txt | xclip -sel clip
+
+	# Show notify on desktop
+	sleep 2
+	/bin/bash $scriptNotify -copy-info
 }
 
 case $1 in
@@ -177,6 +223,8 @@ case $1 in
    "-unlockwidgets") unlock_widgets
          ;;
    "-amf") configure_amf
+         ;;
+   "-copy-info") copy_info
          ;;
    *) echo "Invalid option!"
       exit 1

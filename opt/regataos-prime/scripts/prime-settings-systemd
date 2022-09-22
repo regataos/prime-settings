@@ -8,7 +8,6 @@ do
 # Wait until the environment loads.
 ps -C "plasmashell" > /dev/null
 if [ $? = 0 ]; then
-	sudo /opt/regataos-prime/scripts/system-info.sh &
 	sudo /opt/regataos-prime/scripts/apps-hybrid-graphics
 	break
 fi

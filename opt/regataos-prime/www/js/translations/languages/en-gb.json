@@ -1,0 +1,136 @@
+[
+    {
+        "index": {
+            "windowTitle":"Max-Q",
+            "sideBar": {
+                "showMenu": "Icons and texts",
+                "hideMenu": "Icons only",
+                "applications": "Applications",
+                "settings": "Settings",
+                "performance": "Performance",
+                "system": "System"
+            },
+            "status": {
+                "performance": "High performance",
+                "powersaving": "Power saving"
+            },
+            "buttonTop": {
+                "close": "Close"
+            }
+        },
+        "appsPage": {
+            "title": "Applications",
+            "description": "Choose which applications to run with your device's dedicated GPU.",
+            "buttonAllApps": {
+                "enableApps": "Enable for all application",
+                "disableApps": "Disable for all application"
+            },
+            "addApp": {
+                "title": "Add application",
+                "tip": "Use this option to add more applications to the list to run with your device's dGPU.",
+                "description": "Add more apps to the list"
+            }
+        },
+        "settingsPage": {
+            "title": "Settings",
+            "description": "Choose the best configuration for your dedicated GPU, configure the display and perform simple tests.",
+            "selectGpu": {
+                "title": "Render with GPU:",
+                "integrated": "Integrated",
+                "dedicated": "Dedicated",
+                "energySaving": "Energy saving",
+                "performance": "High performance"
+            },
+            "displaySettings": {
+                "title": "Screen settings",
+                "description": "Manage and configure displays"
+            },
+            "nvidiaSettings": {
+                "title": "NVIDIA Driver settings",
+                "description": "Choose the best configuration for your GPU"
+            },
+            "runTests": {
+                "title": "Test the dedicated GPU",
+                "description": "Run simple test with OpenGL or Vulkan"
+            },
+            "popUpTests": {
+                "title": "Test the dedicated GPU",
+                "description": "Run simple tests with your device's dedicated GPU using the following options:",
+                "buttonOpengl": "Test with OpenGL",
+                "buttonVulkan": "Test with Vulkan"
+            },
+            "tearing": {
+                "title": "Prevent Screen Tearing",
+                "on": "Enabled",
+                "off": "Disabled"
+            },
+            "freesync": {
+                "title": "Radeon FreeSync",
+                "on": "FreeSync enabled",
+                "off": "FreeSync disabled"
+            },
+            "cpuPower": {
+                "title": "CPU Power:",
+                "balanced": "Balanced"
+            },
+            "compositor": {
+                "title": "Desktop Effects",
+                "on": "Compositor activated",
+                "off": "Compositor disabled"
+            },
+            "unlockWidgets": {
+                "title": "Lock widgets",
+                "on": "Blocked widgets",
+                "off": "Unlocked widgets"
+            },
+            "amdAmf": {
+                "title": "Enable AMD AMF",
+                "on": "AMD AMF enabled",
+                "off": "AMD AMF disabled"
+            }
+        },
+        "performancePage": {
+            "title": "Performance",
+            "description": "Check hardware resource consumption information.",
+            "blocksTitle": {
+                "ram": "RAM usage",
+                "cpu": "CPU usage",
+                "vram": "VRAM usage",
+                "gpu": "GPU usage"
+
+            },
+            "blocksDesc": {
+                "temperature": "Temperature",
+                "frequency": "Frequency",
+                "memorySize": "Memory size",
+                "totalMemory": "Total memory",
+                "inUse": "In use"
+            }
+        },
+        "systemPage": {
+            "title": "System",
+            "description": "Check out more information about hardware and software.",
+            "copyButton": {
+                "title": "Copy all",
+                "description": "Copy the information to the clipboard."
+            },
+            "moreInfo": {
+                "title": "More details about the system",
+                "description": "System information center"
+            },
+            "systemInfo": {
+                "nvidia": "NVIDIA driver version",
+                "dgpu": "Graphic chipset",
+                "vram": "Video memory size",
+                "osName": "Operational system",
+                "ram": "System memory",
+                "cpu": "CPU model",
+                "igpu": "Integrated graphics",
+                "mesa": "Mesa Driver version",
+                "opengl": "OpenGL API version",
+                "vulkan": "Vulkan API version",
+                "linux": "Linux Kernel version"
+            }
+        }
+    }
+]
