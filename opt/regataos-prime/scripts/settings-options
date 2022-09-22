@@ -18,7 +18,7 @@ else
 fi
 
 # Configure application language
-if test -e "/opt/regataos-prime/scripts/notifications/$language"
+if test -e "/opt/regataos-prime/scripts/notifications/$language"; then
 	scriptNotify="/opt/regataos-prime/scripts/notifications/$language"
 else
 	scriptNotify="/opt/regataos-prime/scripts/notifications/en-us"
