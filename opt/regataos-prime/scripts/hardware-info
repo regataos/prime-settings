@@ -311,7 +311,13 @@ function vulkan_version() {
 		if [[ $vulkan_test != *"Vulkan support is incomplete"* ]]; then
 			echo $(vulkaninfo | grep "Vulkan Instance Version") >"/tmp/regataos-prime/vulkan-version.txt"
 			sed -i '/WARNING/d' "/tmp/regataos-prime/vulkan-version.txt"
+
+		else
+			echo "Incomplete support" > "$HOME/.config/regataos-prime/system-info/vulkan-version.txt"
 		fi
+
+	else
+		echo "Not supported" > "$HOME/.config/regataos-prime/system-info/vulkan-version.txt"
 	fi
 }
 
@@ -369,7 +375,7 @@ function mesa_version() {
 		echo "$mesa_version"
 
 	else
-		echo "Not detected driver for Mesa"
+		echo "$mesa_version (modesetting)"
 	fi
 }
 

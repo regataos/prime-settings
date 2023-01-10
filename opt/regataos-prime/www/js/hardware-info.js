@@ -41,8 +41,10 @@ function system_information() {
 	document.getElementById("gl-version").innerHTML = opengl_version;
 
 	// Capture Vulkan version
-	const vulkan_version = fs.readFileSync("/tmp/regataos-prime/config/system-info/vulkan-version.txt", "utf8");
-	document.getElementById("vk-version").innerHTML = vulkan_version;
+	if (fs.existsSync("/tmp/regataos-prime/config/system-info/vulkan-version.txt")) {
+		const vulkan_version = fs.readFileSync("/tmp/regataos-prime/config/system-info/vulkan-version.txt", "utf8");
+		document.getElementById("vk-version").innerHTML = vulkan_version;
+	}
 
 	// Capture Kernel version
 	const kernel_version = fs.readFileSync("/tmp/regataos-prime/config/system-info/kernel-version.txt", "utf8");
