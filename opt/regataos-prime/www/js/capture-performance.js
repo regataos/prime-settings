@@ -11,7 +11,7 @@ run_radeontop();
 //Capture the discrete GPU usage
 function gpu_usage() {
 	const exec = require('child_process').exec;
-	const command = "echo $(/opt/regataos-prime/scripts/hardware-info -gpu-usage)";
+	const command = "echo $(/opt/regataos-prime/scripts/hardware-info -gpu-usage | head -1 | tail -1)";
 	exec(command, (error, stdout, stderr) => {
 		if (stdout.length <= 1) {
 			document.getElementById("gpu-usage").style.strokeDashoffset = "calc(440 - (440 * 0) / 100)";
@@ -30,7 +30,7 @@ setInterval(function () {
 //Capture the discrete GPU temp
 function gpu_temp() {
 	const exec = require('child_process').exec;
-	const command = "/opt/regataos-prime/scripts/hardware-info -gpu-temp";
+	const command = "/opt/regataos-prime/scripts/hardware-info -gpu-temp | head -1 | tail -1";
 	exec(command, (error, stdout, stderr) => {
 		if (stdout) {
 			document.getElementById("gpu-temp").innerHTML = stdout;
@@ -45,7 +45,7 @@ setInterval(function () {
 //Capture the discrete GPU frequency
 function gpu_freq() {
 	const exec = require('child_process').exec;
-	const command = "/opt/regataos-prime/scripts/hardware-info -gpu-freq";
+	const command = "/opt/regataos-prime/scripts/hardware-info -gpu-freq | head -1 | tail -1";
 	exec(command, (error, stdout, stderr) => {
 		if (stdout) {
 			document.getElementById("gpu-freq").innerHTML = stdout;
@@ -70,7 +70,7 @@ vram_size();
 //Capture the discrete GPU video memory (VRAM) frequency
 function vram_freq() {
 	const exec = require('child_process').exec;
-	const command = "/opt/regataos-prime/scripts/hardware-info -vram-freq";
+	const command = "/opt/regataos-prime/scripts/hardware-info -vram-freq | head -1 | tail -1";
 	exec(command, (error, stdout, stderr) => {
 		if (stdout) {
 			document.getElementById("vram-freq").innerHTML = stdout;
@@ -85,7 +85,7 @@ setInterval(function () {
 //Capture the discrete GPU video memory (VRAM) usage
 function vram_usage() {
 	const exec = require('child_process').exec;
-	const command = "echo $(/opt/regataos-prime/scripts/hardware-info -vram-usage)";
+	const command = "echo $(/opt/regataos-prime/scripts/hardware-info -vram-usage | head -1 | tail -1)";
 	exec(command, (error, stdout, stderr) => {
 		if (stdout.length <= 1) {
 			document.getElementById("vram-usage").style.strokeDashoffset = "calc(440 - (440 * 0) / 100)";
@@ -104,7 +104,7 @@ setInterval(function () {
 // Capture information about using CPU
 function cpu_use() {
 	const exec = require('child_process').exec;
-	const command = "/opt/regataos-prime/scripts/hardware-info -cpu-use";
+	const command = "/opt/regataos-prime/scripts/hardware-info -cpu-use | head -1 | tail -1";
 	exec(command, (error, stdout, stderr) => {
 	});
 }
@@ -130,7 +130,7 @@ setInterval(function () {
 
 function cpu_freq() {
 	const exec = require('child_process').exec;
-	const command = "/opt/regataos-prime/scripts/hardware-info -cpu-freq";
+	const command = "/opt/regataos-prime/scripts/hardware-info -cpu-freq | head -1 | tail -1";
 	exec(command, (error, stdout, stderr) => {
 		if (stdout) {
 			document.getElementById("cpu-freq").innerHTML = stdout;

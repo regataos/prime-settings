@@ -25,16 +25,16 @@ if [[ $detect_driver == *"nvidia"* ]]; then
 fi
 
 #Capture iGPU
-echo $(/bin/bash /opt/regataos-prime/scripts/hardware-info -capture-igpu) >"/home/$user/.config/regataos-prime/system-info/igpu-model.txt"
+echo $(/bin/bash /opt/regataos-prime/scripts/hardware-info -capture-igpu | head -1 | tail -1) >"/home/$user/.config/regataos-prime/system-info/igpu-model.txt"
 
 #Capture dgpu
-echo $(/bin/bash /opt/regataos-prime/scripts/hardware-info -capture-dgpu) >"/home/$user/.config/regataos-prime/system-info/dgpu-model.txt"
+echo $(/bin/bash /opt/regataos-prime/scripts/hardware-info -capture-dgpu | head -1 | tail -1) >"/home/$user/.config/regataos-prime/system-info/dgpu-model.txt"
 
 #Capture MESA version
-echo $(/bin/bash /opt/regataos-prime/scripts/hardware-info -mesa-version) >"/home/$user/.config/regataos-prime/system-info/mesa-version.txt"
+echo $(/bin/bash /opt/regataos-prime/scripts/hardware-info -mesa-version | head -1 | tail -1) >"/home/$user/.config/regataos-prime/system-info/mesa-version.txt"
 
 #Capture OpenGL version
-echo $(/bin/bash /opt/regataos-prime/scripts/hardware-info -opengl-version) >"/home/$user/.config/regataos-prime/system-info/opengl-version.txt"
+echo $(/bin/bash /opt/regataos-prime/scripts/hardware-info -opengl-version | head -1 | tail -1) >"/home/$user/.config/regataos-prime/system-info/opengl-version.txt"
 
 #Capture Vulkan version
 /bin/bash /opt/regataos-prime/scripts/hardware-info -vulkan-version
@@ -43,12 +43,13 @@ if test -e "/tmp/regataos-prime/vulkan-version.txt"; then
 fi
 
 #Capture Kernel version
-echo $(/bin/bash /opt/regataos-prime/scripts/hardware-info -kernel-version) >"/home/$user/.config/regataos-prime/system-info/kernel-version.txt"
+echo $(/bin/bash /opt/regataos-prime/scripts/hardware-info -kernel-version | head -1 | tail -1) >"/home/$user/.config/regataos-prime/system-info/kernel-version.txt"
 
 #Capture graphics driver in use
 echo $(lshw -class display | grep "driver") >"/home/$user/.config/regataos-prime/system-info/graphics-driver.txt"
 sed -i '/WARNING/d' "/home/$user/.config/regataos-prime/system-info/graphics-driver.txt"
-graphicsDriver=$(cat "/home/$user/.config/regataos-prime/system-info/graphics-driver.txt" | awk '{print $3}' | cut -d'=' -f 2-)
+sed -i 's/ /\n/g' "/home/$user/.config/regataos-prime/system-info/graphics-driver.txt"
+graphicsDriver=$(grep -r "driver=" "/home/$user/.config/regataos-prime/system-info/graphics-driver.txt" | cut -d'=' -f 2-)
 echo "$graphicsDriver" >"/home/$user/.config/regataos-prime/system-info/graphics-driver.txt"
 
 #Capture the discrete GPU video memory (VRAM) size
