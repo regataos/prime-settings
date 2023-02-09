@@ -13,7 +13,7 @@ icon = icon.read().rstrip('\n')
 trayIcon = QSystemTrayIcon(QIcon(icon), parent=app)
 
 # System tray title information
-title = os.popen('./select-lang.sh')
+title = os.popen('/opt/regataos-prime/icontray/select-lang.sh')
 title = title.read().rstrip('\n')
 trayIcon.setToolTip(title)
 trayIcon.show()

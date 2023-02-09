@@ -3,7 +3,7 @@
 # This script runs apps with AMD AMF (Advanced Media Framework),
 # allowing optimal access to AMD GPUs for multimedia processing.
 
-export VK_ICD_FILENAMES="/opt/amdgpu-pro/amd-vulkan/amd_icd64.json"
-export LD_PRELOAD="/opt/amdgpu-pro/amd-amf/opt/amdgpu-pro/lib/x86_64-linux-gnu/libamfrt64.so"
+export VK_ICD_FILENAMES="/opt/amdgpu-pro/amd-vulkan/amd_icd64.json";
+export LD_PRELOAD="/opt/amdgpu-pro/amd-amf/opt/amdgpu-pro/lib/x86_64-linux-gnu/libamfrt64.so";
 
 "$@"

@@ -3,34 +3,31 @@
 # If necessary, create the MangoHud personalized settings directory,
 # where the "MangoHud.conf" file is located, created manually by the
 # user if he wants to use personalized settings.
-if test ! -e "$HOME/.config/MangoHud/MangoHud.conf" ; then
+if test ! -e "$HOME/.config/MangoHud/MangoHud.conf"; then
 	mkdir -vp "$HOME/.config/MangoHud"
-	cp -f "/opt/regataos-wine/custom-configs/mangohud/MangoHud.conf" "$HOME/.config/MangoHud/MangoHud.conf"
+    cp -f "/opt/regataos-wine/custom-configs/mangohud/MangoHud.conf" "$HOME/.config/MangoHud/MangoHud.conf"
 fi
 
 # Check for hybrid graphics support
-if test -e /tmp/regataos-prime/use-hybrid-graphics.txt ; then
-
-case $1 in
-   "-gl") export MANGOHUD=1; regataos-dgpu mangohud gamemoderun glxgears
-         ;;
-   "-vk") export MANGOHUD=1; regataos-dgpu mangohud gamemoderun vkcube
-         ;;
-   *) echo "Invalid option!"
-      exit 1
-      ;;
-esac
+if test -e "/tmp/regataos-prime/use-hybrid-graphics.txt"; then
+	case $1 in
+		"-gl") regataos-dgpu mangohud gamemoderun glxgears;
+			;;
+		"-vk") regataos-dgpu mangohud gamemoderun vkcube;
+			;;
+		*) echo "Invalid option!";
+			exit 1;
+			;;
+	esac
 
 else
-
-case $1 in
-   "-gl") export MANGOHUD=1; mangohud gamemoderun glxgears
-         ;;
-   "-vk") export MANGOHUD=1; mangohud gamemoderun vkcube
-         ;;
-   *) echo "Invalid option!"
-      exit 1
-      ;;
-esac
-
+	case $1 in
+		"-gl") mangohud gamemoderun glxgears;
+			;;
+		"-vk") mangohud gamemoderun vkcube;
+			;;
+		*) echo "Invalid option!";
+			exit 1;
+			;;
+	esac
 fi

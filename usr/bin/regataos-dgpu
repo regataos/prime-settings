@@ -2,79 +2,164 @@
 #
 # This script helps to run applications and games with the dGPU of notebooks with hybrid graphics.
 
-# Show notification
-/bin/bash /opt/regataos-prime/scripts/notify -running-with-dgpu
+# Detect system language.
+user=$(users | awk '{print $1}');
 
-if test ! -e "/tmp/regataos-prime" ; then
-	mkdir -p "/tmp/regataos-prime/"
-fi
+if test -e "/home/$user/.config/plasma-localerc" ; then
+	language=$(grep -r LANGUAGE= "/home/$user/.config/plasma-localerc" | cut -d"=" -f 2- | cut -d":" -f -1 | tr [A-Z] [a-z] | sed 's/_/-/' | cut -d"." -f -1);
 
-# Capture the binary to verify the software is running
-binary_file=$(echo "$@" | sed 's/ %f\| %F\| %u\| %U//')
-if [[ $(echo $binary_file) == *"--"* ]]; then
-	export binary_file=$(echo $binary_file | sed 's|/| |g' | sed 's/run-amf //' | cut -d"-" -f -1 | awk '{print $NF}')
-else
-	export binary_file=$(echo $binary_file | sed 's|/| |g' | sed 's/run-amf //' | awk '{print $NF}')
-fi
-
-echo ""
-echo "Running: "'"'$binary_file'"'""
-echo ""
-
-# Verifying that the NVIDIA driver is installed.
-if test -e /usr/bin/nvidia-xconfig ; then
-	# Set Vulkan ICD file for NVIDIA dGPU
-	if test -e "/opt/regataos-vulkan/icd.d/nvidia_icd.json"; then
-		export VK_ICD_FILENAMES=/opt/regataos-vulkan/icd.d/nvidia_icd.json
-	else
-		export VK_ICD_FILENAMES=/etc/vulkan/icd.d/nvidia_icd.json
+	if [ -z $language ]; then
+    	language=$(grep -r LANG= "/home/$user/.config/plasma-localerc" | cut -d"=" -f 2- | cut -d"." -f -1 | tr [A-Z] [a-z] | sed 's/_/-/' | cut -d"." -f -1);
 	fi
 
-	# Run the application with the NVIDIA dGPU
-	echo "nvidia" > "/tmp/regataos-prime/running-with-dgpu.txt"
-	export GAMEMODERUNEXEC="env __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia __VK_LAYER_NV_optimus=NVIDIA_only"
-	env __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia __VK_LAYER_NV_optimus=NVIDIA_only "$@" & /opt/regataos-prime/icontray/run-dgpu-tray.sh start & /opt/regataos-prime/icontray/stop-dgpu-tray.sh start
+elif test -e "/home/$user/.config/user-dirs.locale" ; then
+    language=$(cat "/home/$user/.config/user-dirs.locale" | tr [A-Z] [a-z] | sed 's/_/-/');
+
+else
+    language=$(echo $LANG | tr [A-Z] [a-z] | sed 's/_/-/' | cut -d"." -f -1);
+fi
+
+# Configure application language.
+if test -e "/opt/regataos-prime/scripts/notifications/$language"; then
+	scriptNotify="/opt/regataos-prime/scripts/notifications/$language";
+else
+	scriptNotify="/opt/regataos-prime/scripts/notifications/en-us";
+fi
+
+# Show notification.
+/bin/bash $scriptNotify -running-with-dgpu;
+
+if test ! -e "/tmp/regataos-prime" ; then
+	mkdir -p "/tmp/regataos-prime/";
+fi
+
+# Capture the binary to verify the software is running.
+binaryFile=$(echo "$@" | sed 's/ %f\| %F\| %u\| %U//');
+
+if [[ $(echo $binaryFile) == *"--"* ]]; then
+	export binaryFile=$(echo $binaryFile | sed 's|/| |g' | sed 's/run-amf \|gamemoderun \|mangohud //' | cut -d"-" -f -1 | awk '{print $NF}');
+else
+	export binaryFile=$(echo $binaryFile | sed 's|/| |g' | sed 's/run-amf \|gamemoderun \|mangohud //' | awk '{print $NF}');
+fi
+
+# Check if 'gamemoderun' is present.
+if [[ $(echo "$@") == *"gamemoderun"* ]]; then
+	GAMEMODERUN="gamemoderun";
+	echo -e "\n ~> Running "'"'$binaryFile'"'" with Feral's GameMode... \n";
+else
+	echo -e "\n ~> Running: "'"'$binaryFile'"'" \n";
+fi
+
+# Check if 'mangohud' is present.
+if [[ $(echo "$@") == *"mangohud"* ]]; then
+	export MANGOHUD=1;
+	MANGOHUD_BIN="mangohud";
+fi
+
+# Prepare the file for execution
+runFile=$(echo "$@" | sed 's/run-amf \|gamemoderun \|mangohud //g');
+
+# If necessary, display the device's dGPU manufacturer's logo in the system tray.
+function iconTray() {
+    if [ ! -z $product ];then
+        ps -C dgpu-icontray.py > /dev/null;
+
+        if [ $? = 1 ]; then
+            cd "/opt/regataos-prime/icontray/";
+            /opt/regataos-prime/icontray/dgpu-icontray.py;
+        fi
+    fi
+}
+
+# Verifying that the NVIDIA driver is installed.
+if test -e "/usr/bin/nvidia-xconfig"; then
+	# Set Vulkan ICD file for NVIDIA dGPU.
+	if test -e "/opt/regataos-vulkan/icd.d/nvidia_icd.json"; then
+		export VK_ICD_FILENAMES=/opt/regataos-vulkan/icd.d/nvidia_icd.json;
+	else
+		export VK_ICD_FILENAMES=/etc/vulkan/icd.d/nvidia_icd.json;
+	fi
+
+    # System tray icon.
+    export product="NVIDIA"; iconTray &
+    echo "nvidia" > "/tmp/regataos-prime/running-with-dgpu.txt";
+
+    # Run application with device dGPU
+	if [ ! -z $GAMEMODERUN ];then
+		export GAMEMODERUNEXEC="env __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia __VK_LAYER_NV_optimus=NVIDIA_only $(echo $MANGOHUD_BIN)";
+		gamemoderun "$runFile";
+	else
+		env __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia __VK_LAYER_NV_optimus=NVIDIA_only $(echo $MANGOHUD_BIN) "$runFile";
+	fi
 
 else
 	# If the NVIDIA driver is not installed, detect which dGPU is available on the hardware
-	detect_dgpu=$(DRI_PRIME=1 glxinfo | grep vendor)
+	detect_dgpu=$(DRI_PRIME=1 glxinfo | grep vendor);
+
 	if [[ $detect_dgpu == *"AMD"* ]]; then
-		# Set Vulkan ICD file for AMD dGPU
-		if test -e "/opt/regataos-vulkan/icd.d/radeon_icd.i686.json"; then
-			export VK_ICD_FILENAMES=/opt/regataos-vulkan/icd.d/radeon_icd.i686.json:/opt/regataos-vulkan/icd.d/radeon_icd.x86_64.json
+		# Check if 'run-amf' is present.
+		if [[ $(echo "$@") == *"run-amf"* ]]; then
+			export VK_ICD_FILENAMES="/opt/amdgpu-pro/amd-vulkan/amd_icd64.json";
+			export LD_PRELOAD="/opt/amdgpu-pro/amd-amf/opt/amdgpu-pro/lib/x86_64-linux-gnu/libamfrt64.so";
+
 		else
-			export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/radeon_icd.i686.json:/usr/share/vulkan/icd.d/radeon_icd.x86_64.json
+			# Set Vulkan ICD file for AMD dGPU
+			if test -e "/opt/regataos-vulkan/icd.d/radeon_icd.i686.json"; then
+				export VK_ICD_FILENAMES=/opt/regataos-vulkan/icd.d/radeon_icd.i686.json:/opt/regataos-vulkan/icd.d/radeon_icd.x86_64.json;
+			else
+				export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/radeon_icd.i686.json:/usr/share/vulkan/icd.d/radeon_icd.x86_64.json;
+			fi
 		fi
 
-		# Run the application with the AMD dGPU
-		echo "amd" > "/tmp/regataos-prime/running-with-dgpu.txt"
-		export GAMEMODERUNEXEC="env DRI_PRIME=1"
-		env DRI_PRIME=1 "$@" & /opt/regataos-prime/icontray/run-dgpu-tray.sh start & /opt/regataos-prime/icontray/stop-dgpu-tray.sh start
+        # System tray icon.
+        export product="AMD"; iconTray &
+        echo "amd" > "/tmp/regataos-prime/running-with-dgpu.txt";
+
+        # Run application with device dGPU
+		if [ ! -z $GAMEMODERUN ];then
+			export GAMEMODERUNEXEC="env DRI_PRIME=1 $(echo $MANGOHUD_BIN)";
+			gamemoderun "$runFile";
+		else
+			env DRI_PRIME=1 $(echo $MANGOHUD_BIN) "$runFile";
+		fi
 
 	elif [[ $detect_dgpu == *"Intel"* ]]; then
 		# Set Vulkan ICD file for Intel dGPU
 		if test -e "/opt/regataos-vulkan/icd.d/intel_icd.i686.json"; then
-			export VK_ICD_FILENAMES=/opt/regataos-vulkan/icd.d/intel_icd.i686.json:/opt/regataos-vulkan/icd.d/intel_icd.x86_64.json
+			export VK_ICD_FILENAMES=/opt/regataos-vulkan/icd.d/intel_icd.i686.json:/opt/regataos-vulkan/icd.d/intel_icd.x86_64.json;
 		else
-			export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.i686.json:/usr/share/vulkan/icd.d/intel_icd.x86_64.json
+			export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.i686.json:/usr/share/vulkan/icd.d/intel_icd.x86_64.json;
 		fi
 
-		# Run the application with the Intel dGPU
-		echo "intel" > "/tmp/regataos-prime/running-with-dgpu.txt"
-		export GAMEMODERUNEXEC="env DRI_PRIME=1"
-		env DRI_PRIME=1 "$@" & /opt/regataos-prime/icontray/run-dgpu-tray.sh start & /opt/regataos-prime/icontray/stop-dgpu-tray.sh start
+        # System tray icon.
+        export product="Intel"; iconTray &
+        echo "intel" > "/tmp/regataos-prime/running-with-dgpu.txt";
+
+        # Run application with device dGPU
+        if [ ! -z $GAMEMODERUN ];then
+			export GAMEMODERUNEXEC="env DRI_PRIME=1 $(echo $MANGOHUD_BIN)";
+			gamemoderun "$runFile";
+		else
+			env DRI_PRIME=1 $(echo $MANGOHUD_BIN) "$runFile";
+		fi
 
 	else
-		# Run the application with the Intel dGPU
-		echo "not-detected" > "/tmp/regataos-prime/running-with-dgpu.txt"
-		export GAMEMODERUNEXEC="env DRI_PRIME=1"
-		env DRI_PRIME=1 "$@" & /opt/regataos-prime/icontray/run-dgpu-tray.sh start & /opt/regataos-prime/icontray/stop-dgpu-tray.sh start
+        # Unable to detect device dGPU.
+		if [ ! -z $GAMEMODERUN ];then
+			export GAMEMODERUNEXEC="env DRI_PRIME=1 $(echo $MANGOHUD_BIN)";
+			gamemoderun "$runFile";
+		else
+			env DRI_PRIME=1 $(echo $MANGOHUD_BIN) "$runFile";
+		fi
 	fi
 fi
 
 # Check how many processes are running
-running=$(ps -C regataos-dgpu | wc -l)
+running=$(ps -C regataos-dgpu | wc -l);
 
-if [ $(echo $running) -le 2 ]; then
-	rm -f "/tmp/regataos-prime/running-with-dgpu.txt"
+if [ $(echo $running) -le 4 ]; then
+    killall dgpu-icontray.py;
+	rm -f "/tmp/regataos-prime/running-with-dgpu.txt";
 fi
+
+echo -e "\n ~> The "'"'$binaryFile'"'" application has been closed! \n";
