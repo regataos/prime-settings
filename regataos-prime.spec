@@ -5,6 +5,7 @@ Url: https://github.com/regataos/prime-settings
 Summary: PRIME for Regata OS.
 Group: System/GUI/KDE
 License: MIT
+BuildRoot: %{_tmppath}/%{name}-%{version}-build
 BuildRequires: xz
 BuildRequires: desktop-file-utils
 BuildRequires: update-desktop-files
@@ -24,9 +25,8 @@ Requires: radeontop
 Requires: radeontop-lang
 Requires: sensors
 Requires: procps
+Requires: sddm
 Conflicts: suse-prime
-
-BuildRoot: %{_tmppath}/%{name}-%{version}-build
 
 %description
 PRIME is a technology used to manage hybrid graphics found on recent laptops (Optimus for NVIDIA, AMD Dynamic Switchable Graphics for Radeon).
@@ -108,8 +108,9 @@ update-desktop-database
 
 # Prepare the system for AMD AMF
 #Some variables
-ubuntu_version="22.10"
+amdgpu_version="22.10"
 amf_amdgpu_pro="amf-amdgpu-pro_1.4.24-1395274_amd64.deb"
+libamdenc_amdgpu_pro="libamdenc-amdgpu-pro_1.0-1395274_amd64.deb"
 vulkan_amdgpu_pro="vulkan-amdgpu-pro_22.10-1395274_amd64.deb"
 
 #Create directory to receive AMDGPU-PRO files
@@ -127,7 +128,7 @@ fi
 #AMD AMF
 if test ! -e "$amdgpu_pro_dir/amd-amf/$amf_amdgpu_pro"; then
   wget --no-check-certificate -O "$amdgpu_pro_dir/amd-amf/$amf_amdgpu_pro" \
-  "https://repo.radeon.com/amdgpu/$ubuntu_version/ubuntu/pool/proprietary/a/amf-amdgpu-pro/$amf_amdgpu_pro"
+  "https://repo.radeon.com/amdgpu/$amdgpu_version/ubuntu/pool/proprietary/a/amf-amdgpu-pro/$amf_amdgpu_pro"
 
   #Prepare AMDGPU-PRO files
   cd "/$amdgpu_pro_dir/amd-amf/"
@@ -140,10 +141,26 @@ if test ! -e "$amdgpu_pro_dir/amd-amf/$amf_amdgpu_pro"; then
   rm -f "$amdgpu_pro_dir/amd-amf/debian-binary"
 fi
 
+#AMD Encode Core Library
+if test ! -e "$amdgpu_pro_dir/amd-amf/$libamdenc_amdgpu_pro"; then
+  wget --no-check-certificate -O "$amdgpu_pro_dir/amd-amf/$libamdenc_amdgpu_pro" \
+  "https://repo.radeon.com/amdgpu/$amdgpu_version/ubuntu/pool/proprietary/liba/libamdenc-amdgpu-pro/$libamdenc_amdgpu_pro"
+
+  #Prepare AMDGPU-PRO files
+  cd "/$amdgpu_pro_dir/amd-amf/"
+  ar -x "$libamdenc_amdgpu_pro"
+  tar xfv data.tar.xz
+
+  #Clear cache
+  rm -f "$amdgpu_pro_dir/amd-amf/control.tar.xz"
+  rm -f "$amdgpu_pro_dir/amd-amf/data.tar.xz"
+  rm -f "$amdgpu_pro_dir/amd-amf/debian-binary"
+fi
+
 #AMD Vulkan
 if test ! -e "$amdgpu_pro_dir/amd-vulkan/$vulkan_amdgpu_pro"; then
   wget --no-check-certificate -O "$amdgpu_pro_dir/amd-vulkan/$vulkan_amdgpu_pro" \
-  "https://repo.radeon.com/amdgpu/$ubuntu_version/ubuntu/pool/proprietary/v/vulkan-amdgpu-pro/$vulkan_amdgpu_pro"
+  "https://repo.radeon.com/amdgpu/$amdgpu_version/ubuntu/pool/proprietary/v/vulkan-amdgpu-pro/$vulkan_amdgpu_pro"
 
   #Prepare AMDGPU-PRO files
   cd "/$amdgpu_pro_dir/amd-vulkan/"
