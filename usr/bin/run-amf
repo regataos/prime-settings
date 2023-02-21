@@ -3,7 +3,20 @@
 # This script runs apps with AMD AMF (Advanced Media Framework),
 # allowing optimal access to AMD GPUs for multimedia processing.
 
+# Check the available GPU on the machine.
+if test ! -e "/home/josue/.config/regataos-prime/system-info/dgpu-model.txt"; then
+	/opt/regataos-prime/scripts/detect-system-info.sh start
+fi
+
+# Select the AMDGPU-PRO Vulkan driver.
 export VK_ICD_FILENAMES="/opt/amdgpu-pro/amd-vulkan/amd_icd64.json";
-export LD_LIBRARY_PATH="/opt/amdgpu-pro/amd-amf/opt/amdgpu-pro/lib/x86_64-linux-gnu/";
+
+# New versions of AMDGPU-PRO driver don't seem to work well with Vega GPU.
+# Load older versions of driver libraries.
+if [[ $(cat "$HOME/.config/regataos-prime/system-info/dgpu-model.txt") == *"Vega"* ]]; then
+	export LD_LIBRARY_PATH="/opt/amdgpu-pro/amd-amf-legacy/opt/amdgpu-pro/lib/x86_64-linux-gnu/";
+else
+	export LD_LIBRARY_PATH="/opt/amdgpu-pro/amd-amf/opt/amdgpu-pro/lib/x86_64-linux-gnu/";
+fi
 
 "$@"
