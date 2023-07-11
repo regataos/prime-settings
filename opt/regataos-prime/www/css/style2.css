@@ -279,6 +279,9 @@ label.label-add {
 	height: 15px;
 	right: 6px;
 	cursor: pointer;
+	background-image:url('../images/close.png');
+	background-repeat: no-repeat;
+	background-size: 12px 12px;
 }
 
 /* All CSS buttom click */
@@ -337,15 +340,18 @@ li#use-nvidia-click:active {
 /* switch bottom css */
 
 .switch__container {
-	margin-top: 10px;
 	display: inline-block;
+	margin-top: 10px;
 	float: right;
 }
 
 .switch__container2 {
 	margin-top: 0px;
-	display: inline-block;
 	float: right;
+}
+
+.show-switch {
+	display: inline-block !important;
 }
 
 .switch {
@@ -360,6 +366,11 @@ li#use-nvidia-click:active {
 	cursor: pointer;
 	outline: none;
 	user-select: none;
+}
+
+.apps-bottom1 .switch + label,
+.apps-bottom2 .switch + label {
+	display: none;
 }
 /* end switch bottom css */
 
@@ -629,6 +640,10 @@ opacity: 1;
 #copy-all-txt {
 	float: left;
 	margin-left: 3px;
+}
+
+.show-element {
+	display: block !important;
 }
 
 /* Responsive CSS */

@@ -89,6 +89,7 @@
 
 /* app-on/off text */
 .performance {
+	display: none;
 	position: absolute;
 	top: 40px;
 	left: 75px;
@@ -98,6 +99,7 @@
 	margin-top: 3px;
 }
 .powersaving {
+	display: none;
 	position: absolute;
 	display: none;
 	top: 40px;

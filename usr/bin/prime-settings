@@ -91,44 +91,19 @@ if test ! -e "/tmp/regataos-prime/config"; then
 	chmod 777 /tmp/regataos-prime/*
 fi
 
-# Check the apps
-function checkApps_dGPU() {
-	sudo /opt/regataos-prime/scripts/apps-hybrid-graphics
-}
-
 if test -e "/tmp/regataos-prime/use-hybrid-graphics.txt"; then
-	if [[ $(glxinfo | grep vendor) == *"Intel"* ]]; then
-		checkApps_dGPU &
-		sleep 1
-		regataosprime --disable-gpu /opt/regataos-prime &
-		/opt/regataos-prime/scripts/detect-system-info.sh start &
-		/opt/regataos-prime/scripts/check-hardware-resource-support.sh start &
-		/opt/regataos-prime/scripts/intel-gpu-frequency &
-		/opt/regataos-prime/scripts/intel-gpu-usage
-	else
-		checkApps_dGPU &
-		sleep 1
-		regataosprime /opt/regataos-prime &
-		/opt/regataos-prime/scripts/detect-system-info.sh start &
-		/opt/regataos-prime/scripts/check-hardware-resource-support.sh start &
-		/opt/regataos-prime/scripts/intel-gpu-frequency &
-		/opt/regataos-prime/scripts/intel-gpu-usage
-	fi
+	sudo /opt/regataos-prime/scripts/apps-hybrid-graphics &
+	sleep 2
+fi
 
+/opt/regataos-prime/scripts/detect-system-info.sh start &
+/opt/regataos-prime/scripts/check-hardware-resource-support.sh start &
+/opt/regataos-prime/scripts/intel-gpu-frequency &
+
+if [[ $(glxinfo | grep vendor) == *"Intel"* ]]; then
+	regataosprime --disable-gpu /opt/regataos-prime
 else
-	if [[ $(glxinfo | grep vendor) == *"Intel"* ]]; then
-		regataosprime --disable-gpu /opt/regataos-prime &
-		/opt/regataos-prime/scripts/detect-system-info.sh start &
-		/opt/regataos-prime/scripts/check-hardware-resource-support.sh start &
-		/opt/regataos-prime/scripts/intel-gpu-frequency &
-		/opt/regataos-prime/scripts/intel-gpu-usage
-	else
-		regataosprime /opt/regataos-prime &
-		/opt/regataos-prime/scripts/detect-system-info.sh start &
-		/opt/regataos-prime/scripts/check-hardware-resource-support.sh start &
-		/opt/regataos-prime/scripts/intel-gpu-frequency &
-		/opt/regataos-prime/scripts/intel-gpu-usage
-	fi
+	regataosprime /opt/regataos-prime
 fi
 
 # End the radeontop process

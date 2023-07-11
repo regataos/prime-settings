@@ -56,6 +56,12 @@ function gpu_usage() {
 	else
 		dgpu=$(cat "/tmp/regataos-prime/config/system-info/opengl-vendor.txt")
 		if [[ $dgpu == *"AMD"* ]]; then
+			ps -C radeontop > /dev/null
+			if [ $? = 1 ]; then
+				rm -f /tmp/regataos-prime/radeontop.log
+				radeontop -d /tmp/regataos-prime/radeontop.log
+			fi
+
 			gpu_usage=$(tail -2 /tmp/regataos-prime/radeontop.log | awk '{print $5}' | head -1 | tail -1 | cut -d'.' -f -1)
 			echo "$gpu_usage"
 

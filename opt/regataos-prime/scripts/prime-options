@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Enable or disable application execution with the dGPU
-#Capture app name
-app="$2"
-
 function dgpu_app() {
+	# Capture app name
+	app="$2"
+
 	# Enable application execution with the dGPU
 	if [[ $(grep -r "$app" "/tmp/regataos-prime/config/run-without-dgpu.conf") == *"$app"* ]]; then
 		if [[ $(grep -r all-apps "/tmp/regataos-prime/config/regataos-prime.conf") == *"all-apps=off"* ]]; then
@@ -51,6 +51,7 @@ function dgpu_app() {
 function disable_run_dgpu() {
 	sed -i 's/\(all-apps=on\)/all-apps=off/' "/tmp/regataos-prime/config/regataos-prime.conf"
 	sed -i 's/\(one-apps=on\)/one-apps=off/' "/tmp/regataos-prime/config/regataos-prime.conf"
+	echo "" > "/tmp/regataos-prime/config/run-with-dgpu.conf"
 }
 
 # Enable running with dGPU for all applications
@@ -62,12 +63,12 @@ function enable_run_dgpu() {
 
 case $1 in
    "-dgpu-app") dgpu_app
-         ;;
+        ;;
    "-disable-run-dgpu") disable_run_dgpu
-         ;;
+        ;;
    "-enable-run-dgpu") enable_run_dgpu
-         ;;
+        ;;
    *) echo "Invalid option!"
-      exit 1
-      ;;
+    	exit 1
+    	;;
 esac

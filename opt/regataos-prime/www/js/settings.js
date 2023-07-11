@@ -121,37 +121,29 @@ function disable_freesync() {
 // Get path to .desktop file
 function getDesktopFile() {
 	const fileUrl = document.getElementById('add-apps').value
-
+	const commandLine = `
+		sudo /opt/regataos-prime/scripts/prime-config-external-apps ${fileUrl};
+		/opt/regataos-prime/scripts/prime-option-add-apps ${fileUrl}`;
 	const exec = require('child_process').exec;
-	const command = "sudo /opt/regataos-prime/scripts/prime-config-external-apps " + fileUrl + "; \
-		/opt/regataos-prime/scripts/prime-option-add-apps " + fileUrl;
-	exec(command, function (error, call, errlog) {
-	});
+	exec(commandLine, function (error, call, errlog) { });
 
 	document.getElementById('add-apps').value = '';
 
 	setTimeout(function () {
-		apps_external_list();
-	}, 500);
-	setTimeout(function () {
-		check_external_apps_status();
+		createAppList();
 	}, 500);
 }
 
 // Remove external application
-function remove_external_app() {
+function remove_external_app(appname, desktop) {
+	const commandLine = `sudo /opt/regataos-prime/scripts/prime-option-remove-apps ${appname} ${desktop}`;
 	const exec = require('child_process').exec;
-	const command = "sudo /opt/regataos-prime/scripts/prime-option-remove-apps " + appname + " " + desktop;
-	exec(command, function (error, call, errlog) {
-	});
+	exec(commandLine, function (error, call, errlog) { });
 
 	document.getElementById(appname).remove()
 
 	setTimeout(function () {
-		apps_external_list();
-	}, 500);
-	setTimeout(function () {
-		check_external_apps_status();
+		createAppList();
 	}, 500);
 }
 

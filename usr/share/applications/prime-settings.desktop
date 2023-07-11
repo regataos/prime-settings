@@ -25,7 +25,7 @@ GenericName[pt_PT]=Configurações gráficas, uso do hardware e mais
 GenericName[pt]=Configurações gráficas, uso do hardware e mais
 GenericName[es]=Configuración de gráficos, uso de hardware y más
 
-Exec=bash -x prime-settings
+Exec=bash -x prime-settings & /opt/regataos-prime/scripts/intel-gpu-usage
 Icon=Max-q
 Categories=Settings;
 StartupNotify=true

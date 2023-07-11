@@ -50,10 +50,10 @@ function show_sidebar() {
 
 case $1 in
    "-hide-sidebar") hide_sidebar
-         ;;
+        ;;
    "-show-sidebar") show_sidebar
-         ;;
+        ;;
    *) echo "Invalid option!"
-      exit 1
-      ;;
+		exit 1
+		;;
 esac

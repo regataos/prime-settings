@@ -11,8 +11,6 @@
 	<script type="text/javascript" src="../js/check-configs.js"></script>
 	<script type="text/javascript" src="../js/settings.js"></script>
 	<script type="text/javascript" src="../js/actions-apps.js"></script>
-	<script type="text/javascript" src="../js/disable-all-apps.js"></script>
-	<script type="text/javascript" src="../js/disable-all-external-apps.js"></script>
 
 	<script type="text/javascript">
 		//close_popup_nv
@@ -40,13 +38,15 @@
 
 		<div class="all-apps">
 			<div class="text-all-apps disable-all"></div><div class="switch__container2" style="margin-top: 6px;">
-				<input id="switch-shadow-all-apps" class="switch switch--shadow-all-apps" type="checkbox" onclick="disable_all_apps(); disable_all_external_apps(); setTimeout(function(){ check_apps_status(); }, 500); setTimeout(function(){ check_external_apps_status(); }, 1000);">
+				<input id="switch-shadow-all-apps" class="switch switch--shadow-all-apps"
+				type="checkbox" onclick="actionAllApps(this.id);">
 				<label for="switch-shadow-all-apps"></label></div>
 		</div>
-	
+
 		<div class="all-apps2">
 			<div class="text-all-apps enable-all"></div><div class="switch__container2" style="margin-top: 6px;">
-				<input id="switch-shadow2-all-apps" class="switch switch--shadow2-all-apps" type="checkbox" onclick="enable_all_apps(); enable_all_external_apps(); setTimeout(function(){ check_apps_status(); }, 500); setTimeout(function(){ check_external_apps_status(); }, 1000);">
+				<input id="switch-shadow2-all-apps" class="switch switch--shadow2-all-apps"
+				type="checkbox" onclick="actionAllApps(this.id);">
 				<label for="switch-shadow2-all-apps"></label></div>
 		</div>	
 	</div>
@@ -96,9 +96,7 @@
 		<ul class="apps-bottom2 main-ul"></ul>
 		<script type="text/javascript" src="../js/settings-checker.js"></script>
 		<script type="text/javascript" src="../js/translations/apply-translation-pages.js"></script>
-		<script type="text/javascript" src="../js/list-external-apps.js"></script>
 		<script type="text/javascript" src="../js/list-apps.js"></script>
-		<script type="text/javascript" src="../js/check-apps.js"></script>
 	</div>
 	</div>
 </body>
