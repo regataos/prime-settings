@@ -1,7 +1,6 @@
 // Check system
 function check_system() {
 	const fs = require('fs');
-	const exec = require('child_process').exec;
 
 	// Check Prime support
 	const useHybridGraphics = document.getElementById("primeon");

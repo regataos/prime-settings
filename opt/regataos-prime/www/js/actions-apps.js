@@ -16,6 +16,8 @@ function actionApps(script, appname, package, packagemanager, dgpu, executable, 
 	const exec = require('child_process').exec;
 	exec(commandLine, function (error, call, errlog) { });
 
+	console.log(commandLine);
+
 	const runWithoutDgpuPath = '/tmp/regataos-prime/config/run-without-dgpu.conf';
 	const runWithDgpuPath = '/tmp/regataos-prime/config/run-with-dgpu.conf';
 
