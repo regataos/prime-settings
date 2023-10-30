@@ -47,8 +47,10 @@ if [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"tearfree=off"* 
 
 elif [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"tearfree=on"* ]]; then
 	#For NVIDIA Driver
+	# The ForceFullCompositionPipeline option is known to break some games using Vulkan
+	# under Proton with NVIDIA driver 535. So, until NVIDIA can fix the issue, disable this feature.
 	if [[ $(cat /usr/share/X11/xorg.conf.d/20-nvidia.conf) == *"ForceFullCompositionPipeline=Off"* ]]; then
-		nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 { ForceFullCompositionPipeline = On }"
+		nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 { ForceFullCompositionPipeline = Off }"
 	fi
 
 	#For open source drivers

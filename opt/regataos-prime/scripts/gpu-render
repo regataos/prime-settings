@@ -11,10 +11,14 @@ function tearfree_on() {
 	sed -i 's/Option "TearFree" "off"/Option "TearFree" "on"/' "/usr/share/regataos/gpu/20-radeon.conf"
 	sed -i 's/Option "TearFree" "off"/Option "TearFree" "on"/' "/usr/share/X11/xorg.conf.d/20-radeon.conf"
 
-	sed -i 's/ForceFullCompositionPipeline=Off/ForceFullCompositionPipeline=On/' "/usr/share/regataos/gpu/20-nvidia.conf"
-	sed -i 's/Option "TripleBuffer" "off"/Option "TripleBuffer" "on"/' "/usr/share/regataos/gpu/20-nvidia.conf"
-	sed -i 's/ForceFullCompositionPipeline=Off/ForceFullCompositionPipeline=On/' "/usr/share/X11/xorg.conf.d/20-nvidia.conf"
-	sed -i 's/Option "TripleBuffer" "off"/Option "TripleBuffer" "on"/' "/usr/share/X11/xorg.conf.d/20-nvidia.conf"
+	# The ForceFullCompositionPipeline option is known to break some games using Vulkan
+	# under Proton with NVIDIA driver 535. So, until NVIDIA can fix the issue, disable this feature.
+	sed -i 's/ForceFullCompositionPipeline=Off/ForceFullCompositionPipeline=Off/' "/usr/share/regataos/gpu/20-nvidia.conf"
+	sed -i 's/Option "TripleBuffer" "off"/Option "TripleBuffer" "off"/' "/usr/share/regataos/gpu/20-nvidia.conf"
+	sed -i 's/ForceFullCompositionPipeline=Off/ForceFullCompositionPipeline=Off/' "/usr/share/X11/xorg.conf.d/20-nvidia.conf"
+	sed -i 's/Option "TripleBuffer" "off"/Option "TripleBuffer" "off"/' "/usr/share/X11/xorg.conf.d/20-nvidia.conf"
+	sed -i 's/ForceFullCompositionPipeline=Off/ForceFullCompositionPipeline=Off/' "/etc/X11/xorg.conf.d/20-nvidia.conf"
+	sed -i 's/Option "TripleBuffer" "off"/Option "TripleBuffer" "off"/' "/etc/X11/xorg.conf.d/20-nvidia.conf"
 }
 
 function tearfree_off() {
@@ -27,10 +31,14 @@ function tearfree_off() {
 	sed -i 's/Option "TearFree" "on"/Option "TearFree" "off"/' "/usr/share/regataos/gpu/20-radeon.conf"
 	sed -i 's/Option "TearFree" "on"/Option "TearFree" "off"/' "/usr/share/X11/xorg.conf.d/20-radeon.conf"
 
+	# The ForceFullCompositionPipeline option is known to break some games using Vulkan
+	# under Proton with NVIDIA driver 535. So, until NVIDIA can fix the issue, disable this feature.
 	sed -i 's/ForceFullCompositionPipeline=On/ForceFullCompositionPipeline=Off/' "/usr/share/regataos/gpu/20-nvidia.conf"
 	sed -i 's/Option "TripleBuffer" "on"/Option "TripleBuffer" "off"/' "/usr/share/regataos/gpu/20-nvidia.conf"
 	sed -i 's/ForceFullCompositionPipeline=On/ForceFullCompositionPipeline=Off/' "/usr/share/X11/xorg.conf.d/20-nvidia.conf"
 	sed -i 's/Option "TripleBuffer" "on"/Option "TripleBuffer" "off"/' "/usr/share/X11/xorg.conf.d/20-nvidia.conf"
+	sed -i 's/ForceFullCompositionPipeline=On/ForceFullCompositionPipeline=Off/' "/etc/X11/xorg.conf.d/20-nvidia.conf"
+	sed -i 's/Option "TripleBuffer" "on"/Option "TripleBuffer" "off"/' "/etc/X11/xorg.conf.d/20-nvidia.conf"
 }
 
 # Choose which GPU to use for rendering
