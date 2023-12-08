@@ -96,6 +96,11 @@ if test -e "/tmp/regataos-prime/use-hybrid-graphics.txt"; then
 	sleep 2
 fi
 
+# Clear GPUCache files
+if test -e "$HOME/.config/Max-Q/Default/GPUCache/index"; then
+	rm -f "$HOME/.config/Max-Q/Default/GPUCache/"*
+fi
+
 /opt/regataos-prime/scripts/detect-system-info.sh start &
 /opt/regataos-prime/scripts/check-hardware-resource-support.sh start &
 /opt/regataos-prime/scripts/intel-gpu-frequency &
