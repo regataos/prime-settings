@@ -97,13 +97,13 @@ function compositor() {
 
 # Configuration option to unlock widgets
 function unlock_widgets() {
-	# Check if the "compositor" option is present in the configuration file
+	# Check if the "unlockwidgets" option is present in the configuration file
 	if [[ $(grep -r "unlockwidgets=" "/tmp/regataos-prime/config/regataos-prime.conf") != *"unlockwidgets="* ]]; then
 		echo "unlockwidgets=off" >> "$HOME/.config/regataos-prime/regataos-prime.conf"
 		sed -i '/^$/d' "$HOME/.config/regataos-prime/regataos-prime.conf"
 	fi
 
-	# Disable or enable KWin compositing
+	# Disable or enable unlock widgets
 	if [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"unlockwidgets=on"* ]]; then
 		sed -i 's/\(unlockwidgets=on\)/unlockwidgets=off/' "/tmp/regataos-prime/config/regataos-prime.conf"
 		qdbus-qt5 org.kde.plasmashell /PlasmaShell evaluateScript "lockCorona(false)"
