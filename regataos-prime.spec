@@ -108,16 +108,21 @@ update-desktop-database
 
 # Prepare the system for AMD AMF
 #Some variables
-amdgpu_version="22.10"
-amf_amdgpu_pro="amf-amdgpu-pro_1.4.24-1395274_amd64.deb"
-libamdenc_amdgpu_pro="libamdenc-amdgpu-pro_1.0-1395274_amd64.deb"
-vulkan_amdgpu_pro="vulkan-amdgpu-pro_22.10-1395274_amd64.deb"
+amdgpu_version="22.20.5"
+amf_amdgpu_pro="amf-amdgpu-pro_1.4.26-1511376~22.04_amd64.deb"
+libamdenc_amdgpu_pro="libamdenc-amdgpu-pro_1.0-1518373.22.04_amd64.deb"
+libamdenc_amdgpu_pro_legacy="libamdenc-amdgpu-pro_1.0-1511376~22.04_amd64.deb"
+vulkan_amdgpu_pro="vulkan-amdgpu-pro_22.40-1518373.22.04_amd64.deb"
 
 #Create directory to receive AMDGPU-PRO files
 amdgpu_pro_dir="/opt/amdgpu-pro"
 
 if test ! -e "$amdgpu_pro_dir/amd-amf"; then
   mkdir -p "$amdgpu_pro_dir/amd-amf"
+fi
+
+if test ! -e "$amdgpu_pro_dir/amd-amf-legacy"; then
+  mkdir -p "$amdgpu_pro_dir/amd-amf-legacy"
 fi
 
 if test ! -e "$amdgpu_pro_dir/amd-vulkan"; then
@@ -144,7 +149,7 @@ fi
 #AMD Encode Core Library
 if test ! -e "$amdgpu_pro_dir/amd-amf/$libamdenc_amdgpu_pro"; then
   wget --no-check-certificate -O "$amdgpu_pro_dir/amd-amf/$libamdenc_amdgpu_pro" \
-  "https://repo.radeon.com/amdgpu/$amdgpu_version/ubuntu/pool/proprietary/liba/libamdenc-amdgpu-pro/$libamdenc_amdgpu_pro"
+  "https://repo.radeon.com/amdgpu/5.4.1/ubuntu/pool/proprietary/liba/libamdenc-amdgpu-pro/$libamdenc_amdgpu_pro"
 
   #Prepare AMDGPU-PRO files
   cd "/$amdgpu_pro_dir/amd-amf/"
@@ -160,7 +165,7 @@ fi
 #AMD Vulkan
 if test ! -e "$amdgpu_pro_dir/amd-vulkan/$vulkan_amdgpu_pro"; then
   wget --no-check-certificate -O "$amdgpu_pro_dir/amd-vulkan/$vulkan_amdgpu_pro" \
-  "https://repo.radeon.com/amdgpu/$amdgpu_version/ubuntu/pool/proprietary/v/vulkan-amdgpu-pro/$vulkan_amdgpu_pro"
+  "https://repo.radeon.com/amdgpu/5.4.1/ubuntu/pool/proprietary/v/vulkan-amdgpu-pro/$vulkan_amdgpu_pro"
 
   #Prepare AMDGPU-PRO files
   cd "/$amdgpu_pro_dir/amd-vulkan/"
@@ -175,6 +180,42 @@ if test ! -e "$amdgpu_pro_dir/amd-vulkan/$vulkan_amdgpu_pro"; then
   rm -f "$amdgpu_pro_dir/amd-vulkan/control.tar.xz"
   rm -f "$amdgpu_pro_dir/amd-vulkan/data.tar.xz"
   rm -f "$amdgpu_pro_dir/amd-vulkan/debian-binary"
+fi
+
+# Prepare the system for AMD AMF Legacy
+#AMD AMF
+if test ! -e "$amdgpu_pro_dir/amd-amf/$amf_amdgpu_pro"; then
+  wget --no-check-certificate -O "$amdgpu_pro_dir/amd-amf/$amf_amdgpu_pro" \
+  "https://repo.radeon.com/amdgpu/$amdgpu_version/ubuntu/pool/proprietary/a/amf-amdgpu-pro/$amf_amdgpu_pro"
+fi
+
+#Prepare files
+if test ! -e "$amdgpu_pro_dir/amd-amf-legacy/$amf_amdgpu_pro"; then
+  cp -f "$amdgpu_pro_dir/amd-amf/$amf_amdgpu_pro" "$amdgpu_pro_dir/amd-amf-legacy/$amf_amdgpu_pro"
+  cd "/$amdgpu_pro_dir/amd-amf-legacy/"
+  ar -x "$amf_amdgpu_pro"
+  tar xfv data.tar.xz
+
+  #Clear cache
+  rm -f "$amdgpu_pro_dir/amd-amf-legacy/control.tar.xz"
+  rm -f "$amdgpu_pro_dir/amd-amf-legacy/data.tar.xz"
+  rm -f "$amdgpu_pro_dir/amd-amf-legacy/debian-binary"
+fi
+
+#AMD Encode Core Library
+if test ! -e "$amdgpu_pro_dir/amd-amf-legacy/$libamdenc_amdgpu_pro_legacy"; then
+  wget --no-check-certificate -O "$amdgpu_pro_dir/amd-amf-legacy/$libamdenc_amdgpu_pro_legacy" \
+  "https://repo.radeon.com/amdgpu/$amdgpu_version/ubuntu/pool/proprietary/liba/libamdenc-amdgpu-pro/$libamdenc_amdgpu_pro_legacy"
+
+  #Prepare AMDGPU-PRO files
+  cd "/$amdgpu_pro_dir/amd-amf-legacy/"
+  ar -x "$libamdenc_amdgpu_pro_legacy"
+  tar xfv data.tar.xz
+
+  #Clear cache
+  rm -f "$amdgpu_pro_dir/amd-amf-legacy/control.tar.xz"
+  rm -f "$amdgpu_pro_dir/amd-amf-legacy/data.tar.xz"
+  rm -f "$amdgpu_pro_dir/amd-amf-legacy/debian-binary"
 fi
 
 %clean

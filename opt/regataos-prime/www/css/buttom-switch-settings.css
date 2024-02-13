@@ -1,7 +1,7 @@
 /* reverse prime bottom css */
 /* reverse-prime */
 /* on */
-.switch--shadow-reverse-prime + label {
+.switch--shadow-reverse-prime+label {
 	top: -18px;
 	right: -8px;
 	padding: 2px;
@@ -10,8 +10,9 @@
 	background-color: #2e3539;
 	border-radius: 60px;
 }
-.switch--shadow-reverse-prime + label:before,
-.switch--shadow-reverse-prime + label:after {
+
+.switch--shadow-reverse-prime+label:before,
+.switch--shadow-reverse-prime+label:after {
 	display: block;
 	position: absolute;
 	top: 1px;
@@ -19,31 +20,35 @@
 	bottom: 1px;
 	content: "";
 }
-.switch--shadow-reverse-prime + label:before {
+
+.switch--shadow-reverse-prime+label:before {
 	right: 1px;
 	background-color: #0085e4;
 	border-radius: 60px;
 	transition: all 0.3s;
 }
-.switch--shadow-reverse-prime + label:after {
+
+.switch--shadow-reverse-prime+label:after {
 	top: -1px;
 	left: 20px;
 	width: 16px;
 	height: 16px;
-	background-color: #fff;
+	background-color: #eff0f1;
 	border-radius: 100%;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 	transition: all 0.3s;
 }
-.switch--shadow-reverse-prime:checked + label:before {
+
+.switch--shadow-reverse-prime:checked+label:before {
 	background-color: #ddd;
 }
-.switch--shadow-reverse-prime:checked + label:after {
+
+.switch--shadow-reverse-prime:checked+label:after {
 	transform: translateX(-20px);
 }
 
 /* off */
-.switch--shadow2-reverse-prime + label {
+.switch--shadow2-reverse-prime+label {
 	top: -18px;
 	right: -8px;
 	padding: 2px;
@@ -52,8 +57,9 @@
 	background-color: #2e3539;
 	border-radius: 60px;
 }
-.switch--shadow2-reverse-prime + label:before,
-.switch--shadow2-reverse-prime + label:after {
+
+.switch--shadow2-reverse-prime+label:before,
+.switch--shadow2-reverse-prime+label:after {
 	display: block;
 	position: absolute;
 	top: 1px;
@@ -61,26 +67,30 @@
 	bottom: 1px;
 	content: "";
 }
-.switch--shadow2-reverse-prime + label:before {
+
+.switch--shadow2-reverse-prime+label:before {
 	right: 1px;
 	background-color: #ddd;
 	border-radius: 60px;
 	transition: all 0.3s;
 }
-.switch--shadow2-reverse-prime + label:after {
+
+.switch--shadow2-reverse-prime+label:after {
 	top: -1px;
 	left: 0px;
 	width: 16px;
 	height: 16px;
-	background-color: #fff;
+	background-color: #eff0f1;
 	border-radius: 100%;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 	transition: all 0.3s;
 }
-.switch--shadow2-reverse-prime:checked + label:before {
+
+.switch--shadow2-reverse-prime:checked+label:before {
 	background-color: #0085e4;
 }
-.switch--shadow2-reverse-prime:checked + label:after {
+
+.switch--shadow2-reverse-prime:checked+label:after {
 	transform: translateX(20px);
 }
 
@@ -94,6 +104,7 @@
 	color: #adabab;
 	margin-top: 3px;
 }
+
 .reverse-prime-off {
 	position: absolute;
 	top: 40px;
@@ -114,6 +125,7 @@
 	color: #adabab;
 	margin-top: 3px;
 }
+
 .render-dgpu-desc {
 	position: absolute;
 	top: 40px;
@@ -166,7 +178,7 @@ select.selectnav {
 	border-radius: 4px;
 	font-size: 15px;
 	font-weight: 400;
-	font-family: Roboto,sans-serif;
+	font-family: Roboto, sans-serif;
 	cursor: pointer;
 	width: 95px;
 	height: 30px;
@@ -176,7 +188,7 @@ select.selectnav-cpu {
 	border-radius: 4px;
 	font-size: 15px;
 	font-weight: 400;
-	font-family: Roboto,sans-serif;
+	font-family: Roboto, sans-serif;
 	cursor: pointer;
 	width: 100px;
 	height: 30px;
@@ -189,7 +201,7 @@ li#selecte-gpu {
 /* freesync bottom css */
 /* freesync */
 /* on */
-.switch--shadow-freesync + label {
+.switch--shadow-freesync+label {
 	top: -18px;
 	right: -8px;
 	padding: 2px;
@@ -198,8 +210,9 @@ li#selecte-gpu {
 	background-color: #2e3539;
 	border-radius: 60px;
 }
-.switch--shadow-freesync + label:before,
-.switch--shadow-freesync + label:after {
+
+.switch--shadow-freesync+label:before,
+.switch--shadow-freesync+label:after {
 	display: block;
 	position: absolute;
 	top: 1px;
@@ -207,31 +220,35 @@ li#selecte-gpu {
 	bottom: 1px;
 	content: "";
 }
-.switch--shadow-freesync + label:before {
+
+.switch--shadow-freesync+label:before {
 	right: 1px;
 	background-color: #0085e4;
 	border-radius: 60px;
 	transition: all 0.3s;
 }
-.switch--shadow-freesync + label:after {
+
+.switch--shadow-freesync+label:after {
 	top: -1px;
 	left: 20px;
 	width: 16px;
 	height: 16px;
-	background-color: #fff;
+	background-color: #eff0f1;
 	border-radius: 100%;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 	transition: all 0.3s;
 }
-.switch--shadow-freesync:checked + label:before {
+
+.switch--shadow-freesync:checked+label:before {
 	background-color: #ddd;
 }
-.switch--shadow-freesync:checked + label:after {
+
+.switch--shadow-freesync:checked+label:after {
 	transform: translateX(-20px);
 }
 
 /* off */
-.switch--shadow2-freesync + label {
+.switch--shadow2-freesync+label {
 	top: -18px;
 	right: -8px;
 	padding: 2px;
@@ -240,8 +257,9 @@ li#selecte-gpu {
 	background-color: #2e3539;
 	border-radius: 60px;
 }
-.switch--shadow2-freesync + label:before,
-.switch--shadow2-freesync + label:after {
+
+.switch--shadow2-freesync+label:before,
+.switch--shadow2-freesync+label:after {
 	display: block;
 	position: absolute;
 	top: 1px;
@@ -249,26 +267,30 @@ li#selecte-gpu {
 	bottom: 1px;
 	content: "";
 }
-.switch--shadow2-freesync + label:before {
+
+.switch--shadow2-freesync+label:before {
 	right: 1px;
 	background-color: #ddd;
 	border-radius: 60px;
 	transition: all 0.3s;
 }
-.switch--shadow2-freesync + label:after {
+
+.switch--shadow2-freesync+label:after {
 	top: -1px;
 	left: 0px;
 	width: 16px;
 	height: 16px;
-	background-color: #fff;
+	background-color: #eff0f1;
 	border-radius: 100%;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 	transition: all 0.3s;
 }
-.switch--shadow2-freesync:checked + label:before {
+
+.switch--shadow2-freesync:checked+label:before {
 	background-color: #0085e4;
 }
-.switch--shadow2-freesync:checked + label:after {
+
+.switch--shadow2-freesync:checked+label:after {
 	transform: translateX(20px);
 }
 
@@ -282,6 +304,7 @@ li#selecte-gpu {
 	color: #adabab;
 	margin-top: 3px;
 }
+
 .freesync-off {
 	position: absolute;
 	top: 40px;
@@ -294,39 +317,39 @@ li#selecte-gpu {
 
 /* run dGPU test */
 .test-dgpu {
-    width: 140px;
-    height: 20px;
-    cursor: pointer;
+	width: 140px;
+	height: 20px;
+	cursor: pointer;
 	border-radius: 8px;
-    padding-top: 10px;
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-bottom: 10px;
+	padding-top: 10px;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-bottom: 10px;
 }
 
 li.button-gl {
 	background-color: #35567b;
-    background-position: center;
+	background-position: center;
 	border: 1px solid #5cabf7;
 	transition: all .4s ease-in-out;
 	margin-right: 5px !important;
 }
 
 li.button-gl:hover {
-    background: rgb(42 69 99) radial-gradient(circle, transparent 1%, rgb(42 69 99) 1%) center/15000%;
+	background: rgb(42 69 99) radial-gradient(circle, transparent 1%, rgb(42 69 99) 1%) center/15000%;
 	border-color: rgb(44 117 187);
 }
 
 li.button-gl:active {
-    background-color: #5cabf7;
-    background-size: 100%;
-    transition: all 0s;
-    border: 1px solid #5cabf7;
+	background-color: #5cabf7;
+	background-size: 100%;
+	transition: all 0s;
+	border: 1px solid #5cabf7;
 }
 
 li.button-vk {
 	background-color: #35567b;
-    background-position: center;
+	background-position: center;
 	border: 1px solid #5cabf7;
 	transition: all .4s ease-in-out;
 	margin-right: 0px !important;
@@ -334,28 +357,28 @@ li.button-vk {
 }
 
 li.button-vk:hover {
-    background: rgb(42 69 99) radial-gradient(circle, transparent 1%, rgb(42 69 99) 1%) center/15000%;
+	background: rgb(42 69 99) radial-gradient(circle, transparent 1%, rgb(42 69 99) 1%) center/15000%;
 	border-color: rgb(44 117 187);
 }
 
 li.button-vk:active {
-    background-color: #5cabf7;
-    background-size: 100%;
-    transition: all 0s;
-    border: 1px solid #5cabf7;
+	background-color: #5cabf7;
+	background-size: 100%;
+	transition: all 0s;
+	border: 1px solid #5cabf7;
 }
 
 .test-dgpu:active {
 	background: #333840;
-	box-shadow: 0 0px 0px rgba(0,0,0,.15);
+	box-shadow: 0 0px 0px rgba(0, 0, 0, .15);
 	transition: all .2s;
 }
 
 .div-test {
 	text-align: center;
-    margin: auto;
-    width: 355px;
-    height: 50px;
+	margin: auto;
+	width: 355px;
+	height: 50px;
 	margin-top: 30px;
 }
 
@@ -374,6 +397,7 @@ li.button-vk:active {
 #compositor2 {
 	display: none;
 }
+
 #compositor-off {
 	display: none;
 }
@@ -382,6 +406,7 @@ li.button-vk:active {
 #unlockwidgets2 {
 	display: none;
 }
+
 #unlockwidgets-off {
 	display: none;
 }
@@ -390,38 +415,41 @@ li.button-vk:active {
 #amf1 {
 	display: none;
 }
+
 #amf-on {
 	display: none;
 }
 
 /* Responsive CSS */
 @media screen and (max-width: 1280px) {
-#cpugovernor1 {
-	right: 15px;
-}
-#cpugovernor2 {
-	right: 15px;
-}
+	#cpugovernor1 {
+		right: 15px;
+	}
 
-#selectnav1 {
-	right: 15px;
-}
-#selectnav2 {
-	right: 15px;
-}
+	#cpugovernor2 {
+		right: 15px;
+	}
 
-/* CSS kscreen */
-li#kscreen {
-	width: 260px;
-}
+	#selectnav1 {
+		right: 15px;
+	}
 
-/* CSS reverse prime */
-li#reverse-prime {
-	width: 260px;
-}
+	#selectnav2 {
+		right: 15px;
+	}
 
-.kscreen-desc {
-	left: 14px;
-}
+	/* CSS kscreen */
+	li#kscreen {
+		width: 260px;
+	}
+
+	/* CSS reverse prime */
+	li#reverse-prime {
+		width: 260px;
+	}
+
+	.kscreen-desc {
+		left: 14px;
+	}
 
 }

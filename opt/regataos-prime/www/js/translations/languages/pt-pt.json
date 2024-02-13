@@ -51,7 +51,7 @@
             },
             "runTests": {
                 "title": "Testar a GPU dedicada",
-                "description": "Rode simples teste com OpenGL ou Vulkan"
+                "description": "Testes simples com OpenGL e Vulkan"
             },
             "popUpTests": {
                 "title": "Testar a GPU dedicada",

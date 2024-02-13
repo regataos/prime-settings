@@ -1,23 +1,23 @@
-@font-face{
+@font-face {
     font-family: "Oxygen";
     font-display: block;
-	font-style: normal;
-	font-weight: normal;
+    font-style: normal;
+    font-weight: normal;
     src: url('fonts/oxygen/Oxygen-Regular.ttf') format('truetype');
 }
 
-@font-face{
+@font-face {
     font-family: "Roboto";
     font-display: block;
-	font-style: normal;
-	font-weight: normal;
+    font-style: normal;
+    font-weight: normal;
     src: url('fonts/roboto/Roboto-Regular.ttf') format('truetype');
 }
 
 body {
     font-family: Oxygen;
     font-weight: 300;
-	background-color: #171a21;
+    background-color: #1b1e20;
     padding: 0;
     margin: 0;
     -webkit-touch-callout: none;
@@ -26,13 +26,13 @@ body {
 }
 
 #loadscreen {
-	display: block;
+    display: block;
     opacity: 1;
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	background-color: #171a21;
-	z-index: 40000;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: #1b1e20;
+    z-index: 40000;
     animation-name: initEffect;
     animation-duration: 1.2s;
 }
@@ -40,9 +40,40 @@ body {
 @keyframes initEffect {
     from {
         opacity: 1;
-    } to {
+    }
+
+    to {
         opacity: 0;
     }
+}
+
+/* scrollbar css */
+/* width */
+::-webkit-scrollbar {
+    width: 20px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #eff0f1;
+    border-left: 1px solid #cdcdcd;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    transition: all .3s;
+    background: #b3b3b3;
+    border-radius: 2em;
+    border: 6px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #8a8a8a;
+    border-radius: 2em;
+    border: 6px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
 }
 
 a {
@@ -55,21 +86,22 @@ a {
     position: fixed;
     float: left;
     width: 100%;
+    min-width: 422px;
     height: 100%;
     transition: all 0.3s ease-in-out;
     margin-left: 230px;
 }
 
 .iframe {
-	overflow:hidden;
-	overflow-x:hidden;
-	overflow-y:hidden;
-	height:100%;
-	width: calc(100% - 230px);
-	top:0px;
-	left:0px;
-	right:0px;
-    bottom:0px;
+    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    height: 100%;
+    width: calc(100% - 230px);
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
 }
 
 .iframe::-webkit-scrollbar {
@@ -79,7 +111,7 @@ a {
 .sidebar {
     display: block;
     position: fixed;
-    background-color: #2a2f35;
+    background-color: #2a2e32;
     text-align: left;
     top: 0px;
     left: 0px;
@@ -90,9 +122,7 @@ a {
     float: left;
     transition: all 0.3s ease-in-out;
     z-index: 30000;
-    -webkit-box-shadow: 0px 0px 3px 0px rgba(8, 13, 18, 0.34);
-    -moz-box-shadow: 0px 0px 3px 0px rgba(8, 13, 18, 0.34);
-    box-shadow: 0px 0px 3px 0px rgba(8, 13, 18, 0.34);
+    box-shadow: 0 0 2px rgb(0 0 0 / 40%);
 }
 
 .ul-sidebar {
@@ -101,16 +131,16 @@ a {
 
 .sidebar .ul-sidebar li {
     cursor: pointer;
-    background-color: #2a2f35;
+    background-color: #2a2e32;
     color: #f3f3f3;
     font-family: 'Roboto', sans-serif;
-	width: 0px;
+    width: 0px;
     transition: all 0.3s ease-in-out;
     margin-top: 0px;
-	margin-left: 0px;
+    margin-left: 0px;
     margin-bottom: 0px;
-	padding-top: 18px;
-	padding-bottom: 18px;
+    padding-top: 18px;
+    padding-bottom: 18px;
 }
 
 /*
@@ -124,31 +154,31 @@ a {
     display: none;
     bottom: 0;
     width: 20px;
-	animation-name: example;
-	animation-duration: 2s;
+    animation-name: example;
+    animation-duration: 2s;
 }
 
 .li-sidebar-uninstalling {
     display: none;
     bottom: 0;
     width: 20px;
-	animation-name: example;
-	animation-duration: 2s;
+    animation-name: example;
+    animation-duration: 2s;
 }
 
 .link-items {
     display: flex;
     flex-direction: row;
     align-items: center;
-	height: 26px;
+    height: 26px;
     font-size: 18px;
-	text-decoration: none;
-	color: #f3f3f3 !important;
+    text-decoration: none;
+    color: #f3f3f3 !important;
     border-left: 4px solid #2a2d32;
     transition: all 0.3s ease-in-out;
-	padding-top: 2px;
+    padding-top: 2px;
     padding-left: 8px;
-	padding-bottom: 2px;
+    padding-bottom: 2px;
 }
 
 .sidebar .ul-sidebar li:hover {
@@ -191,8 +221,13 @@ a {
 }
 
 @keyframes example {
-    from {opacity: 0;}
-    to {opacity: 1;}
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .hide-sidebar {
@@ -200,9 +235,9 @@ a {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-	width: 30px;
-	height: 25px;
-	cursor: pointer;
+    width: 30px;
+    height: 25px;
+    cursor: pointer;
     transition: all 0.3s ease-in-out;
     margin-top: 20px;
     margin-bottom: 11px;
@@ -220,9 +255,9 @@ a {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-	width: 30px;
-	height: 25px;
-	cursor: pointer;
+    width: 30px;
+    height: 25px;
+    cursor: pointer;
     transition: all 0.3s ease-in-out;
     margin-top: 20px;
     margin-left: 12px;

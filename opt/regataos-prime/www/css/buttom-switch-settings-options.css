@@ -1,16 +1,17 @@
 /* switch bottom css */
 /* on */
-.switch--shadow-app + label {
+.switch--shadow-app+label {
 	top: -18px;
-	right: -8px;
+	right: -12px;
 	padding: 2px;
-	width: 31px;
+	width: 20px;
 	height: 10px;
 	background-color: #2e3539;
 	border-radius: 60px;
 }
-.switch--shadow-app + label:before,
-.switch--shadow-app + label:after {
+
+.switch--shadow-app+label:before,
+.switch--shadow-app+label:after {
 	display: block;
 	position: absolute;
 	top: 1px;
@@ -18,15 +19,17 @@
 	bottom: 1px;
 	content: "";
 }
-.switch--shadow-app + label:before {
+
+.switch--shadow-app+label:before {
 	right: 1px;
 	background-color: #0085e4;
 	border-radius: 60px;
 	transition: all 0.3s;
 }
-.switch--shadow-app + label:after {
+
+.switch--shadow-app+label:after {
 	top: -1px;
-	left: 20px;
+	left: 12px;
 	width: 16px;
 	height: 16px;
 	background-color: #fff;
@@ -34,11 +37,13 @@
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 	transition: all 0.3s;
 }
-.switch--shadow-app:checked + label:before {
+
+.switch--shadow-app:checked+label:before {
 	background-color: #ddd;
 }
-.switch--shadow-app:checked + label:after {
-	transform: translateX(-20px);
+
+.switch--shadow-app:checked+label:after {
+	transform: translateX(-15px);
 }
 
 /* off */
@@ -46,17 +51,18 @@
 	display: none;
 }
 
-.switch--shadow2-app + label {
+.switch--shadow2-app+label {
 	top: -18px;
-	right: -8px;
+	right: -12px;
 	padding: 2px;
-	width: 31px;
+	width: 20px;
 	height: 10px;
 	background-color: #2e3539;
 	border-radius: 60px;
 }
-.switch--shadow2-app + label:before,
-.switch--shadow2-app + label:after {
+
+.switch--shadow2-app+label:before,
+.switch--shadow2-app+label:after {
 	display: block;
 	position: absolute;
 	top: 1px;
@@ -64,15 +70,17 @@
 	bottom: 1px;
 	content: "";
 }
-.switch--shadow2-app + label:before {
+
+.switch--shadow2-app+label:before {
 	right: 1px;
 	background-color: #ddd;
 	border-radius: 60px;
 	transition: all 0.3s;
 }
-.switch--shadow2-app + label:after {
+
+.switch--shadow2-app+label:after {
 	top: -1px;
-	left: 0px;
+	left: -5px;
 	width: 16px;
 	height: 16px;
 	background-color: #fff;
@@ -80,10 +88,12 @@
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 	transition: all 0.3s;
 }
-.switch--shadow2-app:checked + label:before {
+
+.switch--shadow2-app:checked+label:before {
 	background-color: #0085e4;
 }
-.switch--shadow2-app:checked + label:after {
+
+.switch--shadow2-app:checked+label:after {
 	transform: translateX(20px);
 }
 
@@ -91,17 +101,18 @@
 .enabled {
 	position: absolute;
 	top: 40px;
-	font-size: 13px;
-	font-weight: 600;
-	color: #adabab;
+	font-size: 14px;
+	font-weight: 500;
+	color: #eff0f1;
 	margin-top: 3px;
 }
+
 .disabled {
 	position: absolute;
 	display: none;
 	top: 40px;
-	font-size: 13px;
-	font-weight: 600;
-	color: #adabab;
+	font-size: 14px;
+	font-weight: 500;
+	color: #eff0f1;
 	margin-top: 3px;
 }
