@@ -159,6 +159,11 @@ ul {
 	animation-duration: .5s;
 }
 
+.div2-performance .main-ul {
+	grid-column-gap: 25px;
+	grid-row-gap: 25px;
+}
+
 li {
 	display: block;
 	position: relative;
@@ -244,16 +249,17 @@ li#add-external-apps:active {
 li.li-performance {
 	display: inline-block;
 	position: relative;
-	width: 247px;
+	width: auto;
 	height: 350px;
 	list-style: none;
 	float: left;
 	background: #2a2e32;
-	margin-right: 11px;
-	margin-left: 11px;
+	margin-right: 0px;
+	margin-left: 0px;
 	margin-bottom: 27px;
 	padding: 0px;
-	box-shadow: 0 1px 5px rgb(0 0 0 / 15%);
+	border-radius: 8px;
+	box-shadow: 0 0 2px rgb(0 0 0 / 40%);
 	-webkit-transition: all 0.5s ease-in-out;
 	transition: all 0.5s ease-in-out;
 	-webkit-animation-name: animatebottom;
