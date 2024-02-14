@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<title>Max-Q</title>
 	<meta charset="utf-8" />
@@ -8,13 +9,14 @@
 	<link rel="stylesheet" type="text/css" href="../css/circle-progress.css">
 	<link rel="stylesheet" type="text/css" href="../css/style-system/buttom-system.css">
 </head>
+
 <body>
-    <div id="loadscreen"></div>
-    <script>
-        setTimeout(function () {
-            document.getElementById("loadscreen").style.display= "none";
-        }, 1000);
-    </script>
+	<div id="loadscreen"></div>
+	<script>
+		setTimeout(function () {
+			document.getElementById("loadscreen").style.display = "none";
+		}, 1000);
+	</script>
 
 	<div class="div1">
 		<div id="title" class="hdiv1 page-performance-title">Performance</div>
@@ -22,131 +24,188 @@
 	</div>
 
 	<div class="main-div" id="main-div">
-	<div class="div2 div2-performance" id="div2">
-		<ul class="main-ul">
-			<li class="li-performance">
-				<div class="text-app"></div><span class='info-item'></span>
-				<div class="container">
-				  <div class="card">
-					<div class="box">
-					  <div class="percent">
-						<svg>
-						  <circle cx="70" cy="70" r="70"></circle>
-						  <circle id="gpu-usage" cx="70" cy="70" r="70"></circle>
-						</svg>
-						<div class="number">
-							<h2><span class="data-number" id="gpu-usage-number">0</span><span>%</span></h2>
+		<div class="div2 div2-performance" id="div2">
+			<ul class="main-ul">
+				<li class="li-performance">
+					<div class="text-app"></div><span class='info-item'></span>
+					<div class="container">
+						<div class="card">
+							<div class="box">
+								<div class="percent">
+									<svg>
+										<circle cx="70" cy="70" r="70"></circle>
+										<circle id="gpu-usage" cx="70" cy="70" r="70"></circle>
+									</svg>
+									<div class="number">
+										<h2><span class="data-number" id="gpu-usage-number">0</span><span>%</span></h2>
+									</div>
+								</div>
+								<h2 class="text gpu-desc">GPU usage</h2>
+								<div class="more-data">
+									<div class="more-data-child more-data-temp">
+										<div class="more-details">
+											<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960"
+												width="24">
+												<path
+													d="M480-100.001q-74.922 0-127.461-52.538Q300.001-205.078 300.001-280q0-45.692 21.193-84.692 21.192-39 58.807-64.538V-760q0-41.922 29.038-70.961 29.039-29.038 70.961-29.038t70.961 29.038q29.038 29.039 29.038 70.961v330.77q37.615 25.538 58.807 64.538 21.193 39 21.193 84.692 0 74.922-52.538 127.461Q554.922-100.001 480-100.001Zm-40-412.306h80v-50.001h-40v-35.384h40v-84.616h-40v-35.384h40V-760q0-17-11.5-28.5T480-800q-17 0-28.5 11.5T440-760v247.693Z" />
+											</svg>
+											<div class="more-details-item" id="gpu-temp">45°C</div>
+										</div>
+										<div class="mode-data-desc temp-text">Temperature</div>
+									</div>
+									<div class="more-data-child more-data-freq">
+										<div class="more-details">
+											<svg class="freq-svg" xmlns="http://www.w3.org/2000/svg" height="24"
+												viewBox="0 -960 960 960" width="24">
+												<path
+													d="M479.878-100.001q-78.032 0-147.323-29.9-69.291-29.9-121.023-81.631-51.731-51.732-81.631-121.023t-29.9-147.323q0-78.984 29.962-147.976 29.961-68.991 81.576-120.607 51.616-51.615 121.004-81.576 69.389-29.962 147.332-29.962 78.894 0 147.932 29.962 69.038 29.961 120.654 81.576 51.615 51.616 81.576 120.607 29.962 68.992 29.962 147.976 0 78.032-29.962 147.377-29.961 69.346-81.576 120.962-51.616 51.615-120.607 81.576-68.992 29.962-147.976 29.962ZM480-309.999q57.692 0 112.961 16.538 55.269 16.539 103.346 48.385 49.847-45.616 76.77-106.465Q800-412.39 800-480q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 67.693 26.616 128.808 26.615 61.116 77.077 106.116 48.077-31.846 103.346-48.385Q422.308-309.999 480-309.999Zm.058 59.998q-43.366 0-84.674 11.154-41.308 11.154-78.615 32.693 36.538 22.692 78.07 34.423Q436.37-160 480.031-160q43.662 0 85.162-11.731 41.5-11.731 78.038-34.423-37.307-21.539-78.558-32.693-41.25-11.154-84.615-11.154ZM280-523.846q15.077 0 25.615-10.539 10.539-10.538 10.539-25.615 0-15.077-10.539-25.615-10.538-10.539-25.615-10.539-15.077 0-25.615 10.539-10.539 10.538-10.539 25.615 0 15.077 10.539 25.615 10.538 10.539 25.615 10.539Zm120-120q15.077 0 25.615-10.539 10.539-10.538 10.539-25.615 0-15.077-10.539-25.615-10.538-10.539-25.615-10.539-15.077 0-25.615 10.539-10.539 10.538-10.539 25.615 0 15.077 10.539 25.615 10.538 10.539 25.615 10.539Zm280 120q15.077 0 25.615-10.539 10.539-10.538 10.539-25.615 0-15.077-10.539-25.615-10.538-10.539-25.615-10.539-15.077 0-25.615 10.539-10.539 10.538-10.539 25.615 0 15.077 10.539 25.615 10.538 10.539 25.615 10.539ZM480-410.001q29.154 0 49.576-20.423 20.423-20.422 20.423-49.576 0-13-4.577-24.923-4.577-11.923-12.961-21.538l58.615-147.54q5.077-11.769.116-23.422-4.962-11.654-16.793-16.731-11.091-5.076-22.724-.214-11.633 4.862-16.136 16.829l-59.385 147.54q-27.692 1.923-46.923 21.922-19.23 20-19.23 48.077 0 29.154 20.423 49.576 20.422 20.423 49.576 20.423Zm0 100.002Zm0-212.539Zm0 272.537Z" />
+											</svg>
+											<div class="more-details-item" id="gpu-freq">59MHz</div>
+										</div>
+										<div class="mode-data-desc freq-text">Frequency</div>
+									</div>
+								</div>
+							</div>
 						</div>
-					  </div>
-					  <h2 class="text gpu-desc">GPU usage</h2>
-					  <div class="more-data">
-							<div class="more-data-child">
-								<div id="gpu-temp">45°C</div>
-								<div class="mode-data-desc temp-text">Temperature</div>
-							</div>
-							<div class="more-data-child">
-						  		<div id="gpu-freq">59MHz</div>
-								<div class="mode-data-desc freq-text">Frequency</div>
-							</div>
-					  </div>
 					</div>
-				  </div>
-				</div>
-			</li>
-			<li class="li-performance">
-				<div class="text-app"></div><span class='info-item'></span>
-				<div class="container">
-				  <div class="card">
-					<div class="box">
-					  <div class="percent">
-						<svg>
-						  <circle cx="70" cy="70" r="70"></circle>
-						  <circle id="vram-usage" cx="70" cy="70" r="70"></circle>
-						</svg>
-						<div class="number">
-						  <h2><span class="data-number" id="vram-usage-number">0</span><span>%</span></h2>
+				</li>
+				<li class="li-performance">
+					<div class="text-app"></div><span class='info-item'></span>
+					<div class="container">
+						<div class="card">
+							<div class="box">
+								<div class="percent">
+									<svg>
+										<circle cx="70" cy="70" r="70"></circle>
+										<circle id="vram-usage" cx="70" cy="70" r="70"></circle>
+									</svg>
+									<div class="number">
+										<h2><span class="data-number" id="vram-usage-number">0</span><span>%</span></h2>
+									</div>
+								</div>
+								<h2 class="text vram-desc">VRAM usage</h2>
+								<div class="more-data">
+									<div class="more-data-child more-data-memory">
+										<div class="more-details">
+											<svg class="memory-svg" xmlns="http://www.w3.org/2000/svg" height="24"
+												viewBox="0 -960 960 960" width="24">
+												<path
+													d="M380.001-416.155v-127.69q0-15.365 10.395-25.759 10.394-10.395 25.759-10.395h127.69q15.365 0 25.759 10.395 10.395 10.394 10.395 25.759v127.69q0 15.365-10.395 25.759-10.394 10.395-25.759 10.395h-127.69q-15.365 0-25.759-10.395-10.395-10.394-10.395-25.759ZM440-440h80v-80h-80v80Zm-69.999 260.768v-40.769h-77.692q-30.308 0-51.308-21t-21-51.308v-77.692h-40.769q-12.75 0-21.374-8.628-8.625-8.629-8.625-21.384 0-12.756 8.625-21.371 8.624-8.615 21.374-8.615h40.769v-100.002h-40.769q-12.75 0-21.374-8.628-8.625-8.629-8.625-21.384 0-12.756 8.625-21.371 8.624-8.615 21.374-8.615h40.769v-77.692q0-30.308 21-51.308t51.308-21h77.692v-40.769q0-12.75 8.628-21.374 8.629-8.625 21.384-8.625 12.756 0 21.371 8.625 8.615 8.624 8.615 21.374v40.769h100.002v-40.769q0-12.75 8.628-21.374 8.629-8.625 21.384-8.625 12.756 0 21.371 8.625 8.615 8.624 8.615 21.374v40.769h77.692q30.308 0 51.308 21t21 51.308v77.692h40.769q12.75 0 21.374 8.628 8.625 8.629 8.625 21.384 0 12.756-8.625 21.371-8.624 8.615-21.374 8.615h-40.769v100.002h40.769q12.75 0 21.374 8.628 8.625 8.629 8.625 21.384 0 12.756-8.625 21.371-8.624 8.615-21.374 8.615h-40.769v77.692q0 30.308-21 51.308t-51.308 21h-77.692v40.769q0 12.75-8.628 21.374-8.629 8.625-21.384 8.625-12.756 0-21.371-8.625-8.615-8.624-8.615-21.374v-40.769H429.999v40.769q0 12.75-8.628 21.374-8.629 8.625-21.384 8.625-12.756 0-21.371-8.625-8.615-8.624-8.615-21.374ZM667.691-280q4.616 0 8.463-3.846 3.846-3.847 3.846-8.463v-375.382q0-4.616-3.846-8.463-3.847-3.846-8.463-3.846H292.309q-4.616 0-8.463 3.846-3.846 3.847-3.846 8.463v375.382q0 4.616 3.846 8.463 3.847 3.846 8.463 3.846h375.382ZM480-480Z" />
+											</svg>
+											<div class="more-details-item" id="vram-size">1024MB</div>
+										</div>
+										<div class="mode-data-desc mem-sz-text">Memory size</div>
+									</div>
+									<div class="more-data-child more-data-freq">
+										<div class="more-details">
+											<svg class="freq-svg" xmlns="http://www.w3.org/2000/svg" height="24"
+												viewBox="0 -960 960 960" width="24">
+												<path
+													d="M479.878-100.001q-78.032 0-147.323-29.9-69.291-29.9-121.023-81.631-51.731-51.732-81.631-121.023t-29.9-147.323q0-78.984 29.962-147.976 29.961-68.991 81.576-120.607 51.616-51.615 121.004-81.576 69.389-29.962 147.332-29.962 78.894 0 147.932 29.962 69.038 29.961 120.654 81.576 51.615 51.616 81.576 120.607 29.962 68.992 29.962 147.976 0 78.032-29.962 147.377-29.961 69.346-81.576 120.962-51.616 51.615-120.607 81.576-68.992 29.962-147.976 29.962ZM480-309.999q57.692 0 112.961 16.538 55.269 16.539 103.346 48.385 49.847-45.616 76.77-106.465Q800-412.39 800-480q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 67.693 26.616 128.808 26.615 61.116 77.077 106.116 48.077-31.846 103.346-48.385Q422.308-309.999 480-309.999Zm.058 59.998q-43.366 0-84.674 11.154-41.308 11.154-78.615 32.693 36.538 22.692 78.07 34.423Q436.37-160 480.031-160q43.662 0 85.162-11.731 41.5-11.731 78.038-34.423-37.307-21.539-78.558-32.693-41.25-11.154-84.615-11.154ZM280-523.846q15.077 0 25.615-10.539 10.539-10.538 10.539-25.615 0-15.077-10.539-25.615-10.538-10.539-25.615-10.539-15.077 0-25.615 10.539-10.539 10.538-10.539 25.615 0 15.077 10.539 25.615 10.538 10.539 25.615 10.539Zm120-120q15.077 0 25.615-10.539 10.539-10.538 10.539-25.615 0-15.077-10.539-25.615-10.538-10.539-25.615-10.539-15.077 0-25.615 10.539-10.539 10.538-10.539 25.615 0 15.077 10.539 25.615 10.538 10.539 25.615 10.539Zm280 120q15.077 0 25.615-10.539 10.539-10.538 10.539-25.615 0-15.077-10.539-25.615-10.538-10.539-25.615-10.539-15.077 0-25.615 10.539-10.539 10.538-10.539 25.615 0 15.077 10.539 25.615 10.538 10.539 25.615 10.539ZM480-410.001q29.154 0 49.576-20.423 20.423-20.422 20.423-49.576 0-13-4.577-24.923-4.577-11.923-12.961-21.538l58.615-147.54q5.077-11.769.116-23.422-4.962-11.654-16.793-16.731-11.091-5.076-22.724-.214-11.633 4.862-16.136 16.829l-59.385 147.54q-27.692 1.923-46.923 21.922-19.23 20-19.23 48.077 0 29.154 20.423 49.576 20.422 20.423 49.576 20.423Zm0 100.002Zm0-212.539Zm0 272.537Z" />
+											</svg>
+											<div class="more-details-item" id="vram-freq">59MHz</div>
+										</div>
+										<div class="mode-data-desc freq-text">Frequency</div>
+									</div>
+								</div>
+							</div>
 						</div>
-					  </div>
-					  <h2 class="text vram-desc">VRAM usage</h2>
-					  <div class="more-data">
-							<div class="more-data-child">
-								<div id="vram-size">1024MB</div>
-								<div class="mode-data-desc mem-sz-text">Memory size</div>
-							</div>
-							<div class="more-data-child">
-						  		<div id="vram-freq">59MHz</div>
-								<div class="mode-data-desc freq-text">Frequency</div>
-							</div>
-					  </div>
 					</div>
-				  </div>
-				</div>
-			</li>
-			<li class="li-performance">
-				<div class="text-app"></div><span class='info-item'></span>
-				<div class="container">
-				  <div class="card">
-					<div class="box">
-					  <div class="percent">
-						<svg>
-						  <circle cx="70" cy="70" r="70"></circle>
-						  <circle id="cpu-usage" cx="70" cy="70" r="70"></circle>
-						</svg>
-						<div class="number">
-						  <h2><span class="data-number" id="cpu-usage-number">0</span><span>%</span></h2>
+				</li>
+				<li class="li-performance">
+					<div class="text-app"></div><span class='info-item'></span>
+					<div class="container">
+						<div class="card">
+							<div class="box">
+								<div class="percent">
+									<svg>
+										<circle cx="70" cy="70" r="70"></circle>
+										<circle id="cpu-usage" cx="70" cy="70" r="70"></circle>
+									</svg>
+									<div class="number">
+										<h2><span class="data-number" id="cpu-usage-number">0</span><span>%</span></h2>
+									</div>
+								</div>
+								<h2 class="text cpu-desc">CPU usage</h2>
+								<div class="more-data">
+									<div class="more-data-child more-data-temp2">
+										<div class="more-details">
+											<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960"
+												width="24">
+												<path
+													d="M480-100.001q-74.922 0-127.461-52.538Q300.001-205.078 300.001-280q0-45.692 21.193-84.692 21.192-39 58.807-64.538V-760q0-41.922 29.038-70.961 29.039-29.038 70.961-29.038t70.961 29.038q29.038 29.039 29.038 70.961v330.77q37.615 25.538 58.807 64.538 21.193 39 21.193 84.692 0 74.922-52.538 127.461Q554.922-100.001 480-100.001Zm-40-412.306h80v-50.001h-40v-35.384h40v-84.616h-40v-35.384h40V-760q0-17-11.5-28.5T480-800q-17 0-28.5 11.5T440-760v247.693Z" />
+											</svg>
+											<div class="more-details-item" id="cpu-temp">45°C</div>
+										</div>
+										<div class="mode-data-desc temp-text">Temperature</div>
+									</div>
+									<div class="more-data-child more-data-freq">
+										<div class="more-details">
+											<svg class="freq-svg" xmlns="http://www.w3.org/2000/svg" height="24"
+												viewBox="0 -960 960 960" width="24">
+												<path
+													d="M479.878-100.001q-78.032 0-147.323-29.9-69.291-29.9-121.023-81.631-51.731-51.732-81.631-121.023t-29.9-147.323q0-78.984 29.962-147.976 29.961-68.991 81.576-120.607 51.616-51.615 121.004-81.576 69.389-29.962 147.332-29.962 78.894 0 147.932 29.962 69.038 29.961 120.654 81.576 51.615 51.616 81.576 120.607 29.962 68.992 29.962 147.976 0 78.032-29.962 147.377-29.961 69.346-81.576 120.962-51.616 51.615-120.607 81.576-68.992 29.962-147.976 29.962ZM480-309.999q57.692 0 112.961 16.538 55.269 16.539 103.346 48.385 49.847-45.616 76.77-106.465Q800-412.39 800-480q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 67.693 26.616 128.808 26.615 61.116 77.077 106.116 48.077-31.846 103.346-48.385Q422.308-309.999 480-309.999Zm.058 59.998q-43.366 0-84.674 11.154-41.308 11.154-78.615 32.693 36.538 22.692 78.07 34.423Q436.37-160 480.031-160q43.662 0 85.162-11.731 41.5-11.731 78.038-34.423-37.307-21.539-78.558-32.693-41.25-11.154-84.615-11.154ZM280-523.846q15.077 0 25.615-10.539 10.539-10.538 10.539-25.615 0-15.077-10.539-25.615-10.538-10.539-25.615-10.539-15.077 0-25.615 10.539-10.539 10.538-10.539 25.615 0 15.077 10.539 25.615 10.538 10.539 25.615 10.539Zm120-120q15.077 0 25.615-10.539 10.539-10.538 10.539-25.615 0-15.077-10.539-25.615-10.538-10.539-25.615-10.539-15.077 0-25.615 10.539-10.539 10.538-10.539 25.615 0 15.077 10.539 25.615 10.538 10.539 25.615 10.539Zm280 120q15.077 0 25.615-10.539 10.539-10.538 10.539-25.615 0-15.077-10.539-25.615-10.538-10.539-25.615-10.539-15.077 0-25.615 10.539-10.539 10.538-10.539 25.615 0 15.077 10.539 25.615 10.538 10.539 25.615 10.539ZM480-410.001q29.154 0 49.576-20.423 20.423-20.422 20.423-49.576 0-13-4.577-24.923-4.577-11.923-12.961-21.538l58.615-147.54q5.077-11.769.116-23.422-4.962-11.654-16.793-16.731-11.091-5.076-22.724-.214-11.633 4.862-16.136 16.829l-59.385 147.54q-27.692 1.923-46.923 21.922-19.23 20-19.23 48.077 0 29.154 20.423 49.576 20.422 20.423 49.576 20.423Zm0 100.002Zm0-212.539Zm0 272.537Z" />
+											</svg>
+											<div class="more-details-item" id="cpu-freq">59MHz</div>
+										</div>
+										<div class="mode-data-desc freq-text">Frequency</div>
+									</div>
+								</div>
+							</div>
 						</div>
-					  </div>
-					  <h2 class="text cpu-desc">CPU usage</h2>
-					  <div class="more-data">
-							<div class="more-data-child">
-								<div id="cpu-temp">45°C</div>
-								<div class="mode-data-desc temp-text">Temperature</div>
-							</div>
-							<div class="more-data-child">
-						  		<div id="cpu-freq">59MHz</div>
-								<div class="mode-data-desc freq-text">Frequency</div>
-							</div>
-					  </div>
 					</div>
-				  </div>
-				</div>
-			</li>
-			<li class="li-performance">
-				<div class="text-app"></div><span class='info-item'></span>
-				<div class="container">
-				  <div class="card">
-					<div class="box">
-					  <div class="percent">
-						<svg>
-						  <circle cx="70" cy="70" r="70"></circle>
-						  <circle id="ram-usage" cx="70" cy="70" r="70"></circle>
-						</svg>
-						<div class="number">
-						  <h2><span class="data-number" id="ram-usage-number">0</span><span>%</span></h2>
+				</li>
+				<li class="li-performance">
+					<div class="text-app"></div><span class='info-item'></span>
+					<div class="container">
+						<div class="card">
+							<div class="box">
+								<div class="percent">
+									<svg>
+										<circle cx="70" cy="70" r="70"></circle>
+										<circle id="ram-usage" cx="70" cy="70" r="70"></circle>
+									</svg>
+									<div class="number">
+										<h2><span class="data-number" id="ram-usage-number">0</span><span>%</span></h2>
+									</div>
+								</div>
+								<h2 class="text ram-desc">RAM usage</h2>
+								<div class="more-data">
+									<div class="more-data-child">
+										<div class="more-details">
+											<svg class="memory-svg" xmlns="http://www.w3.org/2000/svg" height="24"
+												viewBox="0 -960 960 960" width="24">
+												<path
+													d="M380.001-416.155v-127.69q0-15.365 10.395-25.759 10.394-10.395 25.759-10.395h127.69q15.365 0 25.759 10.395 10.395 10.394 10.395 25.759v127.69q0 15.365-10.395 25.759-10.394 10.395-25.759 10.395h-127.69q-15.365 0-25.759-10.395-10.395-10.394-10.395-25.759ZM440-440h80v-80h-80v80Zm-69.999 260.768v-40.769h-77.692q-30.308 0-51.308-21t-21-51.308v-77.692h-40.769q-12.75 0-21.374-8.628-8.625-8.629-8.625-21.384 0-12.756 8.625-21.371 8.624-8.615 21.374-8.615h40.769v-100.002h-40.769q-12.75 0-21.374-8.628-8.625-8.629-8.625-21.384 0-12.756 8.625-21.371 8.624-8.615 21.374-8.615h40.769v-77.692q0-30.308 21-51.308t51.308-21h77.692v-40.769q0-12.75 8.628-21.374 8.629-8.625 21.384-8.625 12.756 0 21.371 8.625 8.615 8.624 8.615 21.374v40.769h100.002v-40.769q0-12.75 8.628-21.374 8.629-8.625 21.384-8.625 12.756 0 21.371 8.625 8.615 8.624 8.615 21.374v40.769h77.692q30.308 0 51.308 21t21 51.308v77.692h40.769q12.75 0 21.374 8.628 8.625 8.629 8.625 21.384 0 12.756-8.625 21.371-8.624 8.615-21.374 8.615h-40.769v100.002h40.769q12.75 0 21.374 8.628 8.625 8.629 8.625 21.384 0 12.756-8.625 21.371-8.624 8.615-21.374 8.615h-40.769v77.692q0 30.308-21 51.308t-51.308 21h-77.692v40.769q0 12.75-8.628 21.374-8.629 8.625-21.384 8.625-12.756 0-21.371-8.625-8.615-8.624-8.615-21.374v-40.769H429.999v40.769q0 12.75-8.628 21.374-8.629 8.625-21.384 8.625-12.756 0-21.371-8.625-8.615-8.624-8.615-21.374ZM667.691-280q4.616 0 8.463-3.846 3.846-3.847 3.846-8.463v-375.382q0-4.616-3.846-8.463-3.847-3.846-8.463-3.846H292.309q-4.616 0-8.463 3.846-3.846 3.847-3.846 8.463v375.382q0 4.616 3.846 8.463 3.847 3.846 8.463 3.846h375.382ZM480-480Z" />
+											</svg>
+											<div class="more-details-item" id="ram-use">512MB</div>
+										</div>
+										<div class="mode-data-desc in-use-text">In use</div>
+									</div>
+									<div class="more-data-child">
+										<div class="more-details">
+											<svg class="memory-svg" xmlns="http://www.w3.org/2000/svg" height="24"
+												viewBox="0 -960 960 960" width="24">
+												<path
+													d="M380.001-416.155v-127.69q0-15.365 10.395-25.759 10.394-10.395 25.759-10.395h127.69q15.365 0 25.759 10.395 10.395 10.394 10.395 25.759v127.69q0 15.365-10.395 25.759-10.394 10.395-25.759 10.395h-127.69q-15.365 0-25.759-10.395-10.395-10.394-10.395-25.759ZM440-440h80v-80h-80v80Zm-69.999 260.768v-40.769h-77.692q-30.308 0-51.308-21t-21-51.308v-77.692h-40.769q-12.75 0-21.374-8.628-8.625-8.629-8.625-21.384 0-12.756 8.625-21.371 8.624-8.615 21.374-8.615h40.769v-100.002h-40.769q-12.75 0-21.374-8.628-8.625-8.629-8.625-21.384 0-12.756 8.625-21.371 8.624-8.615 21.374-8.615h40.769v-77.692q0-30.308 21-51.308t51.308-21h77.692v-40.769q0-12.75 8.628-21.374 8.629-8.625 21.384-8.625 12.756 0 21.371 8.625 8.615 8.624 8.615 21.374v40.769h100.002v-40.769q0-12.75 8.628-21.374 8.629-8.625 21.384-8.625 12.756 0 21.371 8.625 8.615 8.624 8.615 21.374v40.769h77.692q30.308 0 51.308 21t21 51.308v77.692h40.769q12.75 0 21.374 8.628 8.625 8.629 8.625 21.384 0 12.756-8.625 21.371-8.624 8.615-21.374 8.615h-40.769v100.002h40.769q12.75 0 21.374 8.628 8.625 8.629 8.625 21.384 0 12.756-8.625 21.371-8.624 8.615-21.374 8.615h-40.769v77.692q0 30.308-21 51.308t-51.308 21h-77.692v40.769q0 12.75-8.628 21.374-8.629 8.625-21.384 8.625-12.756 0-21.371-8.625-8.615-8.624-8.615-21.374v-40.769H429.999v40.769q0 12.75-8.628 21.374-8.629 8.625-21.384 8.625-12.756 0-21.371-8.625-8.615-8.624-8.615-21.374ZM667.691-280q4.616 0 8.463-3.846 3.846-3.847 3.846-8.463v-375.382q0-4.616-3.846-8.463-3.847-3.846-8.463-3.846H292.309q-4.616 0-8.463 3.846-3.846 3.847-3.846 8.463v375.382q0 4.616 3.846 8.463 3.847 3.846 8.463 3.846h375.382ZM480-480Z" />
+											</svg>
+											<div class="more-details-item" id="ram-size">2GB</div>
+										</div>
+										<div class="mode-data-desc mem-tt-text">Memory total</div>
+									</div>
+								</div>
+							</div>
 						</div>
-					  </div>
-					  <h2 class="text ram-desc">RAM usage</h2>
-					  <div class="more-data">
-							<div class="more-data-child">
-								<div id="ram-use">512MB</div>
-								<div class="mode-data-desc in-use-text">In use</div>
-							</div>
-							<div class="more-data-child">
-						  		<div id="ram-size">2GB</div>
-								<div class="mode-data-desc mem-tt-text">Memory total</div>
-							</div>
-					  </div>
 					</div>
-				  </div>
-				</div>
-			</li>
-		</ul>
-	<script type="text/javascript" src="../js/settings-checker.js"></script>
-	<script type="text/javascript" src="../js/translations/apply-translation-pages.js"></script>
-	<script type="text/javascript" src="../js/capture-performance.js"></script>
-	<script type="text/javascript" src="../js/system.js"></script>
-	<script type="text/javascript" src="../js/check-system.js"></script>
-	</div>
+				</li>
+			</ul>
+			<script type="text/javascript" src="../js/settings-checker.js"></script>
+			<script type="text/javascript" src="../js/translations/apply-translation-pages.js"></script>
+			<script type="text/javascript" src="../js/capture-performance.js"></script>
+			<script type="text/javascript" src="../js/system.js"></script>
+			<script type="text/javascript" src="../js/check-system.js"></script>
+		</div>
 	</div>
 </body>
+
 </html>

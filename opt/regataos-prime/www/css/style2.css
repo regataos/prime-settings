@@ -160,8 +160,8 @@ ul {
 }
 
 .div2-performance .main-ul {
-	grid-column-gap: 25px;
-	grid-row-gap: 25px;
+	grid-column-gap: 15px;
+	grid-row-gap: 15px;
 }
 
 li {
@@ -256,7 +256,7 @@ li.li-performance {
 	background: #2a2e32;
 	margin-right: 0px;
 	margin-left: 0px;
-	margin-bottom: 27px;
+	margin-bottom: 0px;
 	padding: 0px;
 	border-radius: 8px;
 	box-shadow: 0 0 2px rgb(0 0 0 / 40%);
@@ -713,8 +713,8 @@ p {
 		grid-template-columns: repeat(3, 1fr);
 	}
 
-	.div2-performance {
-		max-width: 1055px;
+	.div2-performance .main-ul {
+		grid-template-columns: repeat(4, 1fr);
 	}
 
 	.div-for-label {
@@ -723,8 +723,8 @@ p {
 }
 
 @media screen and (max-width: 1100px) {
-	.div2-performance {
-		max-width: 793px;
+	.div2-performance .main-ul {
+		grid-template-columns: repeat(3, 1fr);
 	}
 }
 
@@ -735,8 +735,8 @@ p {
 }
 
 @media screen and (max-width: 900px) {
-	.div2-performance {
-		max-width: 539px;
+	.div2-performance .main-ul {
+		grid-template-columns: repeat(2, 1fr);
 	}
 }
 
@@ -744,10 +744,18 @@ p {
 	.main-ul {
 		grid-template-columns: repeat(1, 1fr);
 	}
+
+	.div2-performance .main-ul {
+		grid-template-columns: repeat(2, 1fr);
+	}
 }
 
 @media screen and (max-width: 640px) {
 	.main-div {
 		min-width: 301px;
+	}
+
+	.div2-performance .main-ul {
+		grid-template-columns: repeat(1, 1fr);
 	}
 }
