@@ -18,7 +18,7 @@ body {
 	background: #1b1e20;
 	font-family: Oxygen;
 	font-weight: 300;
-	font-size: 15px;
+	font-size: 16px;
 	color: #eff0f1;
 	padding: 0;
 	margin: 0;
@@ -60,6 +60,10 @@ body {
 
 #reverse-prime {
 	display: none;
+}
+
+select {
+	width: 120px;
 }
 
 /* scrollbar css */
@@ -108,16 +112,17 @@ body {
 	margin-left: 8px;
 }
 
-.all-apps {
-	display: none;
-	float: right;
-	margin-right: 20px;
-}
-
+.all-apps,
 .all-apps2 {
 	display: none;
 	float: right;
-	margin-right: 80px;
+	margin-top: 20px;
+	margin-right: 20px;
+}
+
+.all-apps .switch__container2,
+.all-apps2 .switch__container2 {
+	height: 0;
 }
 
 .text-all-apps {
@@ -125,7 +130,7 @@ body {
 }
 
 a {
-	color: #0085e4;
+	color: #3daee9;
 	cursor: pointer;
 	text-decoration: underline;
 }
@@ -154,10 +159,6 @@ ul {
 	animation-duration: .5s;
 }
 
-ul.apps-bottom1 {
-	width: 1220px;
-}
-
 li {
 	display: block;
 	position: relative;
@@ -173,10 +174,11 @@ li {
 	padding-bottom: 20px;
 	padding-top: 20px;
 	box-shadow: 0 0 2px rgb(0 0 0 / 40%);
-	-webkit-transition: all 0.3s ease-in-out;
-	transition: all 0.3s ease-in-out;
+	-webkit-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
 }
 
+li:hover,
 li.button-effect:hover {
 	background: #373e46 radial-gradient(circle, transparent 1%, #373e46 1%) center/15000% !important;
 }
@@ -211,28 +213,26 @@ li.libox {
 }
 
 li:hover {
-	background: #333840;
+	background: #2a2e32;
 }
 
 /* Add more apps to the list */
 li#add-external-apps {
 	cursor: pointer;
-	width: 299px;
-	height: 79px;
+	width: auto;
+	height: 80px;
 	background-color: #2a2e32;
 	background-position: center;
-	border-radius: 5px;
-	margin-bottom: 8px;
+	border-radius: 8px;
 	padding-top: 0px;
 	padding-left: 0px;
 	padding-right: 0px;
 	padding-bottom: 0px;
-	-webkit-transition: all 0.5s ease-in-out;
-	transition: all 0.5s ease-in-out;
+	margin-bottom: 0px;
 }
 
 li#add-external-apps:hover {
-	background: #333840 radial-gradient(circle, transparent 1%, #333840 1%) center/15000%;
+	background: #2a2e32 radial-gradient(circle, transparent 1%, #2a2e32 1%) center/15000%;
 }
 
 li#add-external-apps:active {
@@ -248,7 +248,7 @@ li.li-performance {
 	height: 350px;
 	list-style: none;
 	float: left;
-	background: #333840;
+	background: #2a2e32;
 	margin-right: 11px;
 	margin-left: 11px;
 	margin-bottom: 27px;
@@ -284,10 +284,9 @@ label.label-add {
 .desc-option-blocks {
 	position: absolute;
 	top: 40px;
-	left: 75px;
-	font-size: 13px;
-	font-weight: 600;
-	color: #adabab;
+	font-size: 14px;
+	font-weight: 500;
+	color: #eff0f1;
 	margin-top: 3px;
 }
 
@@ -301,7 +300,7 @@ label.label-add {
 	cursor: pointer;
 	background-image: url('../images/close.png');
 	background-repeat: no-repeat;
-	background-size: 12px 12px;
+	background-size: 14px 14px;
 }
 
 /* All CSS buttom click */
@@ -310,9 +309,9 @@ label.label-add {
 }
 
 li#buttom-click:active {
-	background: #333840;
+	background: #2a2e32;
 	box-shadow: 0 0px 0px rgba(0, 0, 0, .15);
-	transition: all .2s;
+	transition: all .3s;
 }
 
 .kscreen-desc {
@@ -332,7 +331,7 @@ li#buttom-click:active {
 	font-size: 14px;
 	font-weight: 500;
 	color: #eff0f1;
-	max-width: 33ch;
+	max-width: 31ch;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -345,9 +344,9 @@ li#buttom-click:active {
 }
 
 li#use-nvidia-click:active {
-	background: #333840;
+	background: #2a2e32;
 	box-shadow: 0 0px 0px rgba(0, 0, 0, .15);
-	transition: all .2s;
+	transition: all .3s;
 }
 
 #separator1 {
@@ -388,8 +387,7 @@ li#use-nvidia-click:active {
 	user-select: none;
 }
 
-.apps-bottom1 .switch+label,
-.apps-bottom2 .switch+label {
+.apps-buttons .switch+label {
 	display: none;
 }
 
@@ -408,34 +406,27 @@ p {
 	font-size: 17px;
 	text-align: left;
 	font-weight: 300;
-	line-height: 1.4;
+	line-height: 1.2;
 	color: #eff0f1;
 	margin-top: 0px;
 	margin-bottom: 0px;
 }
 
-.libox .text-app {
-	max-width: 18ch;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	overflow: hidden;
-}
-
 .text-app1 {
-	font-size: 16px;
+	font-size: 17px;
 	text-align: left;
 	font-weight: 300;
-	line-height: 1.4;
+	line-height: 1.2;
 	margin-top: 0px;
 	margin-bottom: 0px;
 }
 
 .text-app2 {
 	display: none;
-	font-size: 16px;
+	font-size: 17px;
 	text-align: left;
 	font-weight: 300;
-	line-height: 1.4;
+	line-height: 1.2;
 	margin-top: 0px;
 	margin-bottom: 0px;
 }
@@ -448,7 +439,7 @@ p {
 	background-position: 50% 50%;
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
-	margin-right: 15px;
+	margin-right: 10px;
 }
 
 .p-menu {
@@ -670,7 +661,10 @@ p {
 	float: left;
 	width: 20px;
 	height: 20px;
-	margin-top: 3px;
+	background-repeat: no-repeat;
+	background-size: 20px 20px;
+	margin-top: 1px;
+	margin-right: 4px;
 }
 
 #copy-all-txt {
@@ -717,20 +711,12 @@ p {
 		max-width: 1055px;
 	}
 
-	ul.apps-bottom1 {
-		width: 1060px;
-	}
-
 	.div-for-label {
 		width: 209px;
 	}
 }
 
 @media screen and (max-width: 1100px) {
-	ul.apps-bottom1 {
-		width: 796px;
-	}
-
 	.div2-performance {
 		max-width: 793px;
 	}
@@ -743,10 +729,6 @@ p {
 }
 
 @media screen and (max-width: 900px) {
-	ul.apps-bottom1 {
-		width: 530px;
-	}
-
 	.div2-performance {
 		max-width: 539px;
 	}
@@ -761,9 +743,5 @@ p {
 @media screen and (max-width: 640px) {
 	.main-div {
 		min-width: 301px;
-	}
-
-	ul.apps-bottom1 {
-		width: 265px;
 	}
 }

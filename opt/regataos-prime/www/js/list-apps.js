@@ -55,7 +55,6 @@ function checkApp(appname, dgpu, filePath) {
 // Dynamically create the list of apps on the screen.
 function createAppList() {
 	const fs = require("fs");
-
 	const iconAddress = "/opt/regataos-prime/www/images/apps-icons";
 	const getInstalledGames = fs.readFileSync("/opt/regataos-store/installed-apps/installed-apps.txt", "utf8");
 	const jsonFileDirectories = ['/opt/regataos-store/apps-list', '/tmp/regataos-prime/config/external-app'];
@@ -64,13 +63,7 @@ function createAppList() {
 		try {
 			fs.readdirSync(allAppsJsonFiles).forEach(jsonFile => {
 				const filePath = `${allAppsJsonFiles}/${jsonFile}`;
-
-				let listAppsOnScreen = "";
-				if (filePath.includes("external-app")) {
-					listAppsOnScreen = document.querySelector("ul.apps-bottom1");
-				} else {
-					listAppsOnScreen = document.querySelector("ul.apps-bottom2");
-				}
+				let listAppsOnScreen = document.querySelector("ul.apps-buttons");
 
 				fs.readFile(filePath, "utf8", (err, data) => {
 					if (err) {
@@ -92,7 +85,7 @@ function createAppList() {
 
 									if (filePath.includes("external-app")) {
 										desktop = executable;
-										closeButton = `<div class="remove-app-buttom" onclick="remove_external_app('${nickname}', '${desktop}');"></div>`;
+										closeButton = `<div title="" class="remove-app-buttom" onclick="remove_external_app('${nickname}', '${desktop}');"></div>`;
 										scriptRunWithDgpu = "run-external-app-dgpu"
 									} else {
 										icon = fs.readFileSync(`${iconAddress}/${nickname}-icon.txt`, "utf8").trim();
@@ -134,7 +127,6 @@ function createAppList() {
 					});
 				});
 			});
-
 		} catch (error) {
 			console.error(`Error reading directory ${directory}:`, error);
 		}

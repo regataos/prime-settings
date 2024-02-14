@@ -1,54 +1,65 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>Max-Q</title>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
-	<link rel="stylesheet" type="text/css" href="css/style.css">
-	<link rel="stylesheet" type="text/css" href="css/responsive.css">
+    <title>Max-Q</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/responsive.css">
 </head>
+
 <body>
     <div id="loadscreen"></div>
     <script>
         setTimeout(function () {
-            document.getElementById("loadscreen").style.display= "none";
+            document.getElementById("loadscreen").style.display = "none";
         }, 1000);
     </script>
 
-	<div class="sidebar">
-	<div class="hide-sidebar" onclick="hide_sidebar(true);">
-		<img class="icones-menu" title="Apenas ícones" style="height: 30px;" src="images/img-sidebar/hide-sidebar.png"/>
-	</div>
-	<div class="show-sidebar" onclick="show_sidebar(true);">
-		<img class="icones-menu" title="Icones e textos" style="height: 30px;" src="images/img-sidebar/hide-sidebar.png"/>
-	</div>
-		<ul class="ul-sidebar">
+    <div class="sidebar">
+        <div class="hide-sidebar" onclick="hide_sidebar(true);">
+            <img class="icones-menu" title="Apenas ícones" style="height: 30px;"
+                src="images/img-sidebar/hide-sidebar.png" />
+        </div>
+        <div class="show-sidebar" onclick="show_sidebar(true);">
+            <img class="icones-menu" title="Icones e textos" style="height: 30px;"
+                src="images/img-sidebar/hide-sidebar.png" />
+        </div>
+        <ul class="ul-sidebar">
             <li class="li-sidebar applications" onclick="go_applications();">
+                <div class="sidebar-item-effect"></div>
                 <a class="link-items" onclick="go_applications();">
-                    <img class="icones-menu" title="Applications" style="height: 30px;" src="images/img-sidebar/apps2.png"/>
+                    <img class="icones-menu" title="Applications" style="height: 30px;"
+                        src="images/img-sidebar/apps2.png" />
                     <p style="margin-left: 20px;"></p>
                 </a>
             </li>
             <li class="li-sidebar settings" onclick="go_settings();">
+                <div class="sidebar-item-effect"></div>
                 <a class="link-items" onclick="go_settings();">
-                    <img class="icones-menu" title="Settings" style="height: 30px;" src="images/img-sidebar/tools.png"/>
+                    <img class="icones-menu" title="Settings" style="height: 30px;"
+                        src="images/img-sidebar/tools.png" />
                     <p style="margin-left: 22px;"></p>
                 </a>
             </li>
             <li class="li-sidebar system-info" onclick="go_system_info();">
+                <div class="sidebar-item-effect"></div>
                 <a class="link-items" onclick="go_system_info();">
-                    <img class="icones-menu" title="Performance" style="height: 30px;" src="images/img-sidebar/performance.png"/>
+                    <img class="icones-menu" title="Performance" style="height: 30px;"
+                        src="images/img-sidebar/performance.png" />
                     <p style="margin-left: 20px;"></p>
                 </a>
             </li>
             <li class="li-sidebar system" onclick="go_system();">
+                <div class="sidebar-item-effect"></div>
                 <a class="link-items" onclick="go_system();">
-                    <img class="icones-menu" title="System" style="height: 30px;" src="images/img-sidebar/info.png"/>
+                    <img class="icones-menu" title="System" style="height: 30px;" src="images/img-sidebar/info.png" />
                     <p style="margin-left: 20px;"></p>
                 </a>
             </li>
         </ul>
-	</div>
+    </div>
     <script type="text/javascript">
         const icons = document.querySelectorAll(".icones-menu");
         for (let i = 0; i < icons.length; i++) {
@@ -56,19 +67,21 @@
         }
     </script>
 
-	<div class="div-iframe">
-        <iframe onload="detect_iframe_url(this);" src="" allowfullscreen frameborder="0" class="iframe" id="main-iframe"></iframe>
+    <div class="div-iframe">
+        <iframe onload="getIframeUrl(this);" src="" allowfullscreen frameborder="0" class="iframe"
+            id="main-iframe"></iframe>
     </div>
     <script type="text/javascript" src="js/settings-checker.js"></script>
     <script type="text/javascript" src="js/translations/apply-translation-index.js"></script>
-	<script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
 
     <script type="text/javascript">
         const gui = require('nw.gui');
 
-        onload = function() {
+        onload = function () {
             gui.Window.get().show();
         }
     </script>
 </body>
+
 </html>

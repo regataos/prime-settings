@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<title>Max-Q</title>
 	<meta charset="utf-8" />
@@ -14,90 +15,93 @@
 
 	<script type="text/javascript">
 		//close_popup_nv
-		function close_popup_nv(){
+		function close_popup_nv() {
 			document.getElementById("pop-up-nv").style.display = "none";
 		}
 
 		//close_popup_hw
-		function close_popup_hw(){
+		function close_popup_hw() {
 			document.getElementById("pop-up-hw").style.display = "none";
 		}
 	</script>
 </head>
+
 <body>
-    <div id="loadscreen"></div>
-    <script>
-        setTimeout(function () {
-            document.getElementById("loadscreen").style.display= "none";
-        }, 1000);
-    </script>
+	<div id="loadscreen"></div>
+	<script>
+		setTimeout(function () {
+			document.getElementById("loadscreen").style.display = "none";
+		}, 1000);
+	</script>
 
 	<div class="div1">
 		<div id="title" class="hdiv1 page-apps-title">Applications</div>
 		<p class="pdiv1 page-apps-description">Choose which applications to run with your device's dedicated GPU.</p>
 
 		<div class="all-apps">
-			<div class="text-all-apps disable-all"></div><div class="switch__container2" style="margin-top: 6px;">
-				<input id="switch-shadow-all-apps" class="switch switch--shadow-all-apps"
-				type="checkbox" onclick="actionAllApps(this.id);">
-				<label for="switch-shadow-all-apps"></label></div>
+			<div class="text-all-apps disable-all"></div>
+			<div class="switch__container2" style="margin-top: 6px;">
+				<input id="switch-shadow-all-apps" class="switch switch--shadow-all-apps" type="checkbox"
+					onclick="actionAllApps(this.id);">
+				<label for="switch-shadow-all-apps"></label>
+			</div>
 		</div>
 
 		<div class="all-apps2">
-			<div class="text-all-apps enable-all"></div><div class="switch__container2" style="margin-top: 6px;">
-				<input id="switch-shadow2-all-apps" class="switch switch--shadow2-all-apps"
-				type="checkbox" onclick="actionAllApps(this.id);">
-				<label for="switch-shadow2-all-apps"></label></div>
-		</div>	
+			<div class="text-all-apps enable-all"></div>
+			<div class="switch__container2" style="margin-top: 6px;">
+				<input id="switch-shadow2-all-apps" class="switch switch--shadow2-all-apps" type="checkbox"
+					onclick="actionAllApps(this.id);">
+				<label for="switch-shadow2-all-apps"></label>
+			</div>
+		</div>
 	</div>
 
 	<div id="pop-up-nv">
 		<div id="box-pop-up">
-			<div id="button-close" onclick="close_popup_nv();" style="background-image:url(../images/close.png); background-repeat: no-repeat; background-size: 17px 17px;" title="" alt=""></div>
+			<div id="button-close" onclick="close_popup_nv();"
+				style="background-image:url(../images/close.png); background-repeat: no-repeat; background-size: 17px 17px;"
+				title="" alt=""></div>
 			<h3 class="popup-title-home">PRIME Render Offload não é suportado</h3>
-			<p class="popup-desc-home">A versão do driver NVIDIA instalada no sistema não possui suporte para o "PRIME Render Offload". O recurso só é suportado a partir da série de drivers NVIDIA 440.</p>
+			<p class="popup-desc-home">A versão do driver NVIDIA instalada no sistema não possui suporte para o "PRIME
+				Render Offload". O recurso só é suportado a partir da série de drivers NVIDIA 440.</p>
 			<div class="pop-up-ok" onclick="close_popup_nv_on();">OK</div>
 		</div>
 	</div>
 
 	<div id="pop-up-hw">
 		<div id="box-pop-up">
-			<div id="button-close" onclick="close_popup_hw();" style="background-image:url(../images/close.png); background-repeat: no-repeat; background-size: 17px 17px;" title="" alt=""></div>
+			<div id="button-close" onclick="close_popup_hw();"
+				style="background-image:url(../images/close.png); background-repeat: no-repeat; background-size: 17px 17px;"
+				title="" alt=""></div>
 			<h3 class="popup-title-home2">Hardware não suportado</h3>
-			<p class="popup-desc-home2">O seu hardware parece não ter suporte para o "PRIME Render Offload". Atualmente, o recurso é suportado em laptops com gráficos hibridos da AMD ou NVIDIA.</p>
+			<p class="popup-desc-home2">O seu hardware parece não ter suporte para o "PRIME Render Offload". Atualmente,
+				o recurso é suportado em laptops com gráficos hibridos da AMD ou NVIDIA.</p>
 			<div class="pop-up-ok" onclick="close_popup_hw_on();">OK</div>
 		</div>
 	</div>
 
 	<div class="main-div" id="main-div">
-	<div class="div2" id="div2">
+		<div class="div2" id="div2">
 
-		<!-- External apps -->
-		<ul class="apps-bottom1 main-ul" id="dad">
-			<li id="add-external-apps">
-				<label class="label-add" title="" for="add-apps">
-				<div class="div-for-label">
-					<div class="icon-app" style="background-image:url(../images/add-external-apps.png);"></div>
-					<div class="text-app"></div>
-					<span class='desc-option-blocks'></span>
-				</div>
-				</label>
-				<input onchange="getDesktopFile()" type="file" id="add-apps" name="files[]" />
-			</li>
-			<li class="fake-item">
-			</li>
-			<li class="fake-item">
-			</li>
-			<li class="fake-item">
-			</li>
-			<li class="fake-item">
-			</li>
-		</ul>
-		<ul class="apps-bottom2 main-ul"></ul>
-		<script type="text/javascript" src="../js/settings-checker.js"></script>
-		<script type="text/javascript" src="../js/translations/apply-translation-pages.js"></script>
-		<script type="text/javascript" src="../js/list-apps.js"></script>
-	</div>
+			<!-- External apps -->
+			<ul class="apps-buttons main-ul">
+				<li id="add-external-apps">
+					<label class="label-add" title="" for="add-apps">
+						<div class="div-for-label">
+							<div class="icon-app" style="background-image:url(../images/add-external-apps.png);"></div>
+							<div class="text-app"></div>
+							<span class='desc-option-blocks'></span>
+						</div>
+					</label>
+					<input onchange="getDesktopFile()" type="file" id="add-apps" name="files[]" />
+				</li>
+			</ul>
+			<script type="text/javascript" src="../js/settings-checker.js"></script>
+			<script type="text/javascript" src="../js/translations/apply-translation-pages.js"></script>
+			<script type="text/javascript" src="../js/list-apps.js"></script>
+		</div>
 	</div>
 </body>
+
 </html>

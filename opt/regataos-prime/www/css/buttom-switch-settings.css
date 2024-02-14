@@ -23,7 +23,7 @@
 
 .switch--shadow-reverse-prime+label:before {
 	right: 1px;
-	background-color: #0085e4;
+	background-color: #3daee9;
 	border-radius: 60px;
 	transition: all 0.3s;
 }
@@ -40,7 +40,7 @@
 }
 
 .switch--shadow-reverse-prime:checked+label:before {
-	background-color: #ddd;
+	background-color: #9f9f9f;
 }
 
 .switch--shadow-reverse-prime:checked+label:after {
@@ -70,7 +70,7 @@
 
 .switch--shadow2-reverse-prime+label:before {
 	right: 1px;
-	background-color: #ddd;
+	background-color: #9f9f9f;
 	border-radius: 60px;
 	transition: all 0.3s;
 }
@@ -87,7 +87,7 @@
 }
 
 .switch--shadow2-reverse-prime:checked+label:before {
-	background-color: #0085e4;
+	background-color: #3daee9;
 }
 
 .switch--shadow2-reverse-prime:checked+label:after {
@@ -95,44 +95,16 @@
 }
 
 /* reverse-prime-on/off text */
-.reverse-prime-on {
-	position: absolute;
-	top: 40px;
-	left: 20px;
-	font-size: 13px;
-	font-weight: 600;
-	color: #adabab;
-	margin-top: 3px;
-}
-
-.reverse-prime-off {
-	position: absolute;
-	top: 40px;
-	left: 20px;
-	font-size: 13px;
-	font-weight: 600;
-	color: #adabab;
-	margin-top: 3px;
-}
-
-/* GPU used text */
-.render-igpu-desc {
-	position: absolute;
-	top: 40px;
-	left: 20px;
-	font-size: 13px;
-	font-weight: 600;
-	color: #adabab;
-	margin-top: 3px;
-}
-
+.reverse-prime-on,
+.reverse-prime-off,
+.render-igpu-desc,
 .render-dgpu-desc {
 	position: absolute;
 	top: 40px;
 	left: 20px;
-	font-size: 13px;
-	font-weight: 600;
-	color: #adabab;
+	font-size: 14px;
+	font-weight: 500;
+	color: #eff0f1;
 	margin-top: 3px;
 }
 
@@ -140,38 +112,54 @@
 #cpugovernor1 {
 	display: none;
 	position: absolute;
+	background-color: #4e555c;
+	border: 1px solid #4e555c;
+	color: #fff;
 	margin-top: 10px;
 	right: 20px;
 	top: 6px;
 	padding-left: 2px;
+	box-shadow: 0 0 2px rgb(0 0 0 / 40%);
 }
 
 #cpugovernor2 {
 	display: none;
 	position: absolute;
+	background-color: #4e555c;
+	border: 1px solid #4e555c;
+	color: #fff;
 	margin-top: 10px;
 	right: 20px;
 	top: 6px;
 	padding-left: 2px;
+	box-shadow: 0 0 2px rgb(0 0 0 / 40%);
 }
 
 /* select GPU */
 #selectnav1 {
 	display: none;
 	position: absolute;
+	background-color: #4e555c;
+	border: 1px solid #4e555c;
+	color: #fff;
 	margin-top: 10px;
 	right: 20px;
 	top: 6px;
 	padding-left: 2px;
+	box-shadow: 0 0 2px rgb(0 0 0 / 40%);
 }
 
 #selectnav2 {
 	display: none;
 	position: absolute;
+	background-color: #4e555c;
+	border: 1px solid #4e555c;
+	color: #fff;
 	margin-top: 10px;
 	right: 20px;
 	top: 6px;
 	padding-left: 2px;
+	box-shadow: 0 0 2px rgb(0 0 0 / 40%);
 }
 
 select.selectnav {
@@ -180,7 +168,6 @@ select.selectnav {
 	font-weight: 400;
 	font-family: Roboto, sans-serif;
 	cursor: pointer;
-	width: 95px;
 	height: 30px;
 }
 
@@ -190,7 +177,6 @@ select.selectnav-cpu {
 	font-weight: 400;
 	font-family: Roboto, sans-serif;
 	cursor: pointer;
-	width: 100px;
 	height: 30px;
 }
 
@@ -223,7 +209,7 @@ li#selecte-gpu {
 
 .switch--shadow-freesync+label:before {
 	right: 1px;
-	background-color: #0085e4;
+	background-color: #3daee9;
 	border-radius: 60px;
 	transition: all 0.3s;
 }
@@ -240,7 +226,7 @@ li#selecte-gpu {
 }
 
 .switch--shadow-freesync:checked+label:before {
-	background-color: #ddd;
+	background-color: #9f9f9f;
 }
 
 .switch--shadow-freesync:checked+label:after {
@@ -270,7 +256,7 @@ li#selecte-gpu {
 
 .switch--shadow2-freesync+label:before {
 	right: 1px;
-	background-color: #ddd;
+	background-color: #9f9f9f;
 	border-radius: 60px;
 	transition: all 0.3s;
 }
@@ -287,7 +273,7 @@ li#selecte-gpu {
 }
 
 .switch--shadow2-freesync:checked+label:before {
-	background-color: #0085e4;
+	background-color: #3daee9;
 }
 
 .switch--shadow2-freesync:checked+label:after {
@@ -295,23 +281,14 @@ li#selecte-gpu {
 }
 
 /* freesync-on/off text */
-.freesync-on {
-	position: absolute;
-	top: 40px;
-	left: 20px;
-	font-size: 13px;
-	font-weight: 600;
-	color: #adabab;
-	margin-top: 3px;
-}
-
+.freesync-on,
 .freesync-off {
-	position: absolute;
-	top: 40px;
-	left: 20px;
-	font-size: 13px;
-	font-weight: 600;
-	color: #adabab;
+	display: none;
+	position: relative;
+	float: left;
+	font-size: 14px;
+	font-weight: 500;
+	color: #eff0f1;
 	margin-top: 3px;
 }
 
@@ -451,5 +428,4 @@ li.button-vk:active {
 	.kscreen-desc {
 		left: 14px;
 	}
-
 }

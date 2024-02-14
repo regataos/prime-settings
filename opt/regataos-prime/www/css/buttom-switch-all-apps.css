@@ -2,9 +2,9 @@
 /* buttom-on */
 .switch--shadow-all-apps+label {
 	top: -22px;
-	right: -15px;
+	right: -10px;
 	padding: 2px;
-	width: 31px;
+	width: 25px;
 	height: 10px;
 	background-color: #2e3539;
 	border-radius: 60px;
@@ -22,14 +22,14 @@
 
 .switch--shadow-all-apps+label:before {
 	right: 1px;
-	background-color: #ddd;
+	background-color: #3daee9;
 	border-radius: 60px;
 	transition: all 0.3s;
 }
 
 .switch--shadow-all-apps+label:after {
 	top: -1px;
-	left: 0px;
+	left: 14px;
 	width: 16px;
 	height: 16px;
 	background-color: #eff0f1;
@@ -39,19 +39,19 @@
 }
 
 .switch--shadow-all-apps:checked+label:before {
-	background-color: #0085e4;
+	background-color: #9f9f9f;
 }
 
 .switch--shadow-all-apps:checked+label:after {
-	transform: translateX(19px);
+	transform: translateX(-15px);
 }
 
 /* buttom-off */
 .switch--shadow2-all-apps+label {
 	top: -22px;
-	right: -15px;
+	right: -10px;
 	padding: 2px;
-	width: 31px;
+	width: 25px;
 	height: 10px;
 	background-color: #2e3539;
 	border-radius: 60px;
@@ -69,14 +69,14 @@
 
 .switch--shadow2-all-apps+label:before {
 	right: 1px;
-	background-color: #ddd;
+	background-color: #9f9f9f;
 	border-radius: 60px;
 	transition: all 0.3s;
 }
 
 .switch--shadow2-all-apps+label:after {
 	top: -1px;
-	left: 0px;
+	left: -1px;
 	width: 16px;
 	height: 16px;
 	background-color: #eff0f1;
@@ -86,9 +86,9 @@
 }
 
 .switch--shadow2-all-apps:checked+label:before {
-	background-color: #0085e4;
+	background-color: #3daee9;
 }
 
 .switch--shadow2-all-apps:checked+label:after {
-	transform: translateX(19px);
+	transform: translateX(15px);
 }

@@ -33,14 +33,14 @@ function hide_sidebar(saveConfig) {
 
     const itemSideBar = document.querySelectorAll(".sidebar .ul-sidebar li");
     for (let i = 0; i < itemSideBar.length; i++) {
-        itemSideBar[i].style.width = "56px";
+        itemSideBar[i].style.width = "58px";
     }
 
-    document.querySelector(".sidebar").style.width = "56px";
+    document.querySelector(".sidebar").style.width = "58px";
     document.querySelector(".hide-sidebar").style.display = "none";
     document.querySelector(".show-sidebar").style.display = "flex";
-    document.querySelector(".div-iframe").style.marginLeft = "56px";
-    document.querySelector(".iframe").style.width = "calc(100% - 56px)";
+    document.querySelector(".div-iframe").style.marginLeft = "58px";
+    document.querySelector(".iframe").style.width = "calc(100% - 58px)";
 
     if (saveConfig == true) {
         hide_sidebar_shell();
@@ -112,38 +112,38 @@ function check_prime_support() {
 check_prime_support();
 
 //Detect iframe url
-function detect_iframe_url() {
-    const iframe_url = document.getElementById("main-iframe").src;
+function getIframeUrl() {
+    const iframeUrl = document.getElementById("main-iframe").src;
 
-    if ((iframe_url.indexOf("apps") > -1) == "1") {
-        document.querySelector(".applications a").style.borderLeft = "4px solid #0085e4";
+    if (iframeUrl.includes("apps.html")) {
+        document.querySelector(".applications .sidebar-item-effect").style.backgroundColor = "#3daee9";
     } else {
-        document.querySelector(".applications a").style.borderLeft = "4px solid #2a2d32";
+        document.querySelector(".applications .sidebar-item-effect").style.backgroundColor = "";
     }
 
-    if ((iframe_url.indexOf("settings") > -1) == "1") {
-        document.querySelector(".settings a").style.borderLeft = "4px solid #0085e4";
+    if (iframeUrl.includes("settings.html")) {
+        document.querySelector(".settings .sidebar-item-effect").style.backgroundColor = "#3daee9";
     } else {
-        document.querySelector(".settings a").style.borderLeft = "4px solid #2a2d32";
+        document.querySelector(".settings .sidebar-item-effect").style.backgroundColor = "";
     }
 
-    if ((iframe_url.indexOf("performance") > -1) == "1") {
-        document.querySelector(".system-info a").style.borderLeft = "4px solid #0085e4";
+    if (iframeUrl.includes("performance.html")) {
+        document.querySelector(".system-info .sidebar-item-effect").style.backgroundColor = "#3daee9";
     } else {
-        document.querySelector(".system-info a").style.borderLeft = "4px solid #2a2d32";
+        document.querySelector(".system-info .sidebar-item-effect").style.backgroundColor = "";
     }
 
-    if ((iframe_url.indexOf("system") > -1) == "1") {
-        document.querySelector(".system a").style.borderLeft = "4px solid #0085e4";
+    if (iframeUrl.includes("system.html")) {
+        document.querySelector(".system .sidebar-item-effect").style.backgroundColor = "#3daee9";
     } else {
-        document.querySelector(".system a").style.borderLeft = "4px solid #2a2d32";
+        document.querySelector(".system .sidebar-item-effect").style.backgroundColor = "";
     }
 }
 
 //Go to specific pages
 function go_applications() {
-    var iframe_url = document.getElementById("main-iframe").src;
-    if ((iframe_url.indexOf("apps") > -1) == "0") {
+    var iframeUrl = document.getElementById("main-iframe").src;
+    if ((iframeUrl.indexOf("apps") > -1) == "0") {
         document.getElementById("main-iframe").src = "./pages/apps.html";
 
         // Take the page to the top
@@ -154,8 +154,8 @@ function go_applications() {
 }
 
 function go_settings() {
-    var iframe_url = document.getElementById("main-iframe").src;
-    if ((iframe_url.indexOf("settings") > -1) == "0") {
+    var iframeUrl = document.getElementById("main-iframe").src;
+    if ((iframeUrl.indexOf("settings") > -1) == "0") {
         document.getElementById("main-iframe").src = "./pages/settings.html";
 
         // Take the page to the top
@@ -166,8 +166,8 @@ function go_settings() {
 }
 
 function go_system_info() {
-    var iframe_url = document.getElementById("main-iframe").src;
-    if ((iframe_url.indexOf("performance") > -1) == "0") {
+    var iframeUrl = document.getElementById("main-iframe").src;
+    if ((iframeUrl.indexOf("performance") > -1) == "0") {
         document.getElementById("main-iframe").src = "./pages/performance.html";
 
         // Take the page to the top
@@ -178,8 +178,8 @@ function go_system_info() {
 }
 
 function go_system() {
-    var iframe_url = document.getElementById("main-iframe").src;
-    if ((iframe_url.indexOf("system") > -1) == "0") {
+    var iframeUrl = document.getElementById("main-iframe").src;
+    if ((iframeUrl.indexOf("system") > -1) == "0") {
         document.getElementById("main-iframe").src = "./pages/system.html";
 
         // Take the page to the top

@@ -83,8 +83,7 @@ svg {
   z-index: 1000;
 }
 
-svg circle
-{
+svg circle {
   width: 100%;
   height: 100%;
   fill: none;
@@ -102,7 +101,7 @@ svg circle:nth-child(2) {
 
 .card:nth-child(1) svg circle:nth-child(2) {
   stroke-dashoffset: calc(440 - (440 * 0) / 100);
-  stroke: #0085e4;
+  stroke: #3daee9;
 }
 
 .more-data-child {

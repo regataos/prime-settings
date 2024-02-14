@@ -11,7 +11,7 @@ function applyTranslationPages() {
         // Apply translations according to page URL
         pageUrl = window.location.href;
 
-        if ((pageUrl.indexOf("apps.html") > -1) == "1") {
+        if (pageUrl.includes("apps.html")) {
             // Title and description
             const appsPage = document.querySelector(".page-apps-title");
             appsPage.innerHTML = data[i].appsPage.title;
@@ -46,7 +46,12 @@ function applyTranslationPages() {
             document.querySelector(".label-add .desc-option-blocks").innerHTML = data[i].appsPage.addApp.description;
             document.querySelector(".label-add").title = data[i].appsPage.addApp.tip;
 
-        } else if ((pageUrl.indexOf("performance.html") > -1) == "1") {
+            const removeApp = document.querySelectorAll(".remove-app-buttom");
+            for (let b = 0; b < removeApp.length; b++) {
+                removeApp[b].title = data[i].appsPage.addApp.removeApp;
+            }
+
+        } else if (pageUrl.includes("performance.html")) {
             // Title and description
             const perfPage = document.querySelector(".page-performance-title");
             perfPage.innerHTML = data[i].performancePage.title;
@@ -62,17 +67,21 @@ function applyTranslationPages() {
             document.querySelector(".gpu-desc").innerHTML = data[i].performancePage.blocksTitle.gpu;
 
             //Description of the blocks
+            document.querySelector(".mem-sz-text").innerHTML = data[i].performancePage.blocksDesc.memorySize;
+            document.querySelector(".mem-tt-text").innerHTML = data[i].performancePage.blocksDesc.totalMemory;
+            document.querySelector(".in-use-text").innerHTML = data[i].performancePage.blocksDesc.inUse;
+
             const freqStatus = document.querySelectorAll(".freq-text");
             for (let b = 0; b < freqStatus.length; b++) {
                 freqStatus[b].innerHTML = data[i].performancePage.blocksDesc.frequency;
             }
 
-            document.querySelector(".temp-text").innerHTML = data[i].performancePage.blocksDesc.temperature;
-            document.querySelector(".mem-sz-text").innerHTML = data[i].performancePage.blocksDesc.memorySize;
-            document.querySelector(".mem-tt-text").innerHTML = data[i].performancePage.blocksDesc.totalMemory;
-            document.querySelector(".in-use-text").innerHTML = data[i].performancePage.blocksDesc.inUse;
+            const tempStatus = document.querySelectorAll(".temp-text");
+            for (let b = 0; b < tempStatus.length; b++) {
+                tempStatus[b].innerHTML = data[i].performancePage.blocksDesc.temperature;
+            }
 
-        } else if ((pageUrl.indexOf("settings.html") > -1) == "1") {
+        } else if (pageUrl.includes("settings.html")) {
             // Title and description
             const settingsPage = document.querySelector(".page-settings-title");
             settingsPage.innerHTML = data[i].settingsPage.title;
@@ -88,8 +97,17 @@ function applyTranslationPages() {
 
             //Run everything with the dGPU
             document.querySelector(".select-gpu-text").innerHTML = data[i].settingsPage.selectGpu.title;
-            document.querySelector(".integrated").innerHTML = data[i].settingsPage.selectGpu.integrated;
-            document.querySelector(".dedicated").innerHTML = data[i].settingsPage.selectGpu.dedicated;
+
+            const integratedOption = document.querySelectorAll(".integrated");
+            for (let b = 0; b < integratedOption.length; b++) {
+                integratedOption[b].innerHTML = data[i].settingsPage.selectGpu.integrated;
+            }
+
+            const dedicatedOption = document.querySelectorAll(".dedicated");
+            for (let b = 0; b < dedicatedOption.length; b++) {
+                dedicatedOption[b].innerHTML = data[i].settingsPage.selectGpu.dedicated;
+            }
+
             document.querySelector(".render-igpu-desc").innerHTML = data[i].settingsPage.selectGpu.energySaving;
             document.querySelector(".render-dgpu-desc").innerHTML = data[i].settingsPage.selectGpu.performance;
 
@@ -119,10 +137,18 @@ function applyTranslationPages() {
 
             //CPU governor
             document.querySelector(".cpu-governor-text").innerHTML = data[i].settingsPage.cpuPower.title;
-            document.querySelector(".governor-powersave").innerHTML = data[i].settingsPage.cpuPower.balanced;
-            document.querySelector(".governor-performance").innerHTML = data[i].index.status.performance;
             document.querySelector(".cpu-powersave-desc").innerHTML = data[i].index.status.powersaving;
             document.querySelector(".cpu-performance-desc").innerHTML = data[i].index.status.performance;
+
+            const governorPowersave = document.querySelectorAll(".governor-powersave");
+            for (let b = 0; b < governorPowersave.length; b++) {
+                governorPowersave[b].innerHTML = data[i].settingsPage.cpuPower.balanced;
+            }
+
+            const governorPerformance = document.querySelectorAll(".governor-performance");
+            for (let b = 0; b < governorPerformance.length; b++) {
+                governorPerformance[b].innerHTML = data[i].settingsPage.cpuPower.performance;
+            }
 
             //KWin compositor
             document.querySelector(".compositor-text").innerHTML = data[i].settingsPage.compositor.title;
@@ -139,7 +165,7 @@ function applyTranslationPages() {
             document.querySelector(".amf-on").innerHTML = data[i].settingsPage.amdAmf.on;
             document.querySelector(".amf-off").innerHTML = data[i].settingsPage.amdAmf.off;
 
-        } else if ((pageUrl.indexOf("system.html") > -1) == "1") {
+        } else if (pageUrl.includes("system.html")) {
             // Title and description
             const systemPagePage = document.querySelector(".page-system-title");
             systemPagePage.innerHTML = data[i].systemPage.title;

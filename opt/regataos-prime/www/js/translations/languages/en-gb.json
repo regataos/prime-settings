@@ -29,13 +29,14 @@
                 "title": "Add application",
                 "tip": "Use this option to add more applications to the list to run with your device's dGPU.",
                 "description": "Add more apps to the list"
-            }
+            },
+            "removeApp": "Remove"
         },
         "settingsPage": {
             "title": "Settings",
             "description": "Choose the best configuration for your dedicated GPU, configure the display and perform simple tests.",
             "selectGpu": {
-                "title": "Render with GPU:",
+                "title": "Default GPU:",
                 "integrated": "Integrated",
                 "dedicated": "Dedicated",
                 "energySaving": "Energy saving",
@@ -71,7 +72,8 @@
             },
             "cpuPower": {
                 "title": "CPU Power:",
-                "balanced": "Balanced"
+                "balanced": "Balanced",
+                "performance": "Performance"
             },
             "compositor": {
                 "title": "Desktop Effects",

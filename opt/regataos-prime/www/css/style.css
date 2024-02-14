@@ -76,6 +76,20 @@ body {
     background-clip: padding-box;
 }
 
+.sidebar-item-effect {
+    display: block;
+    float: left;
+    width: 5px;
+    height: 30px;
+    border-radius: 4px;
+    margin-left: 4px;
+    transition: all 0.3s ease-in-out;
+}
+
+.sidebar .ul-sidebar li:hover .sidebar-item-effect {
+    background-color: #3daee9;
+}
+
 a {
     color: #0085e4;
     cursor: pointer;
@@ -139,8 +153,8 @@ a {
     margin-top: 0px;
     margin-left: 0px;
     margin-bottom: 0px;
-    padding-top: 18px;
-    padding-bottom: 18px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 /*
@@ -174,24 +188,15 @@ a {
     font-size: 18px;
     text-decoration: none;
     color: #f3f3f3 !important;
-    border-left: 4px solid #2a2d32;
     transition: all 0.3s ease-in-out;
     padding-top: 2px;
-    padding-left: 8px;
     padding-bottom: 2px;
+    padding-left: 2px;
 }
 
 .sidebar .ul-sidebar li:hover {
     background-color: #373e46;
     color: #d2d5da;
-}
-
-.sidebar .ul-sidebar li:hover .link-items {
-    border-left: 4px solid #0085e4 !important;
-}
-
-.link-items:hover {
-    border-left: 4px solid #0085e4 !important;
 }
 
 .link-items p {
@@ -216,8 +221,9 @@ a {
 
 .icones-menu {
     display: inline-block;
-    padding-right: 5px;
     left: -8px;
+    padding-right: 5px;
+    margin-left: 2px;
 }
 
 @keyframes example {
