@@ -172,6 +172,7 @@ select.selectnav {
 }
 
 select.selectnav-cpu {
+	display: none;
 	border-radius: 4px;
 	font-size: 15px;
 	font-weight: 400;

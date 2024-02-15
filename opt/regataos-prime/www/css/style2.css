@@ -181,6 +181,9 @@ li {
 	box-shadow: 0 0 2px rgb(0 0 0 / 40%);
 	-webkit-transition: all 0.5s ease-in-out;
 	transition: all 0.5s ease-in-out;
+	opacity: 1;
+	animation-name: display-element;
+	animation-duration: 1.5s;
 }
 
 li:hover,
@@ -243,7 +246,7 @@ li#add-external-apps:hover {
 li#add-external-apps:active {
 	background-color: #23272c;
 	background-size: 100%;
-	transition: all 0s;
+	transition: all .3s;
 }
 
 li.li-performance {
@@ -680,6 +683,35 @@ p {
 
 .show-element {
 	display: block !important;
+}
+
+.button-settings {
+	position: absolute;
+	background-color: #434b54;
+	background-position: center;
+	color: #fff;
+	margin-top: 10px;
+	right: 20px;
+	top: 6px;
+	width: auto;
+	font-size: 15px;
+	cursor: pointer;
+	border: none;
+	border-radius: 2em;
+	padding: 8px 12px;
+	box-shadow: 0 0 2px rgb(0 0 0 / 40%);
+	-webkit-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+}
+
+.button-settings:hover {
+	background: #4e5864 radial-gradient(circle, transparent 1%, #4e5864 1%) center/15000%;
+}
+
+.button-settings:active {
+	background-color: #434b54;
+	background-size: 100%;
+	transition: all 0s;
 }
 
 /* Responsive CSS */

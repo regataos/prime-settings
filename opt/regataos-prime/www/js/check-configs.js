@@ -205,13 +205,13 @@ function check_cpu_governor() {
 					document.querySelector(".cpu-performance-desc").style.display = "block";
 
 				} else if ((check_configs.indexOf("powersave") > -1) == "1") {
-					document.getElementById("cpugovernor1").style.display = "block";
+					document.getElementById("cpugovernor1").style.display = "none";
 					document.getElementById("cpugovernor2").style.display = "none";
 					document.querySelector(".cpu-powersave-desc").style.display = "block";
 					document.querySelector(".cpu-performance-desc").style.display = "none";
 
 				} else {
-					document.getElementById("cpugovernor1").style.display = "block";
+					document.getElementById("cpugovernor1").style.display = "none";
 					document.getElementById("cpugovernor2").style.display = "none";
 					document.querySelector(".cpu-powersave-desc").style.display = "block";
 					document.querySelector(".cpu-performance-desc").style.display = "none";
