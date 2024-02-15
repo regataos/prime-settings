@@ -714,7 +714,49 @@ p {
 	transition: all 0s;
 }
 
-/* Responsive CSS */
+.context-menu {
+	display: none;
+	position: relative;
+	top: -30px;
+	left: 10px;
+	float: right;
+	width: auto;
+	height: auto;
+	padding: 10px 0px;
+	z-index: 1000;
+	border-radius: 8px;
+	cursor: auto;
+	background-color: #383e4291;
+	-webkit-backdrop-filter: blur(10px);
+	backdrop-filter: blur(10px);
+	box-shadow: rgb(0 0 0 / 44%) 0px 0px 10px;
+	transition: all .3s;
+}
+
+.context-menu div {
+	padding: 12px 20px;
+	transition: all .3s;
+	text-align: left;
+	margin-left: 10px;
+	margin-right: 10px;
+	border-radius: 5px;
+	transition: all .3s;
+}
+
+.division-options {
+	cursor: auto !important;
+	margin: 10px 10px !important;
+	padding: 0 !important;
+	border-bottom: 2px solid #495054;
+}
+
+.context-menu div:focus,
+.context-menu div:hover {
+	background-color: #4e5864;
+	cursor: pointer;
+	box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px;
+}
+
 @-webkit-keyframes animatebottom {
 	from {
 		bottom: -30px;

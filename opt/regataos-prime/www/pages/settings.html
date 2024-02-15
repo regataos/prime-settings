@@ -24,7 +24,7 @@
 	</script>
 </head>
 
-<body>
+<body onclick="hideSpecifiedMenu();">
 	<div id="loadscreen"></div>
 	<script>
 		setTimeout(function () {
@@ -142,16 +142,17 @@
 				<li id="cpu-governor">
 					<div class="text-app cpu-governor-text"></div>
 					<button class="button-settings" id="select-cpu-governor"
-						onclick="showSpecifiedMenu(this.id, 'fps-position')">Performance</button>
+						onclick="showSpecifiedMenu(this.id, 'cpu-governor-menu')"></button>
 
-					<select class="selectnav-cpu" id="cpugovernor1" onchange="choose_cpugovernor1()">
-						<option class="governor-powersave" value="powersave"></option>
-						<option class="governor-performance" value="performance"></option>
-					</select>
-					<select class="selectnav-cpu" id="cpugovernor2" onchange="choose_cpugovernor2();">
-						<option class="governor-performance" value="performance"></option>
-						<option class="governor-powersave" value="powersave"></option>
-					</select>
+					<div class="context-menu" id="cpu-governor-menu">
+						<div class="governor-powersave" id="cpu-powersave-option"
+							onclick="showSpecifiedMenu('select-cpu-governor', 'cpu-governor-menu', this.id); chooseCpuGovernor('powersave')">
+						</div>
+						<div class="division-options"></div>
+						<div class="governor-performance" id="cpu-performance-option"
+							onclick="showSpecifiedMenu('select-cpu-governor', 'cpu-governor-menu', this.id); chooseCpuGovernor('performance')">
+						</div>
+					</div>
 					<span class='info-item cpu-powersave-desc'></span>
 					<span class='info-item cpu-performance-desc'></span>
 				</li>

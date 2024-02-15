@@ -189,44 +189,32 @@ function check_tearfree() {
 check_tearfree();
 
 // Check cpu governor configuration
-function check_cpu_governor() {
+function checkCpuGovernor() {
 	const fs = require('fs');
 
-	fs.access('/etc/regataos-prime/cpu-governor.txt', (err) => {
-		if (!err) {
-			fs.readFile('/etc/regataos-prime/cpu-governor.txt', (err, data) => {
-				if (err) throw err;
-				const check_configs = data
+	if (fs.existsSync("/etc/regataos-prime/cpu-governor.txt")) {
+		const checkCpuGovernorConf = fs.readFileSync("/etc/regataos-prime/cpu-governor.txt", "utf8");
 
-				if ((check_configs.indexOf("performance") > -1) == "1") {
-					document.getElementById("cpugovernor1").style.display = "none";
-					document.getElementById("cpugovernor2").style.display = "block";
-					document.querySelector(".cpu-powersave-desc").style.display = "none";
-					document.querySelector(".cpu-performance-desc").style.display = "block";
-
-				} else if ((check_configs.indexOf("powersave") > -1) == "1") {
-					document.getElementById("cpugovernor1").style.display = "none";
-					document.getElementById("cpugovernor2").style.display = "none";
-					document.querySelector(".cpu-powersave-desc").style.display = "block";
-					document.querySelector(".cpu-performance-desc").style.display = "none";
-
-				} else {
-					document.getElementById("cpugovernor1").style.display = "none";
-					document.getElementById("cpugovernor2").style.display = "none";
-					document.querySelector(".cpu-powersave-desc").style.display = "block";
-					document.querySelector(".cpu-performance-desc").style.display = "none";
-				}
-			});
-
+		if (checkCpuGovernorConf.includes("performance")) {
+			document.getElementById("select-cpu-governor").classList.add("governor-performance");
+			document.querySelector(".cpu-powersave-desc").style.display = "none";
+			document.querySelector(".cpu-performance-desc").style.display = "block";
+		} else if (checkCpuGovernorConf.includes("powersave")) {
+			document.getElementById("select-cpu-governor").classList.add("governor-powersave");
+			document.querySelector(".cpu-powersave-desc").style.display = "block";
+			document.querySelector(".cpu-performance-desc").style.display = "none";
 		} else {
-			document.getElementById("cpugovernor1").style.display = "block";
-			document.getElementById("cpugovernor2").style.display = "none";
+			document.getElementById("select-cpu-governor").classList.add("governor-powersave");
 			document.querySelector(".cpu-powersave-desc").style.display = "block";
 			document.querySelector(".cpu-performance-desc").style.display = "none";
 		}
-	});
+	} else {
+		document.getElementById("select-cpu-governor").classList.add("governor-powersave");
+		document.querySelector(".cpu-powersave-desc").style.display = "block";
+		document.querySelector(".cpu-performance-desc").style.display = "none";
+	}
 }
-check_cpu_governor();
+checkCpuGovernor();
 
 // Check the configuration for the KWin compositor
 function check_option_compositor() {

@@ -147,70 +147,6 @@ function remove_external_app(appname, desktop) {
 	}, 500);
 }
 
-// Set cpu governor configuration
-function choose_cpugovernor1() {
-	const exec = require('child_process').exec;
-
-	const select = document.getElementById('cpugovernor1');
-	const value = select.options[select.selectedIndex].value;
-
-	const command = "sudo /opt/regataos-prime/scripts/cpu-configs -cpu-" + value;
-	exec(command, function (error, call, errlog) {
-	});
-
-	//Notify user on desktop that restart is required
-	const notify_user = value.indexOf("powersave") > -1;
-	if (notify_user == '1') {
-		const command = "/opt/regataos-prime/scripts/notify -cpu-powersave";
-		exec(command, function (error, call, errlog) {
-		});
-
-		document.querySelector(".cpu-powersave-desc").style.display = "block";
-		document.querySelector(".cpu-performance-desc").style.display = "none";
-	}
-
-	const notify_user2 = value.indexOf("performance") > -1;
-	if (notify_user2 == '1') {
-		const command = "/opt/regataos-prime/scripts/notify -cpu-performance";
-		exec(command, function (error, call, errlog) {
-		});
-
-		document.querySelector(".cpu-powersave-desc").style.display = "none";
-		document.querySelector(".cpu-performance-desc").style.display = "block";
-	}
-}
-
-function choose_cpugovernor2() {
-	const select = document.getElementById('cpugovernor2');
-	const value = select.options[select.selectedIndex].value;
-
-	const exec = require('child_process').exec;
-	const command = "sudo /opt/regataos-prime/scripts/cpu-configs -cpu-" + value;
-	exec(command, function (error, call, errlog) {
-	});
-
-	//Notify user on desktop that restart is required
-	const notify_user = value.indexOf("powersave") > -1;
-	if (notify_user == '1') {
-		const command = "/opt/regataos-prime/scripts/notify -cpu-powersave";
-		exec(command, function (error, call, errlog) {
-		});
-
-		document.querySelector(".cpu-powersave-desc").style.display = "block";
-		document.querySelector(".cpu-performance-desc").style.display = "none";
-	}
-
-	const notify_user2 = value.indexOf("performance") > -1;
-	if (notify_user2 == '1') {
-		const command = "/opt/regataos-prime/scripts/notify -cpu-performance";
-		exec(command, function (error, call, errlog) {
-		});
-
-		document.querySelector(".cpu-powersave-desc").style.display = "none";
-		document.querySelector(".cpu-performance-desc").style.display = "block";
-	}
-}
-
 // Configuration option for KWin compositing
 function compositor_config() {
 	const fs = require('fs');
@@ -298,5 +234,52 @@ function amf_config() {
 				document.querySelector(`.${config_option}-off`).style.display = "block";
 			}
 		});
+	}, 1000);
+}
+
+sessionStorage.setItem("hideMenu", "");
+function hideSpecifiedMenu() {
+	let buttonId = sessionStorage.getItem("buttonId");
+	let menuId = sessionStorage.getItem("hideMenu");
+	let clickedElement = document.activeElement.id;
+
+	if (clickedElement != buttonId) {
+		let elementToHide = document.querySelector(`#${menuId}`);
+		elementToHide.style.display = "none";
+	}
+}
+
+function showSpecifiedMenu(buttonId, menuId, optionId) {
+	let extendedMenu = document.querySelector(`#${menuId}`);
+	let styleDefaultValue = extendedMenu.style.display;
+
+	if (styleDefaultValue == "" || styleDefaultValue == "none") {
+		extendedMenu.style.display = "block";
+		sessionStorage.setItem("hideMenu", menuId);
+		sessionStorage.setItem("buttonId", buttonId);
+	} else {
+		extendedMenu.style.display = "none";
+		const buttonText = document.querySelector(`#${optionId}`).textContent;
+		document.querySelector(`#${buttonId}`).textContent = buttonText;
+	}
+}
+
+// Set cpu governor configuration
+function chooseCpuGovernor(value) {
+	const exec = require('child_process').exec;
+	const notifyCpuPower = "/opt/regataos-prime/scripts/notify -cpu-" + value;
+	const setCpuGovernor = "sudo /opt/regataos-prime/scripts/cpu-configs -cpu-" + value;
+	exec(setCpuGovernor, function (error, call, errlog) { });
+
+	// Notify user on desktop that restart is required
+	if (value.includes("powersave")) {
+		document.querySelector(".cpu-powersave-desc").style.display = "block";
+		document.querySelector(".cpu-performance-desc").style.display = "none";
+	} else {
+		document.querySelector(".cpu-powersave-desc").style.display = "none";
+		document.querySelector(".cpu-performance-desc").style.display = "block";
+	}
+	setTimeout(function () {
+		exec(notifyCpuPower, function (error, call, errlog) { });
 	}, 1000);
 }
