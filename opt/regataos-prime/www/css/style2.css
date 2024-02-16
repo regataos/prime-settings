@@ -6,14 +6,6 @@
 	src: url('fonts/oxygen/Oxygen-Regular.ttf') format('truetype');
 }
 
-@font-face {
-	font-family: "Roboto";
-	font-display: block;
-	font-style: normal;
-	font-weight: normal;
-	src: url('fonts/roboto/Roboto-Regular.ttf') format('truetype');
-}
-
 body {
 	background: #1b1e20;
 	font-family: Oxygen;
@@ -478,15 +470,6 @@ p {
 	padding-bottom: 0px;
 }
 
-.button-settings {
-	margin-left: auto;
-	margin-right: auto;
-	width: 148px;
-	min-width: 20px;
-	position: relative;
-	padding-bottom: 0px;
-}
-
 .button-performance {
 	margin-left: auto;
 	margin-right: auto;
@@ -572,10 +555,7 @@ p {
 }
 
 .main-div {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
+	display: block;
 	transition: all ease .3s;
 	width: 100%;
 }
@@ -590,6 +570,16 @@ p {
 	-webkit-animation-duration: .5s;
 	animation-name: animatebottom;
 	animation-duration: .5s;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#div3 {
+	position: fixed;
+	display: block;
+	width: 100%;
+	height: 100%;
+	background-color: #1b1e20;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -690,6 +680,7 @@ p {
 	background-color: #434b54;
 	background-position: center;
 	color: #fff;
+	font-family: Oxygen;
 	margin-top: 10px;
 	right: 20px;
 	top: 6px;
@@ -698,7 +689,7 @@ p {
 	cursor: pointer;
 	border: none;
 	border-radius: 2em;
-	padding: 8px 12px;
+	padding: 10px 18px;
 	box-shadow: 0 0 2px rgb(0 0 0 / 40%);
 	-webkit-transition: all 0.5s ease-in-out;
 	transition: all 0.5s ease-in-out;
@@ -747,7 +738,7 @@ p {
 	cursor: auto !important;
 	margin: 10px 10px !important;
 	padding: 0 !important;
-	border-bottom: 2px solid #495054;
+	border-bottom: 2px solid #4e555c;
 }
 
 .context-menu div:focus,

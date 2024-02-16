@@ -86,6 +86,36 @@ function check_freesync() {
 	});
 }
 
+// Prevent Screen Tearing
+function check_tearfree() {
+	const fs = require('fs');
+
+	fs.readFile('/tmp/regataos-prime/config/regataos-prime.conf', (err, data) => {
+		if (err) throw err;
+		const check_configs = data
+
+		if ((check_configs.indexOf("tearfree=on") > -1) == "1") {
+			document.querySelector(".switch-on-tearfree + label").style.display = "block";
+			document.querySelector(".switch-off-tearfree + label").style.display = "none";
+			document.querySelector(".tearfree-on").style.display = "block";
+			document.querySelector(".tearfree-off").style.display = "none";
+
+		} else if ((check_configs.indexOf("tearfree=off") > -1) == "1") {
+			document.querySelector(".switch-on-tearfree + label").style.display = "none";
+			document.querySelector(".switch-off-tearfree + label").style.display = "block";
+			document.querySelector(".tearfree-on").style.display = "none";
+			document.querySelector(".tearfree-off").style.display = "block";
+
+		} else {
+			document.querySelector(".switch-on-tearfree + label").style.display = "block";
+			document.querySelector(".switch-off-tearfree + label").style.display = "none";
+			document.querySelector(".tearfree-on").style.display = "block";
+			document.querySelector(".tearfree-off").style.display = "none";
+		}
+	});
+}
+check_tearfree();
+
 // Choose which GPU to render everything
 function option_choose_gpu() {
 	const fs = require('fs');
@@ -121,72 +151,32 @@ function option_choose_gpu() {
 }
 option_choose_gpu();
 
-//Select performance or energy savings for the description
-function option_choose_gpu_desc() {
+// Check default rendering GPU
+function checkGpuRender() {
 	const fs = require('fs');
 
-	fs.access('/tmp/regataos-prime/use-hybrid-graphics.txt', (err) => {
-		if (!err) {
-			document.getElementById("selecte-gpu").style.display = "block";
-			return;
-		} else {
-			document.getElementById("selecte-gpu").style.display = "none";
-		}
-	});
+	if (fs.existsSync("/tmp/regataos-prime/use-hybrid-graphics.txt")) {
+		document.getElementById("selecte-gpu").style.display = "block";
 
-	fs.readFile('/tmp/regataos-prime/config/regataos-prime.conf', (err, data) => {
-		if (err) throw err;
-
-		const status1 = "render=igpu"
-		const status2 = "render=dgpu"
-
-		const render_igpu = data.indexOf(status1) > -1;
-		const render_dgpu = data.indexOf(status2) > -1;
-
-		if (render_igpu == '1') {
-			document.querySelector(".render-igpu-desc").style.display = "block";
-			document.querySelector(".render-dgpu-desc").style.display = "none";
-
-		} else if (render_dgpu == '1') {
+		const checkGpuRenderConf = fs.readFileSync("/tmp/regataos-prime/config/regataos-prime.conf", "utf8");
+		if (checkGpuRenderConf.includes("dgpu")) {
+			document.getElementById("select-default-gpu").classList.add("dedicated");
 			document.querySelector(".render-igpu-desc").style.display = "none";
 			document.querySelector(".render-dgpu-desc").style.display = "block";
-
+		} else if (checkGpuRenderConf.includes("igpu")) {
+			document.getElementById("select-default-gpu").classList.add("integrated");
+			document.querySelector(".render-igpu-desc").style.display = "block";
+			document.querySelector(".render-dgpu-desc").style.display = "none";
 		} else {
+			document.getElementById("select-default-gpu").classList.add("integrated");
 			document.querySelector(".render-igpu-desc").style.display = "block";
 			document.querySelector(".render-dgpu-desc").style.display = "none";
 		}
-	});
+	} else {
+		document.getElementById("selecte-gpu").style.display = "none";
+	}
 }
-
-// Prevent Screen Tearing
-function check_tearfree() {
-	const fs = require('fs');
-
-	fs.readFile('/tmp/regataos-prime/config/regataos-prime.conf', (err, data) => {
-		if (err) throw err;
-		const check_configs = data
-
-		if ((check_configs.indexOf("tearfree=on") > -1) == "1") {
-			document.querySelector(".switch-on-tearfree + label").style.display = "block";
-			document.querySelector(".switch-off-tearfree + label").style.display = "none";
-			document.querySelector(".tearfree-on").style.display = "block";
-			document.querySelector(".tearfree-off").style.display = "none";
-
-		} else if ((check_configs.indexOf("tearfree=off") > -1) == "1") {
-			document.querySelector(".switch-on-tearfree + label").style.display = "none";
-			document.querySelector(".switch-off-tearfree + label").style.display = "block";
-			document.querySelector(".tearfree-on").style.display = "none";
-			document.querySelector(".tearfree-off").style.display = "block";
-
-		} else {
-			document.querySelector(".switch-on-tearfree + label").style.display = "block";
-			document.querySelector(".switch-off-tearfree + label").style.display = "none";
-			document.querySelector(".tearfree-on").style.display = "block";
-			document.querySelector(".tearfree-off").style.display = "none";
-		}
-	});
-}
-check_tearfree();
+checkGpuRender();
 
 // Check cpu governor configuration
 function checkCpuGovernor() {
@@ -194,7 +184,6 @@ function checkCpuGovernor() {
 
 	if (fs.existsSync("/etc/regataos-prime/cpu-governor.txt")) {
 		const checkCpuGovernorConf = fs.readFileSync("/etc/regataos-prime/cpu-governor.txt", "utf8");
-
 		if (checkCpuGovernorConf.includes("performance")) {
 			document.getElementById("select-cpu-governor").classList.add("governor-performance");
 			document.querySelector(".cpu-powersave-desc").style.display = "none";
@@ -308,6 +297,5 @@ function check_option_amf() {
 check_option_amf();
 
 setInterval(function () {
-	option_choose_gpu_desc();
 	check_freesync();
 }, 100);

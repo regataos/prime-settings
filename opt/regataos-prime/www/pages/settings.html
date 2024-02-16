@@ -128,14 +128,18 @@
 				</li>
 				<li id="selecte-gpu">
 					<div class="text-app select-gpu-text"></div>
-					<select class="selectnav" id="selectnav1" onchange="choose_gpu1()">
-						<option class="integrated" value="igpu"></option>
-						<option class="dedicated" value="dgpu"></option>
-					</select>
-					<select class="selectnav" id="selectnav2" onchange="choose_gpu2();">
-						<option class="dedicated" value="dgpu"></option>
-						<option class="integrated" value="igpu"></option>
-					</select>
+					<button class="button-settings" id="select-default-gpu"
+						onclick="showSpecifiedMenu(this.id, 'select-gpu-menu')"></button>
+
+					<div class="context-menu" id="select-gpu-menu">
+						<div class="integrated" id="integrated-gpu-option"
+							onclick="showSpecifiedMenu('select-default-gpu', 'select-gpu-menu', this.id); chooseDefaultGpu('igpu')">
+						</div>
+						<div class="division-options"></div>
+						<div class="dedicated" id="dedicated-gpu-option"
+							onclick="showSpecifiedMenu('select-default-gpu', 'select-gpu-menu', this.id); chooseDefaultGpu('dgpu')">
+						</div>
+					</div>
 					<span class='render-igpu-desc'></span>
 					<span class='render-dgpu-desc'></span>
 				</li>
@@ -161,6 +165,7 @@
 			<script type="text/javascript" src="../js/settings.js"></script>
 			<script type="text/javascript" src="../js/check-system.js"></script>
 		</div>
+		<div id="div3"></div>
 	</div>
 
 	<div id="pop-up">

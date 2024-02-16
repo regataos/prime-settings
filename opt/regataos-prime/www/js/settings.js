@@ -30,44 +30,6 @@ function run_config_option() {
 	}, 500);
 }
 
-// Choose gpu to render
-function choose_gpu1() {
-	const exec = require('child_process').exec;
-
-	const select = document.getElementById('selectnav1');
-	const value = select.options[select.selectedIndex].value;
-
-	const command = "sudo /opt/regataos-prime/scripts/gpu-render -" + value;
-	exec(command, function (error, call, errlog) {
-	});
-
-	//Notify user on desktop that restart is required
-	const notify_user = value.indexOf("dgpu") > -1;
-	if (notify_user == '1') {
-		const command = "/opt/regataos-prime/scripts/notify -restart";
-		exec(command, function (error, call, errlog) {
-		});
-	}
-}
-
-function choose_gpu2() {
-	const select = document.getElementById('selectnav2');
-	const value = select.options[select.selectedIndex].value;
-
-	const exec = require('child_process').exec;
-	const command = "sudo /opt/regataos-prime/scripts/gpu-render -" + value;
-	exec(command, function (error, call, errlog) {
-	});
-
-	//Notify user on desktop that restart is required
-	const notify_user = value.indexOf("igpu") > -1;
-	if (notify_user == '1') {
-		const command = "/opt/regataos-prime/scripts/notify -restart";
-		exec(command, function (error, call, errlog) {
-		});
-	}
-}
-
 // Open display
 function display() {
 	setTimeout(function () {
@@ -237,6 +199,7 @@ function amf_config() {
 	}, 1000);
 }
 
+// Functions for buttons with drop-down menu.
 sessionStorage.setItem("hideMenu", "");
 function hideSpecifiedMenu() {
 	let buttonId = sessionStorage.getItem("buttonId");
@@ -253,10 +216,24 @@ function showSpecifiedMenu(buttonId, menuId, optionId) {
 	let extendedMenu = document.querySelector(`#${menuId}`);
 	let styleDefaultValue = extendedMenu.style.display;
 
-	if (styleDefaultValue == "" || styleDefaultValue == "none") {
+	function openMenu() {
 		extendedMenu.style.display = "block";
 		sessionStorage.setItem("hideMenu", menuId);
 		sessionStorage.setItem("buttonId", buttonId);
+	}
+
+	if (styleDefaultValue == "" || styleDefaultValue == "none") {
+		// check if there are any menus open
+		let checkMenuOpen = sessionStorage.getItem("hideMenu");
+		if (checkMenuOpen && checkMenuOpen != menuId) {
+			document.querySelector(`#${menuId}`).style.display = "none";
+			setTimeout(function () {
+				openMenu();
+			}, 300);
+		} else {
+			openMenu();
+		}
+
 	} else {
 		extendedMenu.style.display = "none";
 		const buttonText = document.querySelector(`#${optionId}`).textContent;
@@ -264,10 +241,31 @@ function showSpecifiedMenu(buttonId, menuId, optionId) {
 	}
 }
 
+// Set the default GPU for rendering
+function chooseDefaultGpu(value) {
+	const exec = require('child_process').exec;
+	const gpuRender = "sudo /opt/regataos-prime/scripts/gpu-render -" + value;
+	exec(gpuRender, function (error, call, errlog) { });
+
+	// Notify user on desktop that restart is required
+	if (value.includes("igpu")) {
+		document.querySelector(".render-igpu-desc").style.display = "block";
+		document.querySelector(".render-dgpu-desc").style.display = "none";
+	} else {
+		document.querySelector(".render-igpu-desc").style.display = "none";
+		document.querySelector(".render-dgpu-desc").style.display = "block";
+	}
+
+	setTimeout(function () {
+		const command = "/opt/regataos-prime/scripts/notifications/notify -restart";
+		exec(command, function (error, call, errlog) { });
+	}, 1000);
+}
+
 // Set cpu governor configuration
 function chooseCpuGovernor(value) {
 	const exec = require('child_process').exec;
-	const notifyCpuPower = "/opt/regataos-prime/scripts/notify -cpu-" + value;
+	const notifyCpuPower = "/opt/regataos-prime/scripts/notifications/notify -cpu-" + value;
 	const setCpuGovernor = "sudo /opt/regataos-prime/scripts/cpu-configs -cpu-" + value;
 	exec(setCpuGovernor, function (error, call, errlog) { });
 
@@ -279,6 +277,7 @@ function chooseCpuGovernor(value) {
 		document.querySelector(".cpu-powersave-desc").style.display = "none";
 		document.querySelector(".cpu-performance-desc").style.display = "block";
 	}
+
 	setTimeout(function () {
 		exec(notifyCpuPower, function (error, call, errlog) { });
 	}, 1000);
