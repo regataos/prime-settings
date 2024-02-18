@@ -103,7 +103,6 @@ fi
 
 /opt/regataos-prime/scripts/detect-system-info.sh start &
 /opt/regataos-prime/scripts/check-hardware-resource-support.sh start &
-/opt/regataos-prime/scripts/intel-gpu-frequency &
 
 if [[ $(glxinfo | grep vendor) == *"Intel"* ]]; then
 	regataosprime --disable-gpu /opt/regataos-prime

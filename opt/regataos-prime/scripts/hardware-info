@@ -19,9 +19,9 @@ function vram_freq() {
 			fi
 
 		elif [[ $dgpu == *"Intel"* ]]; then
-			echo "No data"
+			echo "N/A"
 		else
-			echo "No data"
+			echo "N/A"
 		fi
 	fi
 }
@@ -39,9 +39,9 @@ function vram_usage() {
 			echo "$vram_usage"
 
 		elif [[ $dgpu == *"Intel"* ]]; then
-			echo "0"
+			echo "nodata"
 		else
-			echo "0"
+			echo "nodata"
 		fi
 	fi
 }
@@ -56,7 +56,7 @@ function gpu_usage() {
 	else
 		dgpu=$(cat "/tmp/regataos-prime/config/system-info/opengl-vendor.txt")
 		if [[ $dgpu == *"AMD"* ]]; then
-			ps -C radeontop > /dev/null
+			ps -C radeontop >/dev/null
 			if [ $? = 1 ]; then
 				rm -f /tmp/regataos-prime/radeontop.log
 				radeontop -d /tmp/regataos-prime/radeontop.log
@@ -76,7 +76,7 @@ function gpu_usage() {
 			fi
 
 		else
-			echo "0"
+			echo "nodata"
 		fi
 	fi
 }
@@ -100,9 +100,9 @@ function gpu_temp() {
 			fi
 
 		elif [[ $dgpu == *"Intel"* ]]; then
-			echo "No data"
+			echo "N/A"
 		else
-			echo "No data"
+			echo "N/A"
 		fi
 	fi
 }
@@ -139,15 +139,15 @@ function capture_igpu() {
 	igpu=$(glxinfo | grep "renderer string" | cut -d":" -f 2-)
 
 	if [[ $igpu == *"Intel"* ]]; then
-		igpu_model=$(echo $igpu | sed 's/Mesa DRI Intel(R) //' | cut -d"(" -f -1)
+		igpu_model=$(echo $igpu | sed 's/Mesa DRI Intel(R) /Intel /' | sed 's/Mesa Intel(R) /Intel /' | cut -d"(" -f -1)
 		echo "$igpu_model"
 
 	elif [[ $igpu == *"AMD"* ]]; then
-		igpu_model=$(echo $igpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
+		igpu_model=$(echo $igpu | sed 's/AMD Radeon(TM) //' | sed 's/Graphics//' | cut -d"(" -f -1 | cut -d"," -f -1)
 		echo "$igpu_model"
 
 	else
-		igpu_model=$(echo $igpu | sed 's/Mesa DRI Intel(R) //' | cut -d"(" -f -1)
+		igpu_model=$(echo $igpu)
 		echo "$igpu_model"
 	fi
 }
@@ -254,7 +254,7 @@ function capture_dgpu() {
 
 		elif [[ $dgpu == *"Intel"* ]]; then
 			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-			dgpu_model=$(echo $dgpu | sed 's/Mesa DRI Intel(R) //' | cut -d"(" -f -1 | cut -d"," -f -1)
+			dgpu_model=$(echo $dgpu | sed 's/Mesa DRI Intel(R) /Intel /' | sed 's/Mesa Intel(R) /Intel /' | cut -d"(" -f -1)
 			echo "Intel $dgpu_model"
 
 		else
@@ -296,7 +296,7 @@ function capture_dgpu() {
 
 		elif [[ $dgpu == *"Intel"* ]]; then
 			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-			dgpu_model=$(echo $dgpu | sed 's/Mesa DRI Intel(R) //' | cut -d"(" -f -1 | cut -d"," -f -1)
+			dgpu_model=$(echo $dgpu | sed 's/Mesa DRI Intel(R) /Intel /' | sed 's/Mesa Intel(R) /Intel /' | cut -d"(" -f -1)
 			echo "Intel $dgpu_model"
 
 		else
@@ -319,11 +319,11 @@ function vulkan_version() {
 			sed -i '/WARNING/d' "/tmp/regataos-prime/vulkan-version.txt"
 
 		else
-			echo "Incomplete support" > "$HOME/.config/regataos-prime/system-info/vulkan-version.txt"
+			echo "Incomplete support" >"$HOME/.config/regataos-prime/system-info/vulkan-version.txt"
 		fi
 
 	else
-		echo "Not supported" > "$HOME/.config/regataos-prime/system-info/vulkan-version.txt"
+		echo "Not supported" >"$HOME/.config/regataos-prime/system-info/vulkan-version.txt"
 	fi
 }
 

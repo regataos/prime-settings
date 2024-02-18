@@ -1,32 +1,29 @@
 #!/bin/bash
 
-sleep 5
-
 cd /
 
-while :
-do
+while :; do
 
-# Capture Intel GPU info
-ps -C regataosprime > /dev/null;
-if [ $? = 0 ] ; then
-	gpu=$(inxi -G | grep Device-1)
-	if [[ $gpu == *"Intel"* ]]; then
-		# Capture the discrete GPU usage
-		if test -e "/tmp/regataos-prime/intel_gpu_freq.log"; then
-			ps -C intel_gpu_top > /dev/null;
-			if [ $? = 1 ] ; then
-				intel_gpu_top -o /tmp/regataos-prime/intel_gpu_top.log
+	# Capture Intel GPU info
+	ps -C regataosprime >/dev/null
+	if [ $? = 0 ]; then
+		gpu=$(inxi -G | grep Device-1)
+		if [[ $gpu == *"Intel"* ]]; then
+			# Capture the discrete GPU usage
+			if test -e "/tmp/regataos-prime/intel_gpu_freq.log"; then
+				ps -C intel_gpu_top >/dev/null
+				if [ $? = 1 ]; then
+					intel_gpu_top -o /tmp/regataos-prime/intel_gpu_top.log
+				fi
 			fi
+		else
+			echo "Intel GPU not found."
+			break
 		fi
+
 	else
-		echo "Intel GPU not found."
 		break
 	fi
 
-else
-	break
-fi
-
-   sleep 1
+	sleep 1
 done

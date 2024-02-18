@@ -81,7 +81,12 @@ function vramUsage() {
 	const exec = require('child_process').exec;
 	const command = "echo $(/opt/regataos-prime/scripts/hardware-info -vram-usage | head -1 | tail -1)";
 	exec(command, (error, stdout, stderr) => {
-		if (stdout.length <= 1) {
+		if (stdout.includes("nodata")) {
+			document.getElementById("vram-usage").style.strokeDashoffset = "calc(440 - (440 * 0) / 100)";
+			document.getElementById("vram-usage-number").innerHTML = "N/A";
+			document.getElementById("vram-usage-nodata").style.display = "none";
+
+		} else if (stdout.length <= 1) {
 			document.getElementById("vram-usage").style.strokeDashoffset = "calc(440 - (440 * 0) / 100)";
 			document.getElementById("vram-usage-number").innerHTML = "0";
 		} else {
