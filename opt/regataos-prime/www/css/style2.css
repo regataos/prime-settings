@@ -167,9 +167,6 @@ li {
 	box-shadow: 0 0 2px rgb(0 0 0 / 40%);
 	-webkit-transition: all 0.5s ease-in-out;
 	transition: all 0.5s ease-in-out;
-	opacity: 1;
-	animation-name: display-element;
-	animation-duration: 1s;
 }
 
 li:hover,
@@ -236,7 +233,7 @@ li#add-external-apps:active {
 }
 
 li.li-performance {
-	display: inline-block;
+	display: block;
 	position: relative;
 	width: auto;
 	height: 350px;
@@ -356,6 +353,9 @@ li#use-nvidia-click:active {
 	margin-top: 10px;
 	margin-right: 10px;
 	float: right;
+	opacity: 1;
+	animation-name: animatebottom;
+	animation-duration: .3s;
 }
 
 .all-apps .switch__container {
@@ -432,7 +432,7 @@ p {
 }
 
 .icon-app {
-	display: inline-block;
+	display: block;
 	float: left;
 	height: 40px;
 	width: 40px;
@@ -449,7 +449,7 @@ p {
 }
 
 .icon-menu {
-	display: inline-block;
+	display: block;
 	float: left;
 	height: 22px;
 	width: 22px;
@@ -503,7 +503,7 @@ p {
 
 @keyframes display-element {
 	from {
-		opacity: 0.2;
+		opacity: 0;
 	}
 
 	to {
@@ -702,8 +702,9 @@ p {
 
 #copy-all {
 	float: right;
-	margin-right: 0px;
 	cursor: pointer;
+	margin-top: 20px;
+	margin-right: 20px;
 }
 
 #copy-all-img {
