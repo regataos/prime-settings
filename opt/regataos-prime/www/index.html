@@ -11,12 +11,6 @@
 
 <body>
     <div id="loadscreen"></div>
-    <script>
-        setTimeout(function () {
-            document.getElementById("loadscreen").style.display = "none";
-        }, 1000);
-    </script>
-
     <div class="sidebar">
         <div class="hide-sidebar" onclick="hide_sidebar(true);">
             <img class="icones-menu" title="Apenas ícones" style="height: 30px;"
@@ -60,13 +54,6 @@
             </li>
         </ul>
     </div>
-    <script type="text/javascript">
-        const icons = document.querySelectorAll(".icones-menu");
-        for (let i = 0; i < icons.length; i++) {
-            icons[i].draggable = false;
-        }
-    </script>
-
     <div class="div-iframe">
         <iframe onload="getIframeUrl(this);" src="" allowfullscreen frameborder="0" class="iframe"
             id="main-iframe"></iframe>
@@ -74,14 +61,6 @@
     <script type="text/javascript" src="js/settings-checker.js"></script>
     <script type="text/javascript" src="js/translations/apply-translation-index.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
-
-    <script type="text/javascript">
-        const gui = require('nw.gui');
-
-        onload = function () {
-            gui.Window.get().show();
-        }
-    </script>
 </body>
 
 </html>

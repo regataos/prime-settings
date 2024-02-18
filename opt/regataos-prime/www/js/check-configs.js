@@ -1,35 +1,3 @@
-// Check whether running with dGPU is enabled or disabled for all applications
-function all_apps_buttom() {
-	const fs = require('fs');
-
-	fs.readFile('/tmp/regataos-prime/config/regataos-prime.conf', (err, data) => {
-		if (err) throw err;
-
-		const status1 = "one-apps=on"
-		const status2 = "one-apps=off"
-
-		const disable_all_apps = data.indexOf(status1) > -1;
-		const enable_all_apps = data.indexOf(status2) > -1;
-
-		if (disable_all_apps == '1') {
-			document.querySelector(".all-apps").style.display = "block";
-			document.querySelector(".all-apps2").style.display = "none";
-			document.getElementById("switch-shadow-all-apps").checked = false;
-
-		} else if (enable_all_apps == '1') {
-			document.querySelector(".all-apps").style.display = "none";
-			document.querySelector(".all-apps2").style.display = "block";
-			document.getElementById("switch-shadow2-all-apps").checked = false;
-
-		} else {
-			document.querySelector(".all-apps").style.display = "block";
-			document.querySelector(".all-apps2").style.display = "none";
-			document.getElementById("switch-shadow-all-apps").checked = false;
-		}
-	});
-}
-all_apps_buttom();
-
 // Check support for FreeSync and make sure it is enabled
 function check_freesync() {
 	const fs = require('fs');

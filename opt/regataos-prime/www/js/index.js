@@ -1,3 +1,20 @@
+// Show app only when the UI is ready
+const gui = require('nw.gui');
+onload = function () {
+    gui.Window.get().show();
+}
+
+// Disable main hover effect after few seconds
+setTimeout(function () {
+    document.getElementById("loadscreen").style.display = "none";
+}, 1000);
+
+// Prevent dragging and dropping of icons
+const icons = document.querySelectorAll(".icones-menu");
+for (let i = 0; i < icons.length; i++) {
+    icons[i].draggable = false;
+}
+
 // Check configuration files
 function checkConfigFile(data, desiredString) {
     const searchString = new RegExp(`(?<=${desiredString}).*`, "g");

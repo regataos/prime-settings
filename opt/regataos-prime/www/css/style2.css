@@ -3,7 +3,7 @@
 	font-display: block;
 	font-style: normal;
 	font-weight: normal;
-	src: url('fonts/oxygen/Oxygen-Regular.ttf') format('truetype');
+	src: url('../css/fonts/oxygen/Oxygen-Regular.ttf') format('truetype');
 }
 
 body {
@@ -11,6 +11,7 @@ body {
 	font-family: Oxygen;
 	font-weight: 300;
 	font-size: 16px;
+	line-height: 1.3;
 	color: #eff0f1;
 	padding: 0;
 	margin: 0;
@@ -104,20 +105,15 @@ select {
 	margin-left: 8px;
 }
 
-.all-apps,
-.all-apps2 {
-	display: none;
+.all-apps {
+	display: block;
 	float: right;
 	margin-top: 20px;
 	margin-right: 20px;
 }
 
-.all-apps .switch__container2,
-.all-apps2 .switch__container2 {
-	height: 0;
-}
-
 .text-all-apps {
+	display: none;
 	margin-right: 30px;
 }
 
@@ -162,20 +158,18 @@ li {
 	width: auto;
 	height: 80px;
 	list-style: none;
+	text-align: left;
 	box-sizing: border-box;
 	background-color: #2a2e32;
 	background-position: center;
 	border-radius: 8px;
-	padding-left: 20px;
-	padding-right: 30px;
-	padding-bottom: 20px;
-	padding-top: 20px;
+	padding: 20px;
 	box-shadow: 0 0 2px rgb(0 0 0 / 40%);
 	-webkit-transition: all 0.5s ease-in-out;
 	transition: all 0.5s ease-in-out;
 	opacity: 1;
 	animation-name: display-element;
-	animation-duration: 1.5s;
+	animation-duration: 1s;
 }
 
 li:hover,
@@ -257,8 +251,6 @@ li.li-performance {
 	box-shadow: 0 0 2px rgb(0 0 0 / 40%);
 	-webkit-transition: all 0.5s ease-in-out;
 	transition: all 0.5s ease-in-out;
-	-webkit-animation-name: animatebottom;
-	-webkit-animation-duration: .5s;
 	animation-name: animatebottom;
 	animation-duration: .5s;
 }
@@ -358,17 +350,24 @@ li#use-nvidia-click:active {
 }
 
 /* switch bottom css */
-
 .switch__container {
-	display: inline-block;
+	position: relative;
+	display: block;
 	margin-top: 10px;
+	margin-right: 10px;
 	float: right;
 }
 
-.switch__container2 {
+.all-apps .switch__container {
+	height: 0;
 	margin-top: 0px;
 	float: right;
 }
+
+/*.main-ul .switch__container {
+	position: absolute;
+	right: 30px;
+}*/
 
 .show-switch {
 	display: inline-block !important;
@@ -382,7 +381,7 @@ li#use-nvidia-click:active {
 
 .switch+label {
 	display: block;
-	position: relative;
+	position: absolute;
 	cursor: pointer;
 	outline: none;
 	user-select: none;
@@ -393,7 +392,6 @@ li#use-nvidia-click:active {
 }
 
 /* end switch bottom css */
-
 p {
 	color: #eff0f1;
 	font-size: 16px;
@@ -404,6 +402,7 @@ p {
 }
 
 .text-app {
+	display: block;
 	font-size: 17px;
 	text-align: left;
 	font-weight: 300;
@@ -564,10 +563,6 @@ p {
 	position: relative;
 	width: 95%;
 	max-width: 1400px;
-	-webkit-transition: all 0.5s ease-in-out;
-	transition: all 0.5s ease-in-out;
-	-webkit-animation-name: animatebottom;
-	-webkit-animation-duration: .5s;
 	animation-name: animatebottom;
 	animation-duration: .5s;
 	margin-left: auto;
@@ -590,23 +585,13 @@ p {
 	float: left;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(29, 35, 41, 0.77);
+	background-color: rgba(0, 0, 0, 0.411);
 	position: fixed;
 	top: 0px;
 	opacity: 1;
-	animation-name: example;
-	animation-duration: .2s;
+	animation-name: popup;
+	animation-duration: .1s;
 	z-index: 30000;
-}
-
-@keyframes example {
-	from {
-		opacity: 0.5;
-	}
-
-	to {
-		opacity: 1;
-	}
 }
 
 #pop-up:hover {
@@ -615,20 +600,75 @@ p {
 
 #box-pop-up {
 	position: relative;
+	top: 20%;
 	width: 450px;
-	height: 170px;
-	background: linear-gradient(107deg, #33373f, #25282e);
+	height: auto;
+	background-color: #373e46;
+	box-shadow: rgb(0 0 0 / 44%) 0px 0px 10px;
 	border-radius: 8px;
 	margin: auto;
-	margin-top: 10%;
-	padding: 10px 15px 15px 15px;
 	box-shadow: 0px 1px 10px 2px rgba(0, 0, 0, 0.3);
+	opacity: 1;
+	animation-name: popup;
+	animation-duration: .1s;
+}
+
+.popup-title-box {
+	background-color: #2a2e32;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	padding: 15px;
+	box-shadow: rgb(25 27 29 / 84%) 0px 1px 2px 0px;
+}
+
+.div-test {
+	width: 400px;
+	height: auto;
+	padding: 20px 0px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.div-test ul {
+	display: grid;
+	justify-content: center;
+	align-items: center;
+	grid-template-columns: repeat(2, 1fr);
+	grid-column-gap: 10px;
+	grid-row-gap: 10px;
+	margin: 0px;
+}
+
+.test-dgpu {
+	width: auto;
+	height: auto;
+	cursor: pointer;
+	text-align: center;
+	background-color: #434b54;
+	background-position: center;
+	border-radius: 8px;
+	border-radius: 2em;
+	padding: 12px 0px;
+	box-shadow: 0 0 2px rgb(0 0 0 / 40%);
+	-webkit-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+	animation-name: none;
+}
+
+.test-dgpu:hover {
+	background: #4e5864 radial-gradient(circle, transparent 1%, #4e5864 1%) center/15000% !important;
+}
+
+.test-dgpu:active {
+	background-color: #434b54 !important;
+	background-size: 100% !important;
+	transition: all 0s !important;
 }
 
 #box-pop-up h3 {
 	text-align: center;
 	font-weight: 300;
-	color: #eff0f0;
+	color: #eff0f1;
 	width: 100%;
 	top: 0px;
 	margin: auto;
@@ -637,7 +677,7 @@ p {
 
 .popup-desc-settings {
 	width: 360px;
-	color: #bfbfbf;
+	color: #eff0f1;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -647,7 +687,17 @@ p {
 	float: right;
 	width: 17px;
 	height: 17px;
-	margin-top: 7px;
+	margin-top: 3px;
+}
+
+@keyframes popup {
+	from {
+		opacity: .5;
+	}
+
+	to {
+		opacity: 1;
+	}
 }
 
 #copy-all {
@@ -746,18 +796,6 @@ p {
 	background-color: #4e5864;
 	cursor: pointer;
 	box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px;
-}
-
-@-webkit-keyframes animatebottom {
-	from {
-		bottom: -30px;
-		opacity: 0
-	}
-
-	to {
-		bottom: 0px;
-		opacity: 1
-	}
 }
 
 @keyframes animatebottom {

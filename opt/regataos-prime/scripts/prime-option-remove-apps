@@ -5,10 +5,13 @@ appname="$1"
 desktop_file="$2"
 
 # Remove external app from the list of not run with the dGPU
+sed -i "s/$appname//" "/tmp/regataos-prime/config/run-with-dgpu.conf"
 sed -i "s/$appname//" "/tmp/regataos-prime/config/run-without-dgpu.conf"
 sed -i "s/$appname=on//" "/tmp/regataos-prime/config/run-without-dgpu.conf"
 
 # Clear empty lines
+sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
+sed -i '/^0/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
 sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
 sed -i '/^0/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
 

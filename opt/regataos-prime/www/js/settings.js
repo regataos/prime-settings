@@ -229,7 +229,7 @@ function showSpecifiedMenu(buttonId, menuId, optionId) {
 			document.querySelector(`#${menuId}`).style.display = "none";
 			setTimeout(function () {
 				openMenu();
-			}, 300);
+			}, 100);
 		} else {
 			openMenu();
 		}

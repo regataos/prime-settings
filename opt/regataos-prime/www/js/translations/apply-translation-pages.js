@@ -19,10 +19,6 @@ function applyTranslationPages() {
             const appsPageDesc = document.querySelector(".page-apps-description");
             appsPageDesc.innerHTML = data[i].appsPage.description;
 
-            // Close popups button
-            const closeButton = document.getElementById("button-close");
-            closeButton.title = data[i].index.buttonTop.close;
-
             // Disable/enable for all apps
             const enableApps = document.querySelector(".enable-all");
             enableApps.innerHTML = data[i].appsPage.buttonAllApps.enableApps;
@@ -46,9 +42,10 @@ function applyTranslationPages() {
             document.querySelector(".label-add .desc-option-blocks").innerHTML = data[i].appsPage.addApp.description;
             document.querySelector(".label-add").title = data[i].appsPage.addApp.tip;
 
+            // Close popups button
             const removeApp = document.querySelectorAll(".remove-app-buttom");
             for (let b = 0; b < removeApp.length; b++) {
-                removeApp[b].title = data[i].appsPage.addApp.removeApp;
+                removeApp[b].title = data[i].appsPage.removeApp;
             }
 
         } else if (pageUrl.includes("performance.html")) {
@@ -94,7 +91,6 @@ function applyTranslationPages() {
             closeButton.title = data[i].index.buttonTop.close;
 
             // Option blocks
-
             //Run everything with the dGPU
             document.querySelector(".select-gpu-text").innerHTML = data[i].settingsPage.selectGpu.title;
 

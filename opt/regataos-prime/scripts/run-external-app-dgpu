@@ -48,7 +48,7 @@ if [[ $(grep -R "$app_name=on" /tmp/regataos-prime/config/run-without-dgpu.conf)
 
 	# Add the app name to the list of apps running with the dGPU and clear empty lines
 	if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) != *"$app_name"* ]]; then
-		echo "$app_name" >> "/tmp/regataos-prime/config/run-with-dgpu.conf"
+		echo "$app_name" >>"/tmp/regataos-prime/config/run-with-dgpu.conf"
 		sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
 	fi
 
@@ -62,7 +62,7 @@ elif [[ $(grep -R 'all-apps' /tmp/regataos-prime/config/regataos-prime.conf | cu
 
 	# Add the app name to the list of apps not running with the dGPU and clear empty lines
 	if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) != *"$app_name"* ]]; then
-		echo "$app_name" >> "/tmp/regataos-prime/config/run-without-dgpu.conf"
+		echo "$app_name" >>"/tmp/regataos-prime/config/run-without-dgpu.conf"
 		sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
 	fi
 
@@ -76,7 +76,7 @@ elif [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) 
 
 	# Add the app name to the list of apps not running with the dGPU and clear empty lines
 	if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) != *"$app_name"* ]]; then
-		echo "$app_name" >> "/tmp/regataos-prime/config/run-without-dgpu.conf"
+		echo "$app_name" >>"/tmp/regataos-prime/config/run-without-dgpu.conf"
 		sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
 	fi
 
@@ -113,7 +113,7 @@ else
 
 	# Add the app name to the list of apps running with the dGPU and clear empty lines
 	if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) != *"$app_name"* ]]; then
-		echo "$app_name" >> "/tmp/regataos-prime/config/run-with-dgpu.conf"
+		echo "$app_name" >>"/tmp/regataos-prime/config/run-with-dgpu.conf"
 		sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
 	fi
 
@@ -121,3 +121,8 @@ else
 	sed -i "s/$app_name//" "/tmp/regataos-prime/config/run-without-dgpu.conf"
 	sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
 fi
+
+# Clear empty lines
+sed -i '/^$/d' "$runWithoutDgpuFile"
+sed -i '/^0/d' "$runWithoutDgpuFile"
+sed -i '/^=on/d' "$runWithoutDgpuFile"

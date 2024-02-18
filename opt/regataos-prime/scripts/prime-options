@@ -28,13 +28,13 @@ function dgpu_app() {
 		fi
 
 		# Indicate that not all apps are running with the dGPU
-		if test ! -s "$runWithoutDgpuFile" ; then
+		if test ! -s "$runWithoutDgpuFile"; then
 			sed -i 's/\(one-apps=off\)/one-apps=on/' "$regataosPrimeConfigFile"
 		fi
 
 	else
 		# Disable application execution with the dGPU
-		echo "$app" >> "$runWithoutDgpuFile"
+		echo "$app" >>"$runWithoutDgpuFile"
 
 		# Indicate that not all apps are running with the dGPU
 		if [[ $(grep -r one-apps "$regataosPrimeConfigFile") == *"one-apps=on"* ]]; then
@@ -51,7 +51,7 @@ function dgpu_app() {
 	sed -i '/^=on/d' "$runWithoutDgpuFile"
 
 	# Indicate that not all apps are running with the dGPU
-	if test ! -s "$runWithoutDgpuFile" ; then
+	if test ! -s "$runWithoutDgpuFile"; then
 		sed -i 's/\(one-apps=off\)/one-apps=on/' "$regataosPrimeConfigFile"
 	fi
 }
@@ -60,24 +60,28 @@ function dgpu_app() {
 function disable_run_dgpu() {
 	sed -i 's/\(all-apps=on\)/all-apps=off/' "$regataosPrimeConfigFile"
 	sed -i 's/\(one-apps=on\)/one-apps=off/' "$regataosPrimeConfigFile"
-	echo "" > "$runWithDgpuFile"
+	echo "" >"$runWithDgpuFile"
 }
 
 # Enable running with dGPU for all applications
 function enable_run_dgpu() {
 	sed -i 's/\(all-apps=off\)/all-apps=on/' "$regataosPrimeConfigFile"
 	sed -i 's/\(one-apps=off\)/one-apps=on/' "$regataosPrimeConfigFile"
-	echo "" > "$runWithoutDgpuFile"
+	echo "" >"$runWithoutDgpuFile"
 }
 
 case $1 in
-   "-dgpu-app") dgpu_app
-        ;;
-   "-disable-run-dgpu") disable_run_dgpu
-        ;;
-   "-enable-run-dgpu") enable_run_dgpu
-        ;;
-   *) echo "Invalid option!"
-    	exit 1
-    	;;
+"-dgpu-app")
+	dgpu_app
+	;;
+"-disable-run-dgpu")
+	disable_run_dgpu
+	;;
+"-enable-run-dgpu")
+	enable_run_dgpu
+	;;
+*)
+	echo "Invalid option!"
+	exit 1
+	;;
 esac

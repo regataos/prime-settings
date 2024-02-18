@@ -11,12 +11,11 @@ function actionApps(script, appname, package, packagemanager, dgpu, executable, 
 	}
 
 	const commandLine = `/opt/regataos-prime/scripts/prime-options -dgpu-app ${appname};
-		sudo /opt/regataos-prime/scripts/${script} ${arguments}`;
+		sudo /opt/regataos-prime/scripts/${script} ${arguments};
+		sed -i '/^=on/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"`;
 
 	const exec = require('child_process').exec;
 	exec(commandLine, function (error, call, errlog) { });
-
-	console.log(commandLine);
 
 	const runWithoutDgpuPath = '/tmp/regataos-prime/config/run-without-dgpu.conf';
 	const runWithDgpuPath = '/tmp/regataos-prime/config/run-with-dgpu.conf';
@@ -115,18 +114,47 @@ function switchAllApps(runAction) {
 	});
 }
 
-function actionAllApps(checkbox) {
-	const checkbox1 = document.getElementById('switch-shadow-all-apps');
-	const checkbox2 = document.getElementById('switch-shadow2-all-apps');
+// Check whether running with dGPU is enabled or disabled for all applications
+function checkGpuConfigForAllApps() {
+	const fs = require('fs');
+	const settingsFile = "/tmp/regataos-prime/config/regataos-prime.conf";
 
+	if (fs.existsSync(settingsFile)) {
+		const getSettings = fs.readFileSync(settingsFile, "utf8");
+		const checkConfig = checkConfigFile(getSettings, "one-apps=");
+		return checkConfig;
+	} else {
+		return "off";
+	}
+}
+
+function buttonsAllApps() {
+	const checkConfig = checkGpuConfigForAllApps();
+
+	if (checkConfig.includes("on")) {
+		document.querySelector(".enable-all").style.display = "none";
+		document.querySelector(".disable-all").style.display = "block";
+		//document.getElementById("switch-shadow2-all-apps").checked = false;
+	} else if (checkConfig.includes("off")) {
+		document.querySelector(".enable-all").style.display = "block";
+		document.querySelector(".disable-all").style.display = "none";
+	} else {
+		document.querySelector(".enable-all").style.display = "block";
+		document.querySelector(".disable-all").style.display = "none";
+	}
+}
+buttonsAllApps();
+
+function actionAllApps(checkbox) {
+	const checkConfig = checkGpuConfigForAllApps();
 	let runAction = "";
 
-	if (checkbox.includes("switch-shadow-all-apps")) {
-		runAction = checkbox1.checked ? "-disable-run-dgpu" : "-enable-run-dgpu";
-	}
-
-	if (checkbox.includes("switch-shadow2-all-apps")) {
-		runAction = checkbox2.checked ? "-enable-run-dgpu" : "-disable-run-dgpu";
+	if (checkConfig.includes("on")) {
+		runAction = "-disable-run-dgpu";
+	} else if (checkConfig.includes("off")) {
+		runAction = "-enable-run-dgpu";
+	} else {
+		runAction = "-disable-run-dgpu";
 	}
 
 	switchAllApps(runAction);

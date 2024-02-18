@@ -48,7 +48,7 @@
             },
             "nvidiaSettings": {
                 "title": "Configurações do NVIDIA Driver",
-                "description": "Escolha a melhor configuração para a sua GPU"
+                "description": "Acesse o painel de controle da sua GPU"
             },
             "runTests": {
                 "title": "Testar a GPU dedicada",
@@ -58,7 +58,7 @@
                 "title": "Testar a GPU dedicada",
                 "description": "Execute simples testes com a GPU dedicada do seu dispositivo usando as seguintes opções:",
                 "buttonOpengl": "Testar com OpenGL",
-                "buttonVulkan": "Testar com Vulkan"
+                "buttonVulkan": "Testar com a Vulkan"
             },
             "tearing": {
                 "title": "Prevenir Screen Tearing",

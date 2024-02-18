@@ -111,8 +111,8 @@ function createAppList() {
 										`;
 
 									listAppsOnScreen.appendChild(newAppBlock);
-									checkApp(nickname, dgpu, filePath);
 									translation_app_status();
+									checkApp(nickname, dgpu, filePath);
 								}
 							}
 						}
@@ -132,5 +132,4 @@ function createAppList() {
 		}
 	});
 }
-
 createAppList();

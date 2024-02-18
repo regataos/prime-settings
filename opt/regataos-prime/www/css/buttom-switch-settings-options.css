@@ -98,15 +98,7 @@
 }
 
 /* on/off text */
-.enabled {
-	position: absolute;
-	top: 40px;
-	font-size: 14px;
-	font-weight: 500;
-	color: #eff0f1;
-	margin-top: 3px;
-}
-
+.enabled,
 .disabled {
 	position: absolute;
 	display: none;

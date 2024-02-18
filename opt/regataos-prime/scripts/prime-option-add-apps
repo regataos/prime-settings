@@ -11,62 +11,38 @@ desktop_file=$(echo "$file" | sed 's,/, ,g' | awk '{print $NF'})
 # Locate the application icon, when searching for its name in specific directories
 if [[ $(echo $icon_name) == *"/snap/"* ]]; then
     icon_directory=$(echo file://$icon_name)
-
 else
-    search_icon_directory_svg=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | egrep "svg" | sed '/symbolic/d' | head -1 | tail -1);
-    search_icon_directory_png1=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | head -1 | tail -1);
-    search_icon_directory_png2=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | tail -1 | head -1);
+    search_icon_directory_svg=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | egrep "svg" | sed '/symbolic/d' | head -1 | tail -1)
+    search_icon_directory_png1=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | head -1 | tail -1)
+    search_icon_directory_png2=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/ /usr/share/icons/breeze-dark/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | tail -1 | head -1)
 
-    if [ -z $search_icon_directory_svg ];then
+    if [ -z $search_icon_directory_svg ]; then
         size_icon_png1=$(identify -verbose $search_icon_directory_png1 | grep Geometry | awk '{print $2}' | cut -d"x" -f -1)
         size_icon_png2=$(identify -verbose $search_icon_directory_png2 | grep Geometry | awk '{print $2}' | cut -d"x" -f -1)
 
         if [ $(echo $size_icon_png1) -gt $(echo $size_icon_png2) ]; then
             icon_directory=$(echo file://$search_icon_directory_png1)
-
         elif [ $(echo $size_icon_png2) -gt $(echo $size_icon_png1) ]; then
             icon_directory=$(echo file://$search_icon_directory_png2)
-
         elif [ $(echo $size_icon_png1) -ge $(echo $size_icon_png2) ]; then
             icon_directory=$(echo file://$search_icon_directory_png2)
-
         elif [ $(echo $size_icon_png2) -ge $(echo $size_icon_png1) ]; then
             icon_directory=$(echo file://$search_icon_directory_png2)
-
         else
             icon_directory="file:///usr/share/icons/breeze-dark/apps/48/ktip.svg"
         fi
-
     else
         icon_directory=$(echo file://$search_icon_directory_svg)
     fi
 fi
 
 # Create the JSON file with all the important information of the app
-app_nickname=external-app$(($(ls /tmp/regataos-prime/config/external-app/ -la|grep -e "^-"|wc -l) + 1))
+#app_nickname=external-app$(($(ls /tmp/regataos-prime/config/external-app/ -la|grep -e "^-"|wc -l) + 1))
+app_nickname="$(echo $desktop_file | sed 's/\.desktop//' | sed 's/\./-/g')"
 
 # Check if the JSON file already exists
-if test -e "/tmp/regataos-prime/config/external-app/$app_nickname.json" ; then
-
-# If the JSON file already exists, create a new file, but always increasing the value of the number in the name.
-# For example, if the external-app1.json file already exists, create an external-app2.json file.
-app_nickname2=external-app$(($(ls /tmp/regataos-prime/config/external-app/ | awk 'END{print $1}' | sed 's/external-app//' | sed 's/.json//') + 1))
-
-cat > "/tmp/regataos-prime/config/external-app/$app_nickname2.json" << EOM
-[
-	{
-		"app_name": "$app_name",
-		"app_nickname": "$app_nickname2",
-		"app_icon": "$icon_directory",
-		"desktop_app_file": "$desktop_file"
-	}
-]
-EOM
-
-else
-
-# A JSON file of the same value does not seem to exist, create the file
-cat > "/tmp/regataos-prime/config/external-app/$app_nickname.json" << EOM
+if test ! -e "/tmp/regataos-prime/config/external-app/$app_nickname.json"; then
+    cat >"/tmp/regataos-prime/config/external-app/$app_nickname.json" <<EOM
 [
 	{
 		"app_name": "$app_name",
@@ -76,12 +52,11 @@ cat > "/tmp/regataos-prime/config/external-app/$app_nickname.json" << EOM
 	}
 ]
 EOM
-
 fi
 
 # Enable execution with the dGPU for the application
-sed -i "s/$external_app//" "/tmp/regataos-prime/config/run-without-dgpu.conf"
-sed -i "s/$external_app=on//" "/tmp/regataos-prime/config/run-without-dgpu.conf"
+sed -i "s/$app_nickname//" "/tmp/regataos-prime/config/run-without-dgpu.conf"
+sed -i "s/$app_nickname=on//" "/tmp/regataos-prime/config/run-without-dgpu.conf"
 
 # Clear empty lines
 sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
