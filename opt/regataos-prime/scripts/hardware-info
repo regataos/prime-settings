@@ -66,15 +66,8 @@ function gpu_usage() {
 			echo "$gpu_usage"
 
 		elif [[ $dgpu == *"Intel"* ]]; then
-			test_file=$(grep -r "IMC" /tmp/regataos-prime/intel_gpu_top.log)
-			if [[ $test_file == *"IMC"* ]]; then
-				gpu_usage=$(cat /tmp/regataos-prime/intel_gpu_top.log | awk '{print $8}' | tail -1 | cut -d'.' -f -1)
-				echo "$gpu_usage"
-			else
-				gpu_usage=$(cat /tmp/regataos-prime/intel_gpu_top.log | awk '{print $6}' | tail -1 | cut -d'.' -f -1)
-				echo "$gpu_usage"
-			fi
-
+			gpu_usage=$(cat /tmp/regataos-prime/intel_gpu_top.log | awk '{print $9}' | tail -1 | cut -d'.' -f -1)
+			echo "$gpu_usage"
 		else
 			echo "nodata"
 		fi
@@ -255,7 +248,7 @@ function capture_dgpu() {
 		elif [[ $dgpu == *"Intel"* ]]; then
 			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
 			dgpu_model=$(echo $dgpu | sed 's/Mesa DRI Intel(R) /Intel /' | sed 's/Mesa Intel(R) /Intel /' | cut -d"(" -f -1)
-			echo "Intel $dgpu_model"
+			echo "$dgpu_model"
 
 		else
 			echo "Not detected graphics"
@@ -297,7 +290,7 @@ function capture_dgpu() {
 		elif [[ $dgpu == *"Intel"* ]]; then
 			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
 			dgpu_model=$(echo $dgpu | sed 's/Mesa DRI Intel(R) /Intel /' | sed 's/Mesa Intel(R) /Intel /' | cut -d"(" -f -1)
-			echo "Intel $dgpu_model"
+			echo "$dgpu_model"
 
 		else
 			echo "Not detected graphics"
