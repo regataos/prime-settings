@@ -174,12 +174,12 @@ function capture_dgpu() {
 
 			elif [[ $dgpu1 == *"AMD"* ]]; then
 				dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-				dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
+				dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | sed 's/Graphics//' | cut -d"(" -f -1 | cut -d"," -f -1)
 				echo "$dgpu_model"
 
 			else
 				dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-				dgpu_model=$(echo $dgpu | sed 's/Mesa DRI Intel(R) //' | cut -d"(" -f -1)
+				dgpu_model=$(echo $dgpu | sed 's/Mesa DRI Intel(R) /Intel /' | sed 's/Mesa Intel(R) /Intel /' | cut -d"(" -f -1)
 				echo "$dgpu_model"
 			fi
 
@@ -206,23 +206,23 @@ function capture_dgpu() {
 
 			elif [[ $dgpu1 == *"AMD"* ]]; then
 				dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-				dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
+				dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | sed 's/Graphics//' | cut -d"(" -f -1 | cut -d"," -f -1)
 				echo "$dgpu_model"
 
 			else
 				dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-				dgpu_model=$(echo $dgpu | sed 's/Mesa DRI Intel(R) //' | cut -d"(" -f -1)
+				dgpu_model=$(echo $dgpu | sed 's/Mesa DRI Intel(R) /Intel /' | sed 's/Mesa Intel(R) /Intel /' | cut -d"(" -f -1)
 				echo "$dgpu_model"
 			fi
 
 		elif [[ $dgpu2 == *"AMD"* ]]; then
 			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-			dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
+			dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | sed 's/Graphics//' | cut -d"(" -f -1 | cut -d"," -f -1)
 			echo "$dgpu_model"
 
 		elif [[ $dgpu2 == *"Radeon"* ]]; then
 			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-			dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
+			dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | sed 's/Graphics//' | cut -d"(" -f -1 | cut -d"," -f -1)
 			echo "$dgpu_model"
 
 		elif [[ $dgpu2 == *"NVIDIA"* ]]; then
@@ -261,12 +261,12 @@ function capture_dgpu() {
 
 		if [[ $dgpu == *"AMD"* ]]; then
 			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-			dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
+			dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | sed 's/Graphics//' | cut -d"(" -f -1 | cut -d"," -f -1)
 			echo "$dgpu_model"
 
 		elif [[ $dgpu == *"Radeon"* ]]; then
 			dgpu=$(DRI_PRIME=1 glxinfo | grep "renderer string" | cut -d":" -f 2-)
-			dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | cut -d"(" -f -1 | cut -d"," -f -1)
+			dgpu_model=$(echo $dgpu | sed 's/AMD Radeon(TM) //' | sed 's/Graphics//' | cut -d"(" -f -1 | cut -d"," -f -1)
 			echo "$dgpu_model"
 
 		elif [[ $dgpu == *"NVIDIA"* ]]; then

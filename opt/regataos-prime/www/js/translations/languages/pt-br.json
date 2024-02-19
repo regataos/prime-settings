@@ -48,7 +48,7 @@
             },
             "nvidiaSettings": {
                 "title": "Configurações do NVIDIA Driver",
-                "description": "Acesse o painel de controle da sua GPU"
+                "description": "Acesse o painel de controle da GPU"
             },
             "runTests": {
                 "title": "Testar a GPU dedicada",
