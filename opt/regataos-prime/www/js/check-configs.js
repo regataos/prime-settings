@@ -1,123 +1,48 @@
-// Check support for FreeSync and make sure it is enabled
-function check_freesync() {
+// Check the status of the various configuration options
+function checkFreeSync() {
 	const fs = require('fs');
+	const configFileWithOptions = "/tmp/regataos-prime/config/regataos-prime.conf";
 
-	// Check support for FreeSync and make sure it is enabled
-	fs.readFile('/tmp/regataos-prime/config/regataos-prime.conf', (err, data) => {
-		if (err) throw err;
-		const check_configs = data
+	if (fs.existsSync(configFileWithOptions)) {
+		const checkOptions = fs.readFileSync(configFileWithOptions, "utf8");
 
-		if ((check_configs.indexOf("freesync-supported=true") > -1) == "1") {
+		// Check support for FreeSync and make sure it is enabled
+		if (checkOptions.includes("freesync-supported=true")) {
 			document.getElementById("freesync-toggle").style.display = "block";
 			document.getElementById("tearfree-toggle").style.display = "none";
-
-		} else if ((check_configs.indexOf("freesync-supported=false") > -1) == "1") {
+		} else if (checkOptions.includes("freesync-supported=false")) {
 			document.getElementById("freesync-toggle").style.display = "none";
 			document.getElementById("tearfree-toggle").style.display = "block";
-
 		} else {
 			document.getElementById("freesync-toggle").style.display = "none";
 			document.getElementById("tearfree-toggle").style.display = "block";
 		}
-	});
 
-	fs.readFile('/tmp/regataos-prime/config/regataos-prime.conf', (err, data) => {
-		if (err) throw err;
+		// Display the status of various configuration options in the UI
+		const allOptions = ["freesync", "compositor", "tearfree", "unlockwidgets", "amf"];
+		for (let i = 0; i < allOptions.length; i++) {
+			console.log(allOptions[i]);
 
-		const status1 = "freesync=on"
-		const status2 = "freesync=off"
-
-		const freesync_on = data.indexOf(status1) > -1;
-		const freesync_off = data.indexOf(status2) > -1;
-
-		if (freesync_on == '1') {
-			document.querySelector(".freesync-on").style.display = "block";
-			document.querySelector(".freesync-off").style.display = "none";
-			document.querySelector(".switch--shadow-freesync + label").style.display = "block";
-			document.querySelector(".switch--shadow2-freesync + label").style.display = "none";
-			document.getElementById("switch-shadow-freesync").checked = false;
-
-		} else if (freesync_off == '1') {
-			document.querySelector(".freesync-on").style.display = "none";
-			document.querySelector(".freesync-off").style.display = "block";
-			document.querySelector(".switch--shadow-freesync + label").style.display = "none";
-			document.querySelector(".switch--shadow2-freesync + label").style.display = "block";
-			document.getElementById("switch-shadow2-freesync").checked = false;
-
-		} else {
-			document.querySelector(".freesync-on").style.display = "block";
-			document.querySelector(".freesync-off").style.display = "none";
-			document.querySelector(".switch--shadow-freesync + label").style.display = "block";
-			document.querySelector(".switch--shadow2-freesync + label").style.display = "none";
-			document.getElementById("switch-shadow-freesync").checked = false;
+			if (checkOptions.includes(`${allOptions[i]}=on`)) {
+				document.querySelector(`.switch-on-${allOptions[i]} + label`).style.display = "block";
+				document.querySelector(`.switch-off-${allOptions[i]} + label`).style.display = "none";
+				document.querySelector(`.${allOptions[i]}-on`).style.display = "block";
+				document.querySelector(`.${allOptions[i]}-off`).style.display = "none";
+			} else if (checkOptions.includes(`${allOptions[i]}=off`)) {
+				document.querySelector(`.switch-on-${allOptions[i]} + label`).style.display = "none";
+				document.querySelector(`.switch-off-${allOptions[i]} + label`).style.display = "block";
+				document.querySelector(`.${allOptions[i]}-on`).style.display = "none";
+				document.querySelector(`.${allOptions[i]}-off`).style.display = "block";
+			} else {
+				document.querySelector(`.${allOptions[i]}-on`).style.display = "block";
+				document.querySelector(`.${allOptions[i]}-off`).style.display = "none";
+				document.querySelector(`.switch-on-${allOptions[i]} + label`).style.display = "block";
+				document.querySelector(`.switch-off-${allOptions[i]} + label`).style.display = "none";
+			}
 		}
-	});
+	}
 }
-
-// Prevent Screen Tearing
-function check_tearfree() {
-	const fs = require('fs');
-
-	fs.readFile('/tmp/regataos-prime/config/regataos-prime.conf', (err, data) => {
-		if (err) throw err;
-		const check_configs = data
-
-		if ((check_configs.indexOf("tearfree=on") > -1) == "1") {
-			document.querySelector(".switch-on-tearfree + label").style.display = "block";
-			document.querySelector(".switch-off-tearfree + label").style.display = "none";
-			document.querySelector(".tearfree-on").style.display = "block";
-			document.querySelector(".tearfree-off").style.display = "none";
-
-		} else if ((check_configs.indexOf("tearfree=off") > -1) == "1") {
-			document.querySelector(".switch-on-tearfree + label").style.display = "none";
-			document.querySelector(".switch-off-tearfree + label").style.display = "block";
-			document.querySelector(".tearfree-on").style.display = "none";
-			document.querySelector(".tearfree-off").style.display = "block";
-
-		} else {
-			document.querySelector(".switch-on-tearfree + label").style.display = "block";
-			document.querySelector(".switch-off-tearfree + label").style.display = "none";
-			document.querySelector(".tearfree-on").style.display = "block";
-			document.querySelector(".tearfree-off").style.display = "none";
-		}
-	});
-}
-check_tearfree();
-
-// Choose which GPU to render everything
-function option_choose_gpu() {
-	const fs = require('fs');
-
-	fs.readFile('/tmp/regataos-prime/config/regataos-prime.conf', (err, data) => {
-		if (err) throw err;
-
-		const status1 = "render=igpu"
-		const status2 = "render=dgpu"
-
-		const render_igpu = data.indexOf(status1) > -1;
-		const render_dgpu = data.indexOf(status2) > -1;
-
-		if (render_igpu == '1') {
-			document.getElementById("selectnav1").style.display = "block";
-			document.getElementById("selectnav2").style.display = "none";
-			document.querySelector(".render-igpu-desc").style.display = "block";
-			document.querySelector(".render-dgpu-desc").style.display = "none";
-
-		} else if (render_dgpu == '1') {
-			document.getElementById("selectnav1").style.display = "none";
-			document.getElementById("selectnav2").style.display = "block";
-			document.querySelector(".render-igpu-desc").style.display = "none";
-			document.querySelector(".render-dgpu-desc").style.display = "block";
-
-		} else {
-			document.getElementById("selectnav1").style.display = "block";
-			document.getElementById("selectnav2").style.display = "none";
-			document.querySelector(".render-igpu-desc").style.display = "block";
-			document.querySelector(".render-dgpu-desc").style.display = "none";
-		}
-	});
-}
-option_choose_gpu();
+checkFreeSync();
 
 // Check default rendering GPU
 function checkGpuRender() {
@@ -172,98 +97,3 @@ function checkCpuGovernor() {
 	}
 }
 checkCpuGovernor();
-
-// Check the configuration for the KWin compositor
-function check_option_compositor() {
-	const fs = require('fs');
-
-	fs.readFile('/tmp/regataos-prime/config/regataos-prime.conf', (err, data) => {
-		if (err) throw err;
-		const check_compositor = data
-
-		if ((check_compositor.indexOf("compositor=on") > -1) == "1") {
-			document.getElementById("compositor1").style.display = "block";
-			document.getElementById("compositor2").style.display = "none";
-			document.querySelector(".compositor-on").style.display = "block";
-			document.querySelector(".compositor-off").style.display = "none";
-
-		} else if ((check_compositor.indexOf("compositor=off") > -1) == "1") {
-			document.getElementById("compositor1").style.display = "none";
-			document.getElementById("compositor2").style.display = "block";
-			document.querySelector(".compositor-on").style.display = "none";
-			document.querySelector(".compositor-off").style.display = "block";
-
-		} else {
-			document.getElementById("compositor1").style.display = "block";
-			document.getElementById("compositor2").style.display = "none";
-			document.querySelector(".compositor-on").style.display = "block";
-			document.querySelector(".compositor-off").style.display = "none";
-		}
-	});
-}
-check_option_compositor();
-
-// Check whether widgets are locked or unlocked
-function check_option_unlock_widgets() {
-	const fs = require('fs');
-
-	fs.readFile('/tmp/regataos-prime/config/regataos-prime.conf', (err, data) => {
-		if (err) throw err;
-		const check_unlock_widgets = data
-
-		if ((check_unlock_widgets.indexOf("unlockwidgets=on") > -1) == "1") {
-			document.getElementById("unlockwidgets1").style.display = "block";
-			document.getElementById("unlockwidgets2").style.display = "none";
-			document.querySelector(".unlockwidgets-on").style.display = "block";
-			document.querySelector(".unlockwidgets-off").style.display = "none";
-
-		} else if ((check_unlock_widgets.indexOf("unlockwidgets=off") > -1) == "1") {
-			document.getElementById("unlockwidgets1").style.display = "none";
-			document.getElementById("unlockwidgets2").style.display = "block";
-			document.querySelector(".unlockwidgets-on").style.display = "none";
-			document.querySelector(".unlockwidgets-off").style.display = "block";
-
-		} else {
-			document.getElementById("unlockwidgets1").style.display = "block";
-			document.getElementById("unlockwidgets2").style.display = "none";
-			document.querySelector(".unlockwidgets-on").style.display = "block";
-			document.querySelector(".unlockwidgets-off").style.display = "none";
-		}
-	});
-}
-check_option_unlock_widgets();
-
-// Check AMD AMF Configuration
-function check_option_amf() {
-	const fs = require('fs');
-
-	fs.readFile('/tmp/regataos-prime/config/regataos-prime.conf', (err, data) => {
-		if (err) throw err;
-		const check_amf = data
-
-		if ((check_amf.indexOf("amf=on") > -1) == "1") {
-			document.getElementById("amf1").style.display = "block";
-			document.getElementById("amf2").style.display = "none";
-
-			document.querySelector(".amf-on").style.display = "block";
-			document.querySelector(".amf-off").style.display = "none";
-
-		} else if ((check_amf.indexOf("amf=off") > -1) == "1") {
-			document.getElementById("amf1").style.display = "none";
-			document.getElementById("amf2").style.display = "block";
-			document.querySelector(".amf-on").style.display = "none";
-			document.querySelector(".amf-off").style.display = "block";
-
-		} else {
-			document.getElementById("amf1").style.display = "none";
-			document.getElementById("amf2").style.display = "block";
-			document.querySelector(".amf-on").style.display = "none";
-			document.querySelector(".amf-off").style.display = "block";
-		}
-	});
-}
-check_option_amf();
-
-setInterval(function () {
-	check_freesync();
-}, 100);

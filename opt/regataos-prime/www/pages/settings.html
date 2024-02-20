@@ -53,27 +53,27 @@
 				<li id="freesync-toggle">
 					<div class="text-app freesync">Radeon FreeSync</div>
 					<div class="switch__container">
-						<input id="switch-shadow-freesync" class="switch switch--shadow-freesync" type="checkbox"
-							onclick="disable_freesync();">
-						<label for="switch-shadow-freesync"></label>
+						<input id="switch-shadow-app freesync" class="switch switch--shadow-app switch-on-freesync"
+							type="checkbox" onclick="runConfigOption('freesync');">
+						<label for="switch-shadow-app freesync"></label>
 					</div>
 					<div class="switch__container">
-						<input id="switch-shadow2-freesync" class="switch switch--shadow2-freesync" type="checkbox"
-							onclick="enable_freesync();">
-						<label for="switch-shadow2-freesync"></label>
+						<input id="switch-shadow2-app freesync" class="switch switch--shadow2-app switch-off-freesync"
+							type="checkbox" onclick="runConfigOption('freesync');">
+						<label for="switch-shadow2-app freesync"></label>
 					</div><span class='freesync-on'></span><span class='freesync-off'></span>
 				</li>
 				<li id="compositor-toggle">
 					<div class="text-app compositor-text">Desktop Effects</div>
-					<div class="switch__container" id="compositor1">
+					<div class="switch__container">
 						<input id="switch-shadow-app compositor" class="switch switch--shadow-app switch-on-compositor"
-							type="checkbox" onclick="window.config_option='compositor'; compositor_config();">
+							type="checkbox" onclick="runConfigOption('compositor');">
 						<label for="switch-shadow-app compositor"></label>
 					</div>
-					<div class="switch__container" id="compositor2">
+					<div class="switch__container">
 						<input id="switch-shadow2-app compositor"
 							class="switch switch--shadow2-app switch-off-compositor" type="checkbox"
-							onclick="window.config_option='compositor'; compositor_config();">
+							onclick="runConfigOption('compositor');">
 						<label for="switch-shadow2-app compositor"></label>
 					</div>
 					<span class="enabled compositor-on"></span>
@@ -81,16 +81,16 @@
 				</li>
 				<li id="unlockwidgets-toggle">
 					<div class="text-app unlockwidgets-text">Lock desktop widgets</div>
-					<div class="switch__container" id="unlockwidgets1">
+					<div class="switch__container">
 						<input id="switch-shadow-app unlockwidgets"
 							class="switch switch--shadow-app switch-on-unlockwidgets" type="checkbox"
-							onclick="window.config_option='unlockwidgets'; unlock_widgets_config();">
+							onclick="runConfigOption('unlockwidgets');">
 						<label for="switch-shadow-app unlockwidgets"></label>
 					</div>
-					<div class="switch__container" id="unlockwidgets2">
+					<div class="switch__container">
 						<input id="switch-shadow2-app unlockwidgets"
 							class="switch switch--shadow2-app switch-off-unlockwidgets" type="checkbox"
-							onclick="window.config_option='unlockwidgets'; unlock_widgets_config();">
+							onclick="runConfigOption('unlockwidgets');">
 						<label for="switch-shadow2-app unlockwidgets"></label>
 					</div>
 					<span class="enabled unlockwidgets-on"></span>
@@ -98,14 +98,14 @@
 				</li>
 				<li id="amf-toggle">
 					<div class="text-app amf-text">Enable AMD AMF</div>
-					<div class="switch__container" id="amf1">
+					<div class="switch__container">
 						<input id="switch-shadow-app amf" class="switch switch--shadow-app switch-on-amf"
-							type="checkbox" onclick="window.config_option='amf'; amf_config();">
+							type="checkbox" onclick="runConfigOption('amf');">
 						<label for="switch-shadow-app amf"></label>
 					</div>
-					<div class="switch__container" id="amf2">
+					<div class="switch__container">
 						<input id="switch-shadow2-app amf" class="switch switch--shadow2-app switch-off-amf"
-							type="checkbox" onclick="window.config_option='amf'; amf_config();">
+							type="checkbox" onclick="runConfigOption('amf');">
 						<label for="switch-shadow2-app amf"></label>
 					</div>
 					<span class="enabled amf-on"></span>
@@ -115,12 +115,12 @@
 					<div class="text-app pst-text">Prevent Screen Tearing</div>
 					<div class="switch__container">
 						<input id="switch-shadow-app tearfree" class="switch switch--shadow-app switch-on-tearfree"
-							type="checkbox" onclick="window.config_option='tearfree'; run_config_option();">
+							type="checkbox" onclick="runConfigOption('tearfree');">
 						<label for="switch-shadow-app tearfree"></label>
 					</div>
 					<div class="switch__container">
 						<input id="switch-shadow2-app tearfree" class="switch switch--shadow2-app switch-off-tearfree"
-							type="checkbox" onclick="window.config_option='tearfree'; run_config_option();">
+							type="checkbox" onclick="runConfigOption('tearfree');">
 						<label for="switch-shadow2-app tearfree"></label>
 					</div>
 					<span class="enabled tearfree-on"></span>
@@ -179,8 +179,8 @@
 			</div>
 			<div class="div-test">
 				<ul>
-					<li class="test-dgpu button-gl" onclick="teste_dgpu_gl();"><span></span></li>
-					<li class="test-dgpu button-vk" onclick="teste_dgpu_vk();"><span></span></li>
+					<li class="test-dgpu button-gl" onclick="dgpuTest('gl');"><span></span></li>
+					<li class="test-dgpu button-vk" onclick="dgpuTest('vk');"><span></span></li>
 				</ul>
 			</div>
 		</div>

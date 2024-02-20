@@ -85,6 +85,7 @@ function vramUsage() {
 			document.getElementById("vram-usage").style.strokeDashoffset = "calc(440 - (440 * 0) / 100)";
 			document.getElementById("vram-usage-number").innerHTML = "N/A";
 			document.getElementById("vram-usage-nodata").style.display = "none";
+			document.getElementById("vram-usage-block").style.opacity = ".3";
 
 		} else if (stdout.length <= 1) {
 			document.getElementById("vram-usage").style.strokeDashoffset = "calc(440 - (440 * 0) / 100)";

@@ -159,8 +159,8 @@ function getIframeUrl() {
 
 //Go to specific pages
 function go_applications() {
-    var iframeUrl = document.getElementById("main-iframe").src;
-    if ((iframeUrl.indexOf("apps") > -1) == "0") {
+    const iframeUrl = document.getElementById("main-iframe").src;
+    if (!iframeUrl.includes("apps")) {
         document.getElementById("main-iframe").src = "./pages/apps.html";
 
         // Take the page to the top
@@ -171,8 +171,8 @@ function go_applications() {
 }
 
 function go_settings() {
-    var iframeUrl = document.getElementById("main-iframe").src;
-    if ((iframeUrl.indexOf("settings") > -1) == "0") {
+    const iframeUrl = document.getElementById("main-iframe").src;
+    if (!iframeUrl.includes("settings")) {
         document.getElementById("main-iframe").src = "./pages/settings.html";
 
         // Take the page to the top
@@ -183,8 +183,8 @@ function go_settings() {
 }
 
 function go_system_info() {
-    var iframeUrl = document.getElementById("main-iframe").src;
-    if ((iframeUrl.indexOf("performance") > -1) == "0") {
+    const iframeUrl = document.getElementById("main-iframe").src;
+    if (!iframeUrl.includes("performance")) {
         document.getElementById("main-iframe").src = "./pages/performance.html";
 
         // Take the page to the top
@@ -195,8 +195,8 @@ function go_system_info() {
 }
 
 function go_system() {
-    var iframeUrl = document.getElementById("main-iframe").src;
-    if ((iframeUrl.indexOf("system") > -1) == "0") {
+    const iframeUrl = document.getElementById("main-iframe").src;
+    if (!iframeUrl.includes("system")) {
         document.getElementById("main-iframe").src = "./pages/system.html";
 
         // Take the page to the top

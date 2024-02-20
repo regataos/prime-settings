@@ -1,33 +1,31 @@
 // Settings page options
 
-// Prevent Screen Tearing
-function run_config_option() {
+// Apply configuration option
+function runConfigOption(option) {
 	const fs = require('fs');
 	const exec = require('child_process').exec;
 
-	const command = "/opt/regataos-prime/scripts/settings-options -" + config_option;
-	exec(command, function (error, call, errlog) {
-	});
+	const command = `/opt/regataos-prime/scripts/settings-options -${option}`;
+	exec(command, function (error, call, errlog) { });
 
 	setTimeout(function () {
-		fs.readFile('/tmp/regataos-prime/config/regataos-prime.conf', (err, data) => {
-			if (err) throw err;
-			const check_configs = data
+		const configFileWithOptions = "/tmp/regataos-prime/config/regataos-prime.conf";
 
-			if ((check_configs.indexOf(config_option + "=on") > -1) == "1") {
-				document.querySelector(`.${config_option}-on`).style.display = "block";
-				document.querySelector(`.${config_option}-off`).style.display = "none";
+		if (fs.existsSync(configFileWithOptions)) {
+			const checkOptions = fs.readFileSync(configFileWithOptions, "utf8");
 
-			} else if ((check_configs.indexOf(config_option) > -1) == "1") {
-				document.querySelector(`.${config_option}-on`).style.display = "none";
-				document.querySelector(`.${config_option}-off`).style.display = "block";
-
+			if (checkOptions.includes(`${option}=on`)) {
+				document.querySelector(`.${option}-on`).style.display = "block";
+				document.querySelector(`.${option}-off`).style.display = "none";
+			} else if (checkOptions.includes(`${option}=off`)) {
+				document.querySelector(`.${option}-on`).style.display = "none";
+				document.querySelector(`.${option}-off`).style.display = "block";
 			} else {
-				document.querySelector(`.${config_option}-on`).style.display = "block";
-				document.querySelector(`.${config_option}-off`).style.display = "none";
+				document.querySelector(`.${option}-on`).style.display = "block";
+				document.querySelector(`.${option}-off`).style.display = "none";
 			}
-		});
-	}, 500);
+		}
+	}, 1000);
 }
 
 // Open display
@@ -41,18 +39,10 @@ function display() {
 }
 
 // Open dgpu-teste
-function teste_dgpu_gl() {
+function dgpuTest(graphicalApi) {
 	const exec = require('child_process').exec;
-	const command = 'sleep 1; /opt/regataos-prime/scripts/test-dgpu -gl';
-	exec(command, function (error, call, errlog) {
-	});
-}
-
-function teste_dgpu_vk() {
-	const exec = require('child_process').exec;
-	const command = 'sleep 1; /opt/regataos-prime/scripts/test-dgpu -vk';
-	exec(command, function (error, call, errlog) {
-	});
+	const command = `sleep 1; /opt/regataos-prime/scripts/test-dgpu -${graphicalApi}`;
+	exec(command, function (error, call, errlog) { });
 }
 
 // Open nvidia-settings
@@ -63,21 +53,6 @@ function nvidia_driver() {
 		exec(command, function (error, call, errlog) {
 		});
 	}, 500);
-}
-
-// Freesync
-function enable_freesync() {
-	const exec = require('child_process').exec;
-	const command = "/opt/regataos-prime/scripts/settings-options -freesync-on";
-	exec(command, function (error, call, errlog) {
-	});
-}
-
-function disable_freesync() {
-	const exec = require('child_process').exec;
-	const command = "/opt/regataos-prime/scripts/settings-options -freesync-off";
-	exec(command, function (error, call, errlog) {
-	});
 }
 
 // Get path to .desktop file
@@ -107,96 +82,6 @@ function remove_external_app(appname, desktop) {
 	setTimeout(function () {
 		createAppList();
 	}, 500);
-}
-
-// Configuration option for KWin compositing
-function compositor_config() {
-	const fs = require('fs');
-	const exec = require('child_process').exec;
-
-	const command = "/opt/regataos-prime/scripts/settings-options -" + config_option;
-	exec(command, function (error, call, errlog) {
-	});
-
-	setTimeout(function () {
-		fs.readFile('/tmp/regataos-prime/config/regataos-prime.conf', (err, data) => {
-			if (err) throw err;
-			const check_configs = data
-
-			if ((check_configs.indexOf(config_option + "=on") > -1) == "1") {
-				document.querySelector(`.${config_option}-on`).style.display = "block";
-				document.querySelector(`.${config_option}-off`).style.display = "none";
-
-			} else if ((check_configs.indexOf(config_option) > -1) == "1") {
-				document.querySelector(`.${config_option}-on`).style.display = "none";
-				document.querySelector(`.${config_option}-off`).style.display = "block";
-
-			} else {
-				document.querySelector(`.${config_option}-on`).style.display = "block";
-				document.querySelector(`.${config_option}-off`).style.display = "none";
-			}
-		});
-	}, 1000);
-}
-
-// Configuration option to unlock widgets
-function unlock_widgets_config() {
-	const fs = require('fs');
-	const exec = require('child_process').exec;
-
-	const command = "/opt/regataos-prime/scripts/settings-options -" + config_option;
-	exec(command, function (error, call, errlog) {
-	});
-
-	setTimeout(function () {
-		fs.readFile('/tmp/regataos-prime/config/regataos-prime.conf', (err, data) => {
-			if (err) throw err;
-			const check_configs = data
-
-			if ((check_configs.indexOf(config_option + "=on") > -1) == "1") {
-				document.querySelector(`.${config_option}-on`).style.display = "block";
-				document.querySelector(`.${config_option}-off`).style.display = "none";
-
-			} else if ((check_configs.indexOf(config_option) > -1) == "1") {
-				document.querySelector(`.${config_option}-on`).style.display = "none";
-				document.querySelector(`.${config_option}-off`).style.display = "block";
-
-			} else {
-				document.querySelector(`.${config_option}-on`).style.display = "block";
-				document.querySelector(`.${config_option}-off`).style.display = "none";
-			}
-		});
-	}, 1000);
-}
-
-// Configuration option to AMF
-function amf_config() {
-	const fs = require('fs');
-	const exec = require('child_process').exec;
-
-	const command = "/opt/regataos-prime/scripts/settings-options -" + config_option;
-	exec(command, function (error, call, errlog) {
-	});
-
-	setTimeout(function () {
-		fs.readFile('/tmp/regataos-prime/config/regataos-prime.conf', (err, data) => {
-			if (err) throw err;
-			const check_configs = data
-
-			if ((check_configs.indexOf(config_option + "=on") > -1) == "1") {
-				document.querySelector(`.${config_option}-on`).style.display = "block";
-				document.querySelector(`.${config_option}-off`).style.display = "none";
-
-			} else if ((check_configs.indexOf(config_option) > -1) == "1") {
-				document.querySelector(`.${config_option}-on`).style.display = "none";
-				document.querySelector(`.${config_option}-off`).style.display = "block";
-
-			} else {
-				document.querySelector(`.${config_option}-on`).style.display = "none";
-				document.querySelector(`.${config_option}-off`).style.display = "block";
-			}
-		});
-	}, 1000);
 }
 
 // Functions for buttons with drop-down menu.

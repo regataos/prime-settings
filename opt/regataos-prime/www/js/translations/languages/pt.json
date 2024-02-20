@@ -86,7 +86,7 @@
                 "off": "Widgets desbloqueados"
             },
             "amdAmf": {
-                "title": "Ativar o AMD AMF",
+                "title": "Advanced Media Framework",
                 "on": "AMD AMF ativado",
                 "off": "AMD AMF desativado"
             }

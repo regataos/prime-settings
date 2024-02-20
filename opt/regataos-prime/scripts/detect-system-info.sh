@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sleep 3
+sleep 1
 
 # Collect hardware information
 user=$(users | awk '{print $1}')
@@ -66,8 +66,12 @@ function get_dgpu_vram() {
         vram_total=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader | sed 's/ MiB/MB/')
         echo "$vram_total" >"$system_info_dir/total-vram-size.txt"
     else
-        vram_total=$(DRI_PRIME=1 glxinfo | egrep -i 'device|memory' | grep 'Video memory' | head -n 1 | awk '{print $3}')
-        echo "$vram_total" >"$system_info_dir/total-vram-size.txt"
+        if [[ $(glxinfo | grep vendor) == *"Intel"* ]]; then
+            echo "N/A" >"$system_info_dir/total-vram-size.txt"
+        else
+            vram_total=$(DRI_PRIME=1 glxinfo | egrep -i 'device|memory' | grep 'Video memory' | head -n 1 | awk '{print $3}')
+            echo "$vram_total" >"$system_info_dir/total-vram-size.txt"
+        fi
     fi
 }
 get_dgpu_vram &

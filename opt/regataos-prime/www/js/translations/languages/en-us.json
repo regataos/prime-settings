@@ -86,7 +86,7 @@
                 "off": "Unlocked widgets"
             },
             "amdAmf": {
-                "title": "Enable AMD AMF",
+                "title": "Advanced Media Framework",
                 "on": "AMD AMF enabled",
                 "off": "AMD AMF disabled"
             }
