@@ -1,5 +1,5 @@
 Name: regataos-prime
-Version: 22.2
+Version: 24.0
 Release: 0
 Url: https://github.com/regataos/prime-settings
 Summary: PRIME for Regata OS.
@@ -55,8 +55,10 @@ else
 fi
 
 # Create regataosprime executable
-rm -f "/opt/magma/regataosprime"
-cp -f "/opt/magma/nw" "/opt/magma/regataosprime"
+if test -e "/opt/magma/nw"; then
+  rm -f "/opt/magma/regataosprime"
+  cp -f "/opt/magma/nw" "/opt/magma/regataosprime"
+fi
 
 if test ! -e "/usr/bin/regataosprime"; then
 	ln -sf "/opt/magma/regataosprime" "/usr/bin/regataosprime"
