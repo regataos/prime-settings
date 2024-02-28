@@ -16,6 +16,7 @@ BuildRequires: grep
 Source1: %{name}-%{version}.tar.xz
 Requires: xz
 Requires: magma >= 5.54.1
+Requires: regataos-base >= 24
 Requires: regataos-store >= 21.3
 Requires: inxi
 Requires: lshw
