@@ -6,7 +6,11 @@ function vram_freq() {
 	detect_driver=$(cat "/tmp/regataos-prime/config/system-info/graphics-driver.txt")
 	if [[ $detect_driver == *"nvidia"* ]]; then
 		vram_freq=$(nvidia-smi --query-gpu=clocks.mem --format=csv,noheader | sed 's/ MHz/MHz/')
-		echo "$vram_freq"
+		if [[ $vram_freq == *"Not Supported"* ]]; then
+			echo "nodata"
+		else
+			echo "$vram_freq"
+		fi
 	else
 		dgpu=$(cat "/tmp/regataos-prime/config/system-info/opengl-vendor.txt")
 		if [[ $dgpu == *"AMD"* ]]; then
@@ -31,7 +35,11 @@ function vram_usage() {
 	detect_driver=$(cat "/tmp/regataos-prime/config/system-info/graphics-driver.txt")
 	if [[ $detect_driver == *"nvidia"* ]]; then
 		vram_usage=$(nvidia-smi --query-gpu=utilization.memory --format=csv,noheader | awk '{print $1}')
-		echo "$vram_usage"
+		if [[ $vram_usage == *"Not Supported"* ]]; then
+			echo "nodata"
+		else
+			echo "$vram_usage"
+		fi
 	else
 		dgpu=$(cat "/tmp/regataos-prime/config/system-info/opengl-vendor.txt")
 		if [[ $dgpu == *"AMD"* ]]; then
@@ -52,7 +60,11 @@ function gpu_usage() {
 	detect_driver=$(cat "/tmp/regataos-prime/config/system-info/graphics-driver.txt")
 	if [[ $detect_driver == *"nvidia"* ]]; then
 		gpu_usage=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader | awk '{print $1}')
-		echo "$gpu_usage"
+		if [[ $gpu_usage == *"Not Supported"* ]]; then
+			echo "nodata"
+		else
+			echo "$gpu_usage"
+		fi
 	else
 		dgpu=$(cat "/tmp/regataos-prime/config/system-info/opengl-vendor.txt")
 		if [[ $dgpu == *"AMD"* ]]; then
@@ -79,8 +91,11 @@ function gpu_temp() {
 	detect_driver=$(cat "/tmp/regataos-prime/config/system-info/graphics-driver.txt")
 	if [[ $detect_driver == *"nvidia"* ]]; then
 		gpu_temp=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader)
-		echo "$gpu_temp"°C
-
+		if [[ $gpu_temp == *"Not Supported"* ]]; then
+			echo "nodata"
+		else
+			echo "$gpu_temp"°C
+		fi
 	else
 		dgpu=$(cat "/tmp/regataos-prime/config/system-info/opengl-vendor.txt")
 		if [[ $dgpu == *"AMD"* ]]; then
@@ -105,7 +120,11 @@ function gpu_freq() {
 	detect_driver=$(cat "/tmp/regataos-prime/config/system-info/graphics-driver.txt")
 	if [[ $detect_driver == *"nvidia"* ]]; then
 		gpu_freq=$(nvidia-smi -q -d CLOCK | grep Graphics | head -1 | tail -1 | awk '{print $3}')
-		echo "$gpu_freq"MHz
+		if [[ $gpu_freq == *"Not Supported"* ]]; then
+			echo "nodata"
+		else
+			echo "$gpu_freq"MHz
+		fi
 	else
 		dgpu=$(cat "/tmp/regataos-prime/config/system-info/opengl-vendor.txt")
 		if [[ $dgpu == *"AMD"* ]]; then

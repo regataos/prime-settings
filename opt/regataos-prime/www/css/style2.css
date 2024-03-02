@@ -740,10 +740,16 @@ p {
 	cursor: pointer;
 	border: none;
 	border-radius: 2em;
-	padding: 10px 18px;
+	padding: 9px;
 	box-shadow: 0 0 2px rgb(0 0 0 / 40%);
 	-webkit-transition: all 0.5s ease-in-out;
 	transition: all 0.5s ease-in-out;
+}
+
+#select-default-gpu,
+#select-cpu-governor {
+	display: flex;
+	align-items: center;
 }
 
 .button-settings:hover {
@@ -754,6 +760,18 @@ p {
 	background-color: #434b54;
 	background-size: 100%;
 	transition: all 0s;
+}
+
+.button-settings span {
+	padding-left: 5px;
+}
+
+.button-settings svg {
+	fill: #fff;
+	margin-top: 2px;
+	margin-left: 0px;
+	width: 24px;
+	height: 24px;
 }
 
 .context-menu {
@@ -825,7 +843,7 @@ p {
 }
 
 /* responsive CSS */
-@media screen and (max-width: 1250px) {
+@media screen and (max-width: 1280px) {
 	.main-ul {
 		grid-template-columns: repeat(3, 1fr);
 	}
@@ -845,7 +863,7 @@ p {
 	}
 }
 
-@media screen and (max-width: 950px) {
+@media screen and (max-width: 980px) {
 	.main-ul {
 		grid-template-columns: repeat(2, 1fr);
 	}

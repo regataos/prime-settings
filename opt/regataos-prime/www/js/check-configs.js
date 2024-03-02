@@ -48,20 +48,20 @@ checkFreeSync();
 function checkGpuRender() {
 	const fs = require('fs');
 
-	if (fs.existsSync("/tmp/regataos-prime/use-hybrid-graphics.txt")) {
+	if ((fs.existsSync("/tmp/regataos-prime/use-hybrid-graphics.txt")) || (fs.existsSync("/usr/share/X11/xorg.conf.d/10-nvidia-primary.conf"))) {
 		document.getElementById("selecte-gpu").style.display = "block";
 
 		const checkGpuRenderConf = fs.readFileSync("/tmp/regataos-prime/config/regataos-prime.conf", "utf8");
 		if (checkGpuRenderConf.includes("dgpu")) {
-			document.getElementById("select-default-gpu").classList.add("dedicated");
+			document.querySelector("#select-default-gpu span").classList.add("dedicated");
 			document.querySelector(".render-igpu-desc").style.display = "none";
 			document.querySelector(".render-dgpu-desc").style.display = "block";
 		} else if (checkGpuRenderConf.includes("igpu")) {
-			document.getElementById("select-default-gpu").classList.add("integrated");
+			document.querySelector("#select-default-gpu span").classList.add("integrated");
 			document.querySelector(".render-igpu-desc").style.display = "block";
 			document.querySelector(".render-dgpu-desc").style.display = "none";
 		} else {
-			document.getElementById("select-default-gpu").classList.add("integrated");
+			document.querySelector("#select-default-gpu span").classList.add("integrated");
 			document.querySelector(".render-igpu-desc").style.display = "block";
 			document.querySelector(".render-dgpu-desc").style.display = "none";
 		}
@@ -78,20 +78,20 @@ function checkCpuGovernor() {
 	if (fs.existsSync("/etc/regataos-prime/cpu-governor.txt")) {
 		const checkCpuGovernorConf = fs.readFileSync("/etc/regataos-prime/cpu-governor.txt", "utf8");
 		if (checkCpuGovernorConf.includes("performance")) {
-			document.getElementById("select-cpu-governor").classList.add("governor-performance");
+			document.querySelector("#select-cpu-governor span").classList.add("governor-performance");
 			document.querySelector(".cpu-powersave-desc").style.display = "none";
 			document.querySelector(".cpu-performance-desc").style.display = "block";
 		} else if (checkCpuGovernorConf.includes("powersave")) {
-			document.getElementById("select-cpu-governor").classList.add("governor-powersave");
+			document.querySelector("#select-cpu-governor span").classList.add("governor-powersave");
 			document.querySelector(".cpu-powersave-desc").style.display = "block";
 			document.querySelector(".cpu-performance-desc").style.display = "none";
 		} else {
-			document.getElementById("select-cpu-governor").classList.add("governor-powersave");
+			document.querySelector("#select-cpu-governor span").classList.add("governor-powersave");
 			document.querySelector(".cpu-powersave-desc").style.display = "block";
 			document.querySelector(".cpu-performance-desc").style.display = "none";
 		}
 	} else {
-		document.getElementById("select-cpu-governor").classList.add("governor-powersave");
+		document.querySelector("#select-cpu-governor span").classList.add("governor-powersave");
 		document.querySelector(".cpu-powersave-desc").style.display = "block";
 		document.querySelector(".cpu-performance-desc").style.display = "none";
 	}

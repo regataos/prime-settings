@@ -121,8 +121,8 @@ function showSpecifiedMenu(buttonId, menuId, optionId) {
 
 	} else {
 		extendedMenu.style.display = "none";
-		const buttonText = document.querySelector(`#${optionId}`).textContent;
-		document.querySelector(`#${buttonId}`).textContent = buttonText;
+		const buttonText = document.querySelector(`#${optionId} span`).textContent;
+		document.querySelector(`#${buttonId} span`).textContent = buttonText;
 	}
 }
 

@@ -69,6 +69,10 @@ if test ! -e "$HOME/.config/regataos-prime/run-without-dgpu.conf"; then
 	echo "" >"$HOME/.config/regataos-prime/run-without-dgpu.conf"
 fi
 
+if test ! -e "$HOME/.config/regataos-prime/run-with-dgpu.conf"; then
+	echo "" >"$HOME/.config/regataos-prime/run-with-dgpu.conf"
+fi
+
 if test ! -e "$HOME/.config/regataos-prime/regataos-prime.conf"; then
 	echo "one-apps=on" >"$HOME/.config/regataos-prime/regataos-prime.conf"
 	echo "all-apps=on" >>"$HOME/.config/regataos-prime/regataos-prime.conf"
