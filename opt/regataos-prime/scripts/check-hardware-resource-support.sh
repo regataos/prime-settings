@@ -65,36 +65,36 @@ fi
 
 # If necessary, disable desktop effects
 if [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"compositor=off"* ]]; then
-	qdbus-qt5 org.kde.KWin /Compositor suspend
+	qdbus6 org.kde.KWin /Compositor suspend
 
 else
 	# Check if the "compositor" option is present in the configuration file
 	if [[ $(grep -r "compositor=" "/tmp/regataos-prime/config/regataos-prime.conf") != *"compositor="* ]]; then
 		echo "compositor=on" >> "$HOME/.config/regataos-prime/regataos-prime.conf"
 		sed -i '/^$/d' "$HOME/.config/regataos-prime/regataos-prime.conf"
-		qdbus-qt5 org.kde.KWin /Compositor resume
+		qdbus6 org.kde.KWin /Compositor resume
 
 	else
 		if [[ $(grep -r "compositor=" "/tmp/regataos-prime/config/regataos-prime.conf") == *"compositor=on"* ]]; then
-			qdbus-qt5 org.kde.KWin /Compositor resume
+			qdbus6 org.kde.KWin /Compositor resume
 		fi
 	fi
 fi
 
 # If necessary, unlock widgets
 if [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"unlockwidgets=off"* ]]; then
-	qdbus-qt5 org.kde.plasmashell /PlasmaShell evaluateScript "lockCorona(false)"
+	qdbus6 org.kde.plasmashell /PlasmaShell evaluateScript "lockCorona(false)"
 
 else
 	# Check if the "unlockwidgets" option is present in the configuration file
 	if [[ $(grep -r "unlockwidgets=" "/tmp/regataos-prime/config/regataos-prime.conf") != *"unlockwidgets="* ]]; then
 		echo "unlockwidgets=on" >> "$HOME/.config/regataos-prime/regataos-prime.conf"
 		sed -i '/^$/d' "$HOME/.config/regataos-prime/regataos-prime.conf"
-		qdbus-qt5 org.kde.plasmashell /PlasmaShell evaluateScript "lockCorona(true)"
+		qdbus6 org.kde.plasmashell /PlasmaShell evaluateScript "lockCorona(true)"
 
 	else
 		if [[ $(grep -r "unlockwidgets=" "/tmp/regataos-prime/config/regataos-prime.conf") == *"unlockwidgets=on"* ]]; then
-			qdbus-qt5 org.kde.plasmashell /PlasmaShell evaluateScript "lockCorona(true)"
+			qdbus6 org.kde.plasmashell /PlasmaShell evaluateScript "lockCorona(true)"
 		fi
 	fi
 fi

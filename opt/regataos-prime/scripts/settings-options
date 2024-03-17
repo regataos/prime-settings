@@ -75,7 +75,7 @@ function compositor() {
 	# Disable or enable KWin compositing
 	if [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"compositor=on"* ]]; then
 		sed -i 's/\(compositor=on\)/compositor=off/' "/tmp/regataos-prime/config/regataos-prime.conf"
-		qdbus-qt5 org.kde.KWin /Compositor suspend
+		qdbus6 org.kde.KWin /Compositor suspend
 
 		# Show notify on desktop
 		sleep 2
@@ -83,7 +83,7 @@ function compositor() {
 
 	elif [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"compositor=off"* ]]; then
 		sed -i 's/\(compositor=off\)/compositor=on/' "/tmp/regataos-prime/config/regataos-prime.conf"
-		qdbus-qt5 org.kde.KWin /Compositor resume
+		qdbus6 org.kde.KWin /Compositor resume
 
 		# Show notify on desktop
 		sleep 2
@@ -91,7 +91,7 @@ function compositor() {
 
 	else
 		sed -i 's/\(compositor=on\)/compositor=off/' "/tmp/regataos-prime/config/regataos-prime.conf"
-		qdbus-qt5 org.kde.KWin /Compositor suspend
+		qdbus6 org.kde.KWin /Compositor suspend
 
 		# Show notify on desktop
 		sleep 2
@@ -110,7 +110,7 @@ function unlock_widgets() {
 	# Disable or enable unlock widgets
 	if [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"unlockwidgets=on"* ]]; then
 		sed -i 's/\(unlockwidgets=on\)/unlockwidgets=off/' "/tmp/regataos-prime/config/regataos-prime.conf"
-		qdbus-qt5 org.kde.plasmashell /PlasmaShell evaluateScript "lockCorona(false)"
+		qdbus6 org.kde.plasmashell /PlasmaShell evaluateScript "lockCorona(false)"
 
 		# Show notify on desktop
 		sleep 2
@@ -118,7 +118,7 @@ function unlock_widgets() {
 
 	elif [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"unlockwidgets=off"* ]]; then
 		sed -i 's/\(unlockwidgets=off\)/unlockwidgets=on/' "/tmp/regataos-prime/config/regataos-prime.conf"
-		qdbus-qt5 org.kde.plasmashell /PlasmaShell evaluateScript "lockCorona(true)"
+		qdbus6 org.kde.plasmashell /PlasmaShell evaluateScript "lockCorona(true)"
 
 		# Show notify on desktop
 		sleep 2
@@ -126,7 +126,7 @@ function unlock_widgets() {
 
 	else
 		sed -i 's/\(unlockwidgets=on\)/unlockwidgets=off/' "/tmp/regataos-prime/config/regataos-prime.conf"
-		qdbus-qt5 org.kde.plasmashell /PlasmaShell evaluateScript "lockCorona(false)"
+		qdbus6 org.kde.plasmashell /PlasmaShell evaluateScript "lockCorona(false)"
 
 		# Show notify on desktop
 		sleep 2

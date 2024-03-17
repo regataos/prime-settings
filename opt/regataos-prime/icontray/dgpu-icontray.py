@@ -1,9 +1,9 @@
-#!/usr/bin/python3
+#!/usr/bin/python3.11
 
 import os
 import sys
-from PyQt5.QtWidgets import QApplication, QSystemTrayIcon, QMenu
-from PyQt5.QtGui import QIcon
+from PyQt6.QtWidgets import QApplication, QSystemTrayIcon, QMenu
+from PyQt6.QtGui import QIcon
 
 app = QApplication(sys.argv)
 
@@ -18,4 +18,4 @@ title = title.read().rstrip('\n')
 trayIcon.setToolTip(title)
 trayIcon.show()
 
-sys.exit(app.exec_())
+sys.exit(app.exec())
