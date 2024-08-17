@@ -32,7 +32,7 @@ function runConfigOption(option) {
 function display() {
 	setTimeout(function () {
 		const exec = require('child_process').exec;
-		const command = "kcmshell5 kcm_kscreen";
+		const command = "kcmshell6 kcm_kscreen";
 		exec(command, function (error, call, errlog) {
 		});
 	}, 500);
