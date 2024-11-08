@@ -8,11 +8,13 @@ function tearfree() {
 
 		#For NVIDIA Driver
 		sleep 3
-		nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 { ForceFullCompositionPipeline = Off }"
+		#nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 { ForceFullCompositionPipeline = Off }"
 
 		#For open source drivers
-		screen=$(xrandr --props | grep 'connected primary' | awk '{print $1}')
-		xrandr --output $screen --set TearFree off
+		if test ! -e "/usr/bin/nvidia-xconfig"; then
+			screen=$(xrandr --props | grep 'connected primary' | awk '{print $1}')
+			xrandr --output $screen --set TearFree off
+		fi
 
 		# Show notify on desktop
 		/opt/regataos-prime/scripts/notifications/notify -tearfree-off
@@ -23,11 +25,13 @@ function tearfree() {
 
 		#For NVIDIA Driver
 		sleep 3
-		nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 { ForceFullCompositionPipeline = On }"
+		#nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 { ForceFullCompositionPipeline = On }"
 
 		#For open source drivers
-		screen=$(xrandr --props | grep 'connected primary' | awk '{print $1}')
-		xrandr --output $screen --set TearFree on
+		if test ! -e "/usr/bin/nvidia-xconfig"; then
+			screen=$(xrandr --props | grep 'connected primary' | awk '{print $1}')
+			xrandr --output $screen --set TearFree on
+		fi
 
 		# Show notify on desktop
 		/opt/regataos-prime/scripts/notifications/notify -tearfree-on

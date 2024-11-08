@@ -35,29 +35,33 @@ fi
 # If necessary, disable TearFree
 if [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"tearfree=off"* ]]; then
 	#For NVIDIA Driver
-	if [[ $(cat /usr/share/X11/xorg.conf.d/20-nvidia.conf) == *"ForceFullCompositionPipeline=On"* ]]; then
-		nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 { ForceFullCompositionPipeline = Off }"
-	fi
+	#if [[ $(cat /usr/share/X11/xorg.conf.d/20-nvidia.conf) == *"ForceFullCompositionPipeline=On"* ]]; then
+	#	nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 { ForceFullCompositionPipeline = Off }"
+	#fi
 
 	#For open source drivers
-	screen=$(xrandr --props | grep 'connected primary' | awk '{print $1}')
-	xrandr --output $screen --set TearFree off
+	if test ! -e "/usr/bin/nvidia-xconfig"; then
+		screen=$(xrandr --props | grep 'connected primary' | awk '{print $1}')
+		xrandr --output $screen --set TearFree off
 
-	sudo /opt/regataos-prime/scripts/gpu-render -tearfree-off
+		sudo /opt/regataos-prime/scripts/gpu-render -tearfree-off
+	fi
 
 elif [[ $(cat /tmp/regataos-prime/config/regataos-prime.conf) == *"tearfree=on"* ]]; then
 	#For NVIDIA Driver
 	# The ForceFullCompositionPipeline option is known to break some games using Vulkan
 	# under Proton with NVIDIA driver 535. So, until NVIDIA can fix the issue, disable this feature.
-	if [[ $(cat /usr/share/X11/xorg.conf.d/20-nvidia.conf) == *"ForceFullCompositionPipeline=Off"* ]]; then
-		nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 { ForceFullCompositionPipeline = Off }"
-	fi
+	#if [[ $(cat /usr/share/X11/xorg.conf.d/20-nvidia.conf) == *"ForceFullCompositionPipeline=Off"* ]]; then
+	#	nvidia-settings --assign CurrentMetaMode="nvidia-auto-select +0+0 { ForceFullCompositionPipeline = Off }"
+	#fi
 
 	#For open source drivers
-	screen=$(xrandr --props | grep 'connected primary' | awk '{print $1}')
-	xrandr --output $screen --set TearFree on
+	if test ! -e "/usr/bin/nvidia-xconfig"; then
+		screen=$(xrandr --props | grep 'connected primary' | awk '{print $1}')
+		xrandr --output $screen --set TearFree on
 
-	sudo /opt/regataos-prime/scripts/gpu-render -tearfree-on
+		sudo /opt/regataos-prime/scripts/gpu-render -tearfree-on
+	fi
 
 else
 	echo "Option not found in the file with configuration options."
