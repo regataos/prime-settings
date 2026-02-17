@@ -1,56 +1,90 @@
-// Check configuration files
-function checkConfigFile(data, desiredString) {
-    const searchString = new RegExp(`(?<=${desiredString}).*`, "g");
+"use strict";
 
-    let systemConfig = data.match(searchString)[0];
-    systemConfig = systemConfig.toLowerCase();
-    systemConfig = systemConfig.replace(/:.*/g, '');
-    systemConfig = systemConfig.replace(/\.utf-8/g, "").replace(/\.utf8/g, "");
-    systemConfig = systemConfig.replace(/_/g, '-');
-    return systemConfig;
-}
+(function () {
+  // Evita conflito de escopo global (NW.js)
+  if (!window.fs) window.fs = require("fs");
+  const fs = window.fs;
 
-// Choose the JSON file with the language translation.
-function selectTranslationFile() {
-    const fs = require('fs');
+  const translationDir = "/opt/regataos-prime/www/js/translations/languages";
+  const fallback = `${translationDir}/en-us.json`;
 
-    const translationDir = "/opt/regataos-prime/www/js/translations/languages"
+  function normalizeLang(raw) {
+    // Ex.: "pt_BR.UTF-8" -> "pt-br"
+    // Ex.: '"pt_BR"' -> "pt-br"
+    // Ex.: "pt_BR:en_US" -> "pt-br" (pega o primeiro)
+    let s = String(raw || "").trim();
 
-    if (fs.existsSync("/tmp/regataos-configs/config/plasma-localerc")) {
-        const checkLangSystem = fs.readFileSync("/tmp/regataos-configs/config/plasma-localerc", "utf8");
+    // remove aspas
+    s = s.replace(/^["']|["']$/g, "");
 
-        if (checkLangSystem.includes("LANGUAGE")) {
-            const configOption = "LANGUAGE="
-            const languageDetected = checkConfigFile(checkLangSystem, configOption);
+    // se tiver lista tipo pt_BR:en_US, pega o primeiro
+    s = s.split(":")[0].trim();
 
-            if (fs.existsSync(`${translationDir}/${languageDetected}.json`)) {
-                return `${translationDir}/${languageDetected}.json`;
-            } else {
-                return `${translationDir}/en-us.json`;
-            }
+    // remove sufixos de encoding
+    s = s.replace(/\.utf-?8$/i, "");
 
-        } else if (checkLangSystem.includes("LANG")) {
-            const configOption = "LANG="
-            const languageDetected = checkConfigFile(checkLangSystem, configOption);
+    // normaliza separador
+    s = s.replace(/_/g, "-").toLowerCase();
 
-            if (fs.existsSync(`${translationDir}/${languageDetected}.json`)) {
-                return `${translationDir}/${languageDetected}.json`;
-            } else {
-                return `${translationDir}/en-us.json`;
-            }
-        }
+    // remove espaços
+    s = s.replace(/\s+/g, "");
 
-    } else if (fs.existsSync("/tmp/regataos-configs/config/user-dirs.locale")) {
-        const checkLangSystem = fs.readFileSync("/tmp/regataos-configs/config/user-dirs.locale", "utf8");
+    return s;
+  }
 
-        let languageDetected = checkLangSystem
-        languageDetected = languageDetected.toLowerCase();
-        languageDetected = languageDetected.replace(/_/g, '-');
+  function getConfigValue(text, key) {
+    // pega o valor de uma linha tipo KEY=value
+    const re = new RegExp(`^\\s*${key}\\s*([^\\r\\n#]*)`, "m");
+    const m = String(text || "").match(re);
+    return m ? String(m[1]).trim() : "";
+  }
 
-        if (fs.existsSync(`${translationDir}/${languageDetected}.json`)) {
-            return `${translationDir}/${languageDetected}.json`;
-        } else {
-            return `${translationDir}/en-us.json`;
-        }
+  function fileIfExists(path) {
+    try {
+      return fs.existsSync(path) ? path : null;
+    } catch {
+      return null;
     }
-}
+  }
+
+  // Choose the JSON file with the language translation.
+  function selectTranslationFile() {
+    // 1) plasma-localerc (prioridade)
+    const plasmaPath = "/tmp/regataos-configs/config/plasma-localerc";
+    if (fs.existsSync(plasmaPath)) {
+      const content = fs.readFileSync(plasmaPath, "utf8");
+
+      const raw =
+        getConfigValue(content, "LANGUAGE=") ||
+        getConfigValue(content, "LANG=");
+
+      const lang = normalizeLang(raw);
+      if (lang) {
+        const candidate = `${translationDir}/${lang}.json`;
+        return fileIfExists(candidate) || fallback;
+      }
+
+      return fallback;
+    }
+
+    // 2) user-dirs.locale
+    const userDirsPath = "/tmp/regataos-configs/config/user-dirs.locale";
+    if (fs.existsSync(userDirsPath)) {
+      const content = fs.readFileSync(userDirsPath, "utf8");
+      const lang = normalizeLang(content);
+
+      if (lang) {
+        const candidate = `${translationDir}/${lang}.json`;
+        return fileIfExists(candidate) || fallback;
+      }
+
+      return fallback;
+    }
+
+    // 3) fallback final garantido
+    return fallback;
+  }
+
+  // expõe se você usa em outro arquivo
+  window.selectTranslationFile = selectTranslationFile;
+})();

@@ -286,9 +286,9 @@ desktop_file=$(rpm -ql $package_name | grep ".desktop" | head -1 | tail -1 | sed
 
 if [ ! -z $desktop_file ];then
 	icon_name=$(grep -r "Icon=" "$desktop_file" | cut -d"=" -f 2-);
-	search_icon_directory_svg=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/apps/48/ /usr/share/icons/breeze-dark/apps/48/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | egrep "svg" | sed '/symbolic/d' | head -1 | tail -1);
-	search_icon_directory_png1=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/apps/48/ /usr/share/icons/breeze-dark/apps/48/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | head -1 | tail -1);
-	search_icon_directory_png2=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/apps/48/ /usr/share/icons/breeze-dark/apps/48/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | tail -1 | head -1);
+	search_icon_directory_svg=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/apps/48/ /usr/share/icons/breeze-dark/apps/48/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | egrep "svg" | sed '/symbolic/d' | sed '/regataos-gcs/d' | head -1 | tail -1);
+	search_icon_directory_png1=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/apps/48/ /usr/share/icons/breeze-dark/apps/48/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | sed '/regataos-gcs/d' | head -1 | tail -1);
+	search_icon_directory_png2=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/apps/48/ /usr/share/icons/breeze-dark/apps/48/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | sed '/regataos-gcs/d' | tail -1 | head -1);
 
 	if [ -z $search_icon_directory_svg ];then
 		size_icon_png1=$(identify -verbose $search_icon_directory_png1 | grep Geometry | awk '{print $2}' | cut -d"x" -f -1)
@@ -333,13 +333,37 @@ fi
 }
 
 for i in /opt/regataos-store/apps-list/*.json; do
-app_name="$(grep -R '"nickname":' $i | awk '{print $2}' | sed 's/"\|,//g')";
-package_name="$(grep -R '"package":' $i | awk '{print $2}' | sed 's/"\|,//g')";
-package_manager="$(grep -R '"package_manager":' $i | awk '{print $2}' | sed 's/"\|,//g')";
-enable_dgpu="$(grep -R '"dgpu":' $i | awk '{print $2}' | sed 's/"\|,//g')";
-app_executable_snap="$(grep -R '"executable":' $i | awk '{print $4}' | sed 's/"\|,\|snap run //g')";
-installed_apps=$(cat /opt/regataos-store/installed-apps/installed-apps.txt)
+read -r app_name package_name package_manager enable_dgpu app_executable_snap < <(
+python3 - "$i" <<'PY'
+import json, sys
 
+path = sys.argv[1]
+with open(path, "r", encoding="utf-8") as f:
+    data = json.load(f)
+
+# seu JSON é uma lista com 1 objeto
+app = data[0] if isinstance(data, list) and data else {}
+
+def first_or_empty(v):
+    # aceita string ou lista
+    if v is None:
+        return ""
+    if isinstance(v, list):
+        return str(v[0]) if v else ""
+    return str(v)
+
+nickname = first_or_empty(app.get("nickname"))
+pkg = first_or_empty(app.get("package"))
+pkgman = first_or_empty(app.get("package_manager"))
+dgpu = first_or_empty(app.get("dgpu"))
+
+exe = first_or_empty(app.get("executable"))
+# seu script antigo removia "snap run "
+exe = exe.replace("snap run ", "").strip()
+
+print(nickname, pkg, pkgman, dgpu, exe)
+PY
+)
 
 if [[ $enable_dgpu == *"none"* ]]; then
 	echo "$app_name: non-dGPU by default"
@@ -351,7 +375,7 @@ else
 	fi
 fi
 
-if [[ $installed_apps == *"$app_name"* ]]; then
+if grep -Fxq "$app_name" /opt/regataos-store/installed-apps/installed-apps.txt; then
 	if [[ $enable_dgpu != *"none"* ]]; then
 
 		# Capture the app icon to display on Max-Q.
@@ -359,11 +383,17 @@ if [[ $installed_apps == *"$app_name"* ]]; then
 			if test -e "/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt"; then
 				check_icon_file=$(cat /opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt)
 				if [[ $(echo $check_icon_file) != *"file:///"* ]]; then
+					echo "####"
+					echo "Criar link da logo do app."
+					echo "####"
 					capture_icon
 				else
 					sed -i 's/-error//' "/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt";
 				fi
 			else
+					echo "####"
+					echo "Criar link da logo do app."
+					echo "####"
 				capture_icon
 			fi
 

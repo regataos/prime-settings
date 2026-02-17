@@ -2,207 +2,218 @@
 <html>
 
 <head>
-	<title>Max-Q</title>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
-	<link rel="stylesheet" type="text/css" href="../css/style2.css">
-	<link rel="stylesheet" type="text/css" href="../css/buttom-switch-settings.css">
-	<link rel="stylesheet" type="text/css" href="../css/buttom-switch-settings-options.css">
-
-	<script type="text/javascript">
-		//close_popup
-		function close_popup() {
-			document.getElementById("pop-up").style.display = "none";
-		}
-
-		//open_popup
-		function open_popup() {
-			setTimeout(function () {
-				document.getElementById("pop-up").style.display = "block";
-			}, 500);
-		}
-	</script>
+  <title>Max-Q</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+  <link rel="stylesheet" type="text/css" href="../css/style2.css">
+  <link rel="stylesheet" type="text/css" href="../css/buttom-switch-settings.css">
+  <link rel="stylesheet" type="text/css" href="../css/buttom-switch-settings-options.css">
 </head>
 
-<body onclick="hideSpecifiedMenu();">
-	<div id="loadscreen"></div>
-	<script>
-		setTimeout(function () {
-			document.getElementById("loadscreen").style.display = "none";
-		}, 1000);
-	</script>
+<body>
+  <div id="loadscreen"></div>
 
-	<div class="div1">
-		<div id="title" class="hdiv1 page-settings-title">Settings</div>
-		<p class="pdiv1 page-settings-description">Choose the best configuration for your dedicated GPU, configure the
-			display and perform simple tests.</p>
-	</div>
+  <div class="div1">
+    <div id="title" class="hdiv1 page-settings-title">Settings</div>
+    <p class="pdiv1 page-settings-description">
+      Choose the best configuration for your dedicated GPU, configure the display and perform simple tests.
+    </p>
+  </div>
 
-	<div class="main-div" id="main-div">
-		<div class="div2" id="div2">
-			<ul class="main-ul">
-				<li id="buttom-click" class="button-effect" onclick="display();">
-					<div class="text-app display-settings"></div><span class='info-item display-settings-info'></span>
-				</li>
-				<li id="use-nvidia-click" class="button-effect" onclick="nvidia_driver();">
-					<div class="text-app nvidia-settings"></div><span class='info-item nvidia-settings-info'></span>
-				</li>
-				<li id="buttom-click" class="button-effect" onclick="open_popup();">
-					<div class="text-app run-tests"></div><span class='info-item run-tests-info'></span>
-				</li>
-				<li id="freesync-toggle">
-					<div class="text-app freesync">Radeon FreeSync</div>
-					<div class="switch__container">
-						<input id="switch-shadow-app freesync" class="switch switch--shadow-app switch-on-freesync"
-							type="checkbox" onclick="runConfigOption('freesync');">
-						<label for="switch-shadow-app freesync"></label>
-					</div>
-					<div class="switch__container">
-						<input id="switch-shadow2-app freesync" class="switch switch--shadow2-app switch-off-freesync"
-							type="checkbox" onclick="runConfigOption('freesync');">
-						<label for="switch-shadow2-app freesync"></label>
-					</div><span class='freesync-on'></span><span class='freesync-off'></span>
-				</li>
-				<li id="compositor-toggle">
-					<div class="text-app compositor-text">Desktop Effects</div>
-					<div class="switch__container">
-						<input id="switch-shadow-app compositor" class="switch switch--shadow-app switch-on-compositor"
-							type="checkbox" onclick="runConfigOption('compositor');">
-						<label for="switch-shadow-app compositor"></label>
-					</div>
-					<div class="switch__container">
-						<input id="switch-shadow2-app compositor"
-							class="switch switch--shadow2-app switch-off-compositor" type="checkbox"
-							onclick="runConfigOption('compositor');">
-						<label for="switch-shadow2-app compositor"></label>
-					</div>
-					<span class="enabled compositor-on"></span>
-					<span class="disabled compositor-off"></span>
-				</li>
-				<li id="unlockwidgets-toggle">
-					<div class="text-app unlockwidgets-text">Lock desktop widgets</div>
-					<div class="switch__container">
-						<input id="switch-shadow-app unlockwidgets"
-							class="switch switch--shadow-app switch-on-unlockwidgets" type="checkbox"
-							onclick="runConfigOption('unlockwidgets');">
-						<label for="switch-shadow-app unlockwidgets"></label>
-					</div>
-					<div class="switch__container">
-						<input id="switch-shadow2-app unlockwidgets"
-							class="switch switch--shadow2-app switch-off-unlockwidgets" type="checkbox"
-							onclick="runConfigOption('unlockwidgets');">
-						<label for="switch-shadow2-app unlockwidgets"></label>
-					</div>
-					<span class="enabled unlockwidgets-on"></span>
-					<span class="disabled unlockwidgets-off"></span>
-				</li>
-				<li id="amf-toggle">
-					<div class="text-app amf-text">Enable AMD AMF</div>
-					<div class="switch__container">
-						<input id="switch-shadow-app amf" class="switch switch--shadow-app switch-on-amf"
-							type="checkbox" onclick="runConfigOption('amf');">
-						<label for="switch-shadow-app amf"></label>
-					</div>
-					<div class="switch__container">
-						<input id="switch-shadow2-app amf" class="switch switch--shadow2-app switch-off-amf"
-							type="checkbox" onclick="runConfigOption('amf');">
-						<label for="switch-shadow2-app amf"></label>
-					</div>
-					<span class="enabled amf-on"></span>
-					<span class="disabled amf-off"></span>
-				</li>
-				<li id="tearfree-toggle">
-					<div class="text-app pst-text">Prevent Screen Tearing</div>
-					<div class="switch__container">
-						<input id="switch-shadow-app tearfree" class="switch switch--shadow-app switch-on-tearfree"
-							type="checkbox" onclick="runConfigOption('tearfree');">
-						<label for="switch-shadow-app tearfree"></label>
-					</div>
-					<div class="switch__container">
-						<input id="switch-shadow2-app tearfree" class="switch switch--shadow2-app switch-off-tearfree"
-							type="checkbox" onclick="runConfigOption('tearfree');">
-						<label for="switch-shadow2-app tearfree"></label>
-					</div>
-					<span class="enabled tearfree-on"></span>
-					<span class="disabled tearfree-off"></span>
-				</li>
-				<li id="selecte-gpu">
-					<div class="text-app select-gpu-text"></div>
-					<button class="button-settings" id="select-default-gpu"
-						onclick="showSpecifiedMenu(this.id, 'select-gpu-menu')">
-						<span></span>
-						<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-							<path
-								d="M480-372.924q-7.231 0-13.461-2.308-6.231-2.307-11.846-7.923L274.924-562.924q-8.308-8.307-8.5-20.884-.193-12.576 8.5-21.268 8.692-8.693 21.076-8.693t21.076 8.693L480-442.153l162.924-162.923q8.307-8.308 20.884-8.5 12.576-.193 21.268 8.5 8.693 8.692 8.693 21.076t-8.693 21.076L505.307-383.155q-5.615 5.616-11.846 7.923-6.23 2.308-13.461 2.308Z" />
-						</svg>
-					</button>
+  <div class="main-div" id="main-div">
+    <div class="div2" id="div2">
 
-					<div class="context-menu" id="select-gpu-menu">
-						<div id="integrated-gpu-option"
-							onclick="showSpecifiedMenu('select-default-gpu', 'select-gpu-menu', this.id); chooseDefaultGpu('igpu')">
-							<span class="integrated"></span>
-						</div>
-						<div class="division-options"></div>
-						<div id="dedicated-gpu-option"
-							onclick="showSpecifiedMenu('select-default-gpu', 'select-gpu-menu', this.id); chooseDefaultGpu('dgpu')">
-							<span class="dedicated"></span>
-						</div>
-					</div>
-					<span class='render-igpu-desc'></span>
-					<span class='render-dgpu-desc'></span>
-				</li>
-				<li id="cpu-governor">
-					<div class="text-app cpu-governor-text"></div>
-					<button class="button-settings" id="select-cpu-governor"
-						onclick="showSpecifiedMenu(this.id, 'cpu-governor-menu')">
-						<span></span>
-						<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
-							<path
-								d="M480-372.924q-7.231 0-13.461-2.308-6.231-2.307-11.846-7.923L274.924-562.924q-8.308-8.307-8.5-20.884-.193-12.576 8.5-21.268 8.692-8.693 21.076-8.693t21.076 8.693L480-442.153l162.924-162.923q8.307-8.308 20.884-8.5 12.576-.193 21.268 8.5 8.693 8.692 8.693 21.076t-8.693 21.076L505.307-383.155q-5.615 5.616-11.846 7.923-6.23 2.308-13.461 2.308Z" />
-						</svg>
-					</button>
+      <ul class="main-ul">
 
-					<div class="context-menu" id="cpu-governor-menu">
-						<div id="cpu-powersave-option"
-							onclick="showSpecifiedMenu('select-cpu-governor', 'cpu-governor-menu', this.id); chooseCpuGovernor('powersave')">
-							<span class="governor-powersave"></span>
-						</div>
-						<div class="division-options"></div>
-						<div id="cpu-performance-option"
-							onclick="showSpecifiedMenu('select-cpu-governor', 'cpu-governor-menu', this.id); chooseCpuGovernor('performance')">
-							<span class="governor-performance"></span>
-						</div>
-					</div>
-					<span class='info-item cpu-powersave-desc'></span>
-					<span class='info-item cpu-performance-desc'></span>
-				</li>
-			</ul>
-			<script type="text/javascript" src="../js/check-configs.js"></script>
-			<script type="text/javascript" src="../js/settings.js"></script>
-			<script type="text/javascript" src="../js/check-system.js"></script>
-		</div>
-		<div id="div3"></div>
-	</div>
+        <!-- Display -->
+        <li id="btn-display" class="button-effect" data-action="open-display">
+          <div class="text-app display-settings"></div>
+          <span class='info-item display-settings-info'></span>
+        </li>
 
-	<div id="pop-up">
-		<div id="box-pop-up">
-			<div class="popup-title-box">
-				<div id="button-close" type="button" onclick="close_popup();"
-					style="background-image:url(./../images/close.png); background-repeat: no-repeat; background-size: 17px 17px;"
-					title=""></div>
-				<h3 class="popup-title-settings"></h3>
-				<p class="popup-desc-settings"></p>
-			</div>
-			<div class="div-test">
-				<ul>
-					<li class="test-dgpu button-gl" onclick="dgpuTest('gl');"><span></span></li>
-					<li class="test-dgpu button-vk" onclick="dgpuTest('vk');"><span></span></li>
-				</ul>
-			</div>
-		</div>
-	</div>
-	<script type="text/javascript" src="../js/settings-checker.js"></script>
-	<script type="text/javascript" src="../js/translations/apply-translation-pages.js"></script>
+        <!-- NVIDIA -->
+        <li id="use-nvidia-click" class="button-effect" data-action="open-nvidia-settings">
+          <div class="text-app nvidia-settings"></div>
+          <span class='info-item nvidia-settings-info'></span>
+        </li>
+
+        <!-- Run tests -->
+        <li id="btn-run-tests" class="button-effect" data-action="open-tests-popup">
+          <div class="text-app run-tests"></div>
+          <span class='info-item run-tests-info'></span>
+        </li>
+
+        <!-- FreeSync -->
+        <li id="freesync-toggle">
+          <div class="text-app freesync">Radeon FreeSync</div>
+
+          <div class="switch__container">
+            <input id="switch-shadow-app-freesync"
+                   class="switch switch--shadow-app switch-on-freesync"
+                   type="checkbox"
+                   data-action="toggle-config"
+                   data-option="freesync">
+            <label for="switch-shadow-app-freesync"></label>
+          </div>
+
+          <div class="switch__container">
+            <input id="switch-shadow2-app-freesync"
+                   class="switch switch--shadow2-app switch-off-freesync"
+                   type="checkbox"
+                   data-action="toggle-config"
+                   data-option="freesync">
+            <label for="switch-shadow2-app-freesync"></label>
+          </div>
+
+          <span class="freesync-on"></span>
+          <span class="freesync-off"></span>
+        </li>
+
+        <!-- Compositor -->
+        <li id="compositor-toggle">
+          <div class="text-app compositor-text">Desktop Effects</div>
+
+          <div class="switch__container">
+            <input id="switch-shadow-app-compositor"
+                   class="switch switch--shadow-app switch-on-compositor"
+                   type="checkbox"
+                   data-action="toggle-config"
+                   data-option="compositor">
+            <label for="switch-shadow-app-compositor"></label>
+          </div>
+
+          <div class="switch__container">
+            <input id="switch-shadow2-app-compositor"
+                   class="switch switch--shadow2-app switch-off-compositor"
+                   type="checkbox"
+                   data-action="toggle-config"
+                   data-option="compositor">
+            <label for="switch-shadow2-app-compositor"></label>
+          </div>
+
+          <span class="compositor-on"></span>
+          <span class="compositor-off"></span>
+        </li>
+
+        <!-- Unlock Widgets -->
+        <li id="unlockwidgets-toggle">
+          <div class="text-app unlockwidgets-text">Lock desktop widgets</div>
+
+          <div class="switch__container">
+            <input id="switch-shadow-app-unlockwidgets"
+                   class="switch switch--shadow-app switch-on-unlockwidgets"
+                   type="checkbox"
+                   data-action="toggle-config"
+                   data-option="unlockwidgets">
+            <label for="switch-shadow-app-unlockwidgets"></label>
+          </div>
+
+          <div class="switch__container">
+            <input id="switch-shadow2-app-unlockwidgets"
+                   class="switch switch--shadow2-app switch-off-unlockwidgets"
+                   type="checkbox"
+                   data-action="toggle-config"
+                   data-option="unlockwidgets">
+            <label for="switch-shadow2-app-unlockwidgets"></label>
+          </div>
+
+          <span class="unlockwidgets-on"></span>
+          <span class="unlockwidgets-off"></span>
+        </li>
+
+        <!-- AMF -->
+        <li id="amf-toggle">
+          <div class="text-app amf-text">Enable AMD AMF</div>
+
+          <div class="switch__container">
+            <input id="switch-shadow-app-amf"
+                   class="switch switch--shadow-app switch-on-amf"
+                   type="checkbox"
+                   data-action="toggle-config"
+                   data-option="amf">
+            <label for="switch-shadow-app-amf"></label>
+          </div>
+
+          <div class="switch__container">
+            <input id="switch-shadow2-app-amf"
+                   class="switch switch--shadow2-app switch-off-amf"
+                   type="checkbox"
+                   data-action="toggle-config"
+                   data-option="amf">
+            <label for="switch-shadow2-app-amf"></label>
+          </div>
+
+          <span class="amf-on"></span>
+          <span class="amf-off"></span>
+        </li>
+
+        <!-- TearFree -->
+        <li id="tearfree-toggle">
+          <div class="text-app pst-text">Prevent Screen Tearing</div>
+
+          <div class="switch__container">
+            <input id="switch-shadow-app-tearfree"
+                   class="switch switch--shadow-app switch-on-tearfree"
+                   type="checkbox"
+                   data-action="toggle-config"
+                   data-option="tearfree">
+            <label for="switch-shadow-app-tearfree"></label>
+          </div>
+
+          <div class="switch__container">
+            <input id="switch-shadow2-app-tearfree"
+                   class="switch switch--shadow2-app switch-off-tearfree"
+                   type="checkbox"
+                   data-action="toggle-config"
+                   data-option="tearfree">
+            <label for="switch-shadow2-app-tearfree"></label>
+          </div>
+
+          <span class="tearfree-on"></span>
+          <span class="tearfree-off"></span>
+        </li>
+
+      </ul>
+
+      <script src="../js/check-configs.js"></script>
+      <script src="../js/settings.js"></script>
+      <script src="../js/check-system.js"></script>
+
+    </div>
+  </div>
+
+  <!-- Popup -->
+  <div id="pop-up">
+    <div id="box-pop-up">
+      <div class="popup-title-box">
+        <div id="button-close"
+             data-action="close-tests-popup"
+             style="background-image:url(./../images/close.png); background-repeat: no-repeat; background-size: 17px 17px;">
+        </div>
+        <h3 class="popup-title-settings"></h3>
+        <p class="popup-desc-settings"></p>
+      </div>
+
+      <div class="div-test">
+        <ul>
+          <li class="test-dgpu button-gl"
+              data-action="dgpu-test"
+              data-api="gl">
+            <span></span>
+          </li>
+
+          <li class="test-dgpu button-vk"
+              data-action="dgpu-test"
+              data-api="vk">
+            <span></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/settings-checker.js"></script>
+  <script src="../js/translations/apply-translation-pages.js"></script>
+
 </body>
-
 </html>
