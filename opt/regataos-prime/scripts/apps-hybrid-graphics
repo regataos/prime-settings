@@ -1,463 +1,593 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -u
 
-# Check and create the PRIME Settings configuration directory
-if test -e "/tmp/regataos-prime" ; then
-	chmod 777 "/tmp/regataos-prime/"
-	chmod 777 /tmp/regataos-prime/*
-else
-	mkdir -p "/tmp/regataos-prime/"
-	chmod 777 "/tmp/regataos-prime"
-	chmod 777 /tmp/regataos-prime/*
-fi
+# =========================
+# Config (edite aqui)
+# =========================
 
-if test ! -e "/tmp/regataos-prime/config" ; then
-	user=$(users | awk '{print $1}')
-	ln -sf "/home/$user/.config/regataos-prime" "/tmp/regataos-prime/config"
-	chmod 777 /tmp/regataos-prime/*
-fi
+PRIME_TMP="/tmp/regataos-prime"
+PRIME_CFG="${PRIME_TMP}/config"
 
-if test ! -e "/opt/regataos-prime/www/images/apps-icons"; then
-	mkdir -p "/opt/regataos-prime/www/images/apps-icons/"
-	chmod 777 /opt/regataos-prime/www/images/apps-icons/*
-fi
+PRIME_CONF="${PRIME_CFG}/regataos-prime.conf"
+RUN_WITH_DGPU="${PRIME_CFG}/run-with-dgpu.conf"
+RUN_WITHOUT_DGPU="${PRIME_CFG}/run-without-dgpu.conf"
 
-# Find the user's desktop
-user=$(users | awk '{print $1}')
-test -f "${XDG_CONFIG_HOME:-/home/$user/.config}/user-dirs.dirs" && source "${XDG_CONFIG_HOME:-/home/$user/.config}/user-dirs.dirs"
-desktop_dir="${XDG_DESKTOP_DIR:-/home/$user/Desktop}"
-desktop_folder="$(echo $desktop_dir | cut -d/ -f 3-)"
+APPS_JSON_DIR="/opt/regataos-store/apps-list"
+INSTALLED_APPS_FILE="/opt/regataos-store/installed-apps/installed-apps.txt"
 
-# Directories where possible .desktop files for apps
-apps_dir="/usr/share/applications"
-desktop_dir="/home/$user/$desktop_folder"
-apps_local_home_dir="/home/$user/.local/share/applications"
-apps_local_dir="/usr/local/share/applications"
-snap_dir="/var/lib/snapd/desktop/applications"
-flatpak_dir="/var/lib/flatpak/exports/share/applications"
+ICONS_OUT_DIR="/opt/regataos-prime/www/images/apps-icons"
 
-# Enable or disable running applications with the dGPU
-function check_app() {
-if [[ $(echo $package_manager) == *"zypper"* ]]; then
-	desktop_file_dir=$(rpm -ql $package_name | grep ".desktop" | head -1 | tail -1 | sed 's/\// /g' | sed 's/local //' | awk '{print $4}');
+# Diretórios onde procurar ícones.
+# ✅ Para adicionar mais locais, inclua aqui:
+ICON_SEARCH_DIRS=(
+  "/usr/share/icons/breeze/apps"
+  "/usr/share/icons/breeze-dark/apps"
+  "/usr/share/icons/hicolor/48x48"
+  "/usr/share/icons/hicolor/64x64"
+  "/snap/*/current/usr/share/icons/hicolor"
+  "/snap/*/current/usr/share/icons/hicolor"
+  "/snap/*/current/usr/share/icons/hicolor/64x64/apps/"
+  "/snap/*/current/usr/share/icons"
+  "/snap/*/current/usr/share/pixmaps"
+)
 
-	if [ -z $desktop_file_dir ]; then
-		check_fake_desktop_file=$(rpm -ql $package_name | grep ".desktop")
-		if ! [ -z $check_fake_desktop_file ]; then
-			desktop_file=$(cat $check_fake_desktop_file | head -5 | tail -1 | cut -d"=" -f 2- | sed 's/\// /g' | sed 's/local //' | awk '{print $4}')
-			echo "$desktop_file"
-		else
-			echo 'No ".desktop" file for '"$package_name"' package.'
-		fi
-	else
-		desktop_file=$(echo $desktop_file_dir)
-		echo "$desktop_file"
-	fi
+ICON_SEARCH_DIRS_OTHERS=(
+  "/usr/share/pixmaps"
+  "/usr/share/icons/hicolor"
+  "/opt"
+)
 
-	# Enable or disable running applications with the dGPU
-	#If laptop with hybrid graphics is not detected, disable running apps with "regataos-dgpu" option.
-	if [ -z $desktop_file ]; then
-		echo "Nothing to do..."
+ICON_EXCLUDE_WORDS=(
+  "-xmas"
+  "tray"
+  "mono"
+  "steamplay"
+)
 
-	elif test -e "/tmp/regataos-prime/not-hybrid-graphics.txt"; then
-		sed -i 's/Exec=regataos-dgpu /Exec=/' "$apps_dir/$desktop_file" "$desktop_dir/$desktop_file" "$apps_local_home_dir/$desktop_file" "$apps_local_dir/$desktop_file"
+ICON_LOG_FILE="/tmp/icons-apps.log"
 
-	elif [[ $(grep -R "$app_name=on" /tmp/regataos-prime/config/run-without-dgpu.conf) == *"$app_name=on"* ]]; then
-		# Run app with the dGPU
-		if [[ $(grep -r "regataos-dgpu" "$apps_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
-			sed -i 's/Exec=/Exec=regataos-dgpu /' "$apps_dir/$desktop_file"
-			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$apps_dir/$desktop_file"
-		fi
+# Diretórios onde .desktop pode existir (além do do rpm).
+DESKTOP_TARGET_DIRS=(
+  "/usr/share/applications"
+  "/usr/local/share/applications"
+  "/var/lib/snapd/desktop/applications"
+  "/var/lib/flatpak/exports/share/applications"
+)
 
-		if [[ $(grep -r "regataos-dgpu" "$desktop_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
-			sed -i 's/Exec=/Exec=regataos-dgpu /' "$desktop_dir/$desktop_file"
-			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$desktop_dir/$desktop_file"
-		fi
+# Alias (o capture_icon usa DESKTOP_SEARCH_DIRS)
+DESKTOP_SEARCH_DIRS=("${DESKTOP_TARGET_DIRS[@]}")
 
-		if [[ $(grep -r "regataos-dgpu" "$apps_local_home_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
-			sed -i 's/Exec=/Exec=regataos-dgpu /' "$apps_local_home_dir/$desktop_file"
-			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$apps_local_home_dir/$desktop_file"
-		fi
+# =========================
+# Helpers
+# =========================
 
-		if [[ $(grep -r "regataos-dgpu" "$apps_local_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
-			sed -i 's/Exec=/Exec=regataos-dgpu /' "$apps_local_dir/$desktop_file"
-			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$apps_local_dir/$desktop_file"
-		fi
+log() { printf '%s\n' "$*"; }
 
-		# Add the app name to the list of apps running with the dGPU and clear empty lines
-		if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) != *"$app_name"* ]]; then
-			echo "$app_name" >> "/tmp/regataos-prime/config/run-with-dgpu.conf"
-			sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
-		fi
-
-		# Remove the app name to the list of apps not running with the dGPU and clear empty lines
-		sed -i "s/$app_name//" "/tmp/regataos-prime/config/run-without-dgpu.conf"
-		sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
-
-	elif [[ $(grep -R 'all-apps' /tmp/regataos-prime/config/regataos-prime.conf | cut -d'=' -f 2-) == *"off"* ]]; then
-		# Run app without the dGPU
-		sed -i 's/Exec=regataos-dgpu /Exec=/' "$apps_dir/$desktop_file" "$desktop_dir/$desktop_file" "$apps_local_home_dir/$desktop_file" "$apps_local_dir/$desktop_file"
-
-		# Add the app name to the list of apps not running with the dGPU and clear empty lines
-		if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) != *"$app_name"* ]]; then
-			echo "$app_name" >> "/tmp/regataos-prime/config/run-without-dgpu.conf"
-			sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
-		fi
-
-		# Remove the app name to the list of apps running with the dGPU and clear empty lines
-		sed -i "s/$app_name//" "/tmp/regataos-prime/config/run-with-dgpu.conf"
-		sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
-
-	elif [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) == *"$app_name"* ]]; then
-		# Run app with the dGPU
-		if [[ $(grep -r "regataos-dgpu" "$apps_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
-			sed -i 's/Exec=/Exec=regataos-dgpu /' "$apps_dir/$desktop_file"
-			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$apps_dir/$desktop_file"
-		fi
-
-		if [[ $(grep -r "regataos-dgpu" "$desktop_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
-			sed -i 's/Exec=/Exec=regataos-dgpu /' "$desktop_dir/$desktop_file"
-			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$desktop_dir/$desktop_file"
-		fi
-
-		if [[ $(grep -r "regataos-dgpu" "$apps_local_home_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
-			sed -i 's/Exec=/Exec=regataos-dgpu /' "$apps_local_home_dir/$desktop_file"
-			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$apps_local_home_dir/$desktop_file"
-		fi
-
-		if [[ $(grep -r "regataos-dgpu" "$apps_local_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
-			sed -i 's/Exec=/Exec=regataos-dgpu /' "$apps_local_dir/$desktop_file"
-			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$apps_local_dir/$desktop_file"
-		fi
-
-		# Add the app name to the list of apps running with the dGPU and clear empty lines
-		if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) != *"$app_name"* ]]; then
-			echo "$app_name" >> "/tmp/regataos-prime/config/run-with-dgpu.conf"
-			sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
-		fi
-
-		# Remove the app name to the list of apps not running with the dGPU and clear empty lines
-		sed -i "s/$app_name//" "/tmp/regataos-prime/config/run-without-dgpu.conf"
-		sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
-
-	elif [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) == *"$app_name"* ]]; then
-		# Run app without the dGPU
-		sed -i 's/Exec=regataos-dgpu /Exec=/' "$apps_dir/$desktop_file" "$desktop_dir/$desktop_file" "$apps_local_home_dir/$desktop_file" "$apps_local_dir/$desktop_file"
-
-		# Add the app name to the list of apps not running with the dGPU and clear empty lines
-		if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) != *"$app_name"* ]]; then
-			echo "$app_name" >> "/tmp/regataos-prime/config/run-without-dgpu.conf"
-			sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
-		fi
-
-		# Remove the app name to the list of apps running with the dGPU and clear empty lines
-		sed -i "s/$app_name//" "/tmp/regataos-prime/config/run-with-dgpu.conf"
-		sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
-
-	else
-		# Run app with the dGPU
-		if [[ $(grep -r "regataos-dgpu" "$apps_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
-			sed -i 's/Exec=/Exec=regataos-dgpu /' "$apps_dir/$desktop_file"
-			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$apps_dir/$desktop_file"
-		fi
-
-		if [[ $(grep -r "regataos-dgpu" "$desktop_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
-			sed -i 's/Exec=/Exec=regataos-dgpu /' "$desktop_dir/$desktop_file"
-			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$desktop_dir/$desktop_file"
-		fi
-
-		if [[ $(grep -r "regataos-dgpu" "$apps_local_home_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
-			sed -i 's/Exec=/Exec=regataos-dgpu /' "$apps_local_home_dir/$desktop_file"
-			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$apps_local_home_dir/$desktop_file"
-		fi
-
-		if [[ $(grep -r "regataos-dgpu" "$apps_local_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
-			sed -i 's/Exec=/Exec=regataos-dgpu /' "$apps_local_dir/$desktop_file"
-			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$apps_local_dir/$desktop_file"
-		fi
-
-		# Add the app name to the list of apps running with the dGPU and clear empty lines
-		if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) != *"$app_name"* ]]; then
-			echo "$app_name" >> "/tmp/regataos-prime/config/run-with-dgpu.conf"
-			sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
-		fi
-
-		# Remove the app name to the list of apps not running with the dGPU and clear empty lines
-		sed -i "s/$app_name//" "/tmp/regataos-prime/config/run-without-dgpu.conf"
-		sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
-	fi
-
-elif [[ $(echo $package_manager) == *"snap"* ]]; then
-	# Enable or disable running applications with the dGPU
-	#If laptop with hybrid graphics is not detected, disable running apps with "regataos-dgpu" option.
-	if test -e "/tmp/regataos-prime/not-hybrid-graphics.txt"; then
-		sed -i 's/Exec=regataos-dgpu /Exec=/' "$apps_dir/$desktop_file" "$desktop_dir/$desktop_file" "$apps_local_home_dir/$desktop_file" "$apps_local_dir/$desktop_file"
-
-	elif [[ $(grep -R "$app_name=on" /tmp/regataos-prime/config/run-without-dgpu.conf) == *"$app_name=on"* ]]; then
-		# Run app with the dGPU
-		if [[ $(grep -r "regataos-dgpu" "$snap_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
-			sed -i 's/Exec=/Exec=regataos-dgpu /' "$snap_dir/$desktop_file"
-			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$snap_dir/$desktop_file"
-		fi
-
-		if [[ $(grep -r "regataos-dgpu" "$desktop_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
-			sed -i 's/Exec=/Exec=regataos-dgpu /' "$desktop_dir/$desktop_file"
-			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$desktop_dir/$desktop_file"
-		fi
-
-		if [[ $(grep -r "regataos-dgpu" "$apps_local_home_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
-			sed -i 's/Exec=/Exec=regataos-dgpu /' "$apps_local_home_dir/$desktop_file"
-			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$apps_local_home_dir/$desktop_file"
-		fi
-
-		# Add the app name to the list of apps running with the dGPU and clear empty lines
-		if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) != *"$app_name"* ]]; then
-			echo "$app_name" >> "/tmp/regataos-prime/config/run-with-dgpu.conf"
-			sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
-		fi
-
-		# Remove the app name to the list of apps not running with the dGPU and clear empty lines
-		sed -i "s/$app_name//" "/tmp/regataos-prime/config/run-without-dgpu.conf"
-		sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
-
-	elif [[ $(grep -R 'all-apps' /tmp/regataos-prime/config/regataos-prime.conf | cut -d'=' -f 2-) == *"off"* ]]; then
-		# Run app without the dGPU
-		sed -i 's/Exec=regataos-dgpu /Exec=/' "$snap_dir/$desktop_file" "$desktop_dir/$desktop_file" "$apps_local_home_dir/$desktop_file"
-
-		# Add the app name to the list of apps not running with the dGPU and clear empty lines
-		if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) != *"$app_name"* ]]; then
-			echo "$app_name" >> "/tmp/regataos-prime/config/run-without-dgpu.conf"
-			sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
-		fi
-
-		# Remove the app name to the list of apps running with the dGPU and clear empty lines
-		sed -i "s/$app_name//" "/tmp/regataos-prime/config/run-with-dgpu.conf"
-		sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
-
-	elif [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) == *"$app_name"* ]]; then
-		# Run app without the dGPU
-		sed -i 's/Exec=regataos-dgpu /Exec=/' "$snap_dir/$desktop_file" "$desktop_dir/$desktop_file" "$apps_local_home_dir/$desktop_file"
-
-		# Add the app name to the list of apps not running with the dGPU and clear empty lines
-		if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) != *"$app_name"* ]]; then
-			echo "$app_name" >> "/tmp/regataos-prime/config/run-without-dgpu.conf"
-			sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
-		fi
-
-		# Remove the app name to the list of apps running with the dGPU and clear empty lines
-		sed -i "s/$app_name//" "/tmp/regataos-prime/config/run-with-dgpu.conf"
-		sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
-
-	else
-		# Run app with the dGPU
-		if [[ $(grep -r "regataos-dgpu" "$snap_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
-			sed -i 's/Exec=/Exec=regataos-dgpu /' "$snap_dir/$desktop_file"
-			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$snap_dir/$desktop_file"
-		fi
-
-		if [[ $(grep -r "regataos-dgpu" "$desktop_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
-			sed -i 's/Exec=/Exec=regataos-dgpu /' "$desktop_dir/$desktop_file"
-			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$desktop_dir/$desktop_file"
-		fi
-
-		if [[ $(grep -r "regataos-dgpu" "$apps_local_home_dir/$desktop_file") != *"regataos-dgpu"* ]]; then
-			sed -i 's/Exec=/Exec=regataos-dgpu /' "$apps_local_home_dir/$desktop_file"
-			sed -i 's/TryExec=regataos-dgpu /TryExec=/' "$apps_local_home_dir/$desktop_file"
-		fi
-
-		# Add the app name to the list of apps running with the dGPU and clear empty lines
-		if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) != *"$app_name"* ]]; then
-			echo "$app_name" >> "/tmp/regataos-prime/config/run-with-dgpu.conf"
-			sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
-		fi
-
-		# Remove the app name to the list of apps not running with the dGPU and clear empty lines
-		sed -i "s/$app_name//" "/tmp/regataos-prime/config/run-without-dgpu.conf"
-		sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
-	fi
-
-else
-	echo "Nothing to do..."
-fi
+ensure_dir() {
+  local d="$1"
+  if [[ ! -d "$d" ]]; then
+    mkdir -p "$d"
+  fi
 }
 
-# Capture the app icon to display on Max-Q.
-function capture_icon() {
-desktop_file=$(rpm -ql $package_name | grep ".desktop" | head -1 | tail -1 | sed 's/.txt//');
-
-if [ ! -z $desktop_file ];then
-	icon_name=$(grep -r "Icon=" "$desktop_file" | cut -d"=" -f 2-);
-	search_icon_directory_svg=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/apps/48/ /usr/share/icons/breeze-dark/apps/48/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | egrep "svg" | sed '/symbolic/d' | sed '/regataos-gcs/d' | head -1 | tail -1);
-	search_icon_directory_png1=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/apps/48/ /usr/share/icons/breeze-dark/apps/48/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | sed '/regataos-gcs/d' | head -1 | tail -1);
-	search_icon_directory_png2=$(find /opt/ /usr/share/pixmaps/ /usr/share/icons/breeze/apps/48/ /usr/share/icons/breeze-dark/apps/48/ /usr/share/icons/hicolor/ /usr/share/icons/gnome/ -type f -iname $icon_name* | grep "png" | sed '/symbolic/d' | sed '/regataos-gcs/d' | tail -1 | head -1);
-
-	if [ -z $search_icon_directory_svg ];then
-		size_icon_png1=$(identify -verbose $search_icon_directory_png1 | grep Geometry | awk '{print $2}' | cut -d"x" -f -1)
-		size_icon_png2=$(identify -verbose $search_icon_directory_png2 | grep Geometry | awk '{print $2}' | cut -d"x" -f -1)
-
-		if [ $(echo $size_icon_png1) -gt $(echo $size_icon_png2) ]; then
-			echo "Icon for $app_name: $search_icon_directory_svg"
-			search_icon_directory=$(echo $search_icon_directory_png1)
-
-		elif [ $(echo $size_icon_png2) -gt $(echo $size_icon_png1) ]; then
-			echo "Icon for $app_name: $search_icon_directory_svg"
-			search_icon_directory=$(echo $search_icon_directory_png2)
-
-		elif [ $(echo $size_icon_png1) -ge $(echo $size_icon_png2) ]; then
-			echo "Icon for $app_name: $search_icon_directory_svg"
-			search_icon_directory=$(echo $search_icon_directory_png2)
-
-		elif [ $(echo $size_icon_png2) -ge $(echo $size_icon_png1) ]; then
-			echo "Icon for $app_name: $search_icon_directory_svg"
-			search_icon_directory=$(echo $search_icon_directory_png2)
-
-		else
-			echo "Icon not found for $app_name"
-			search_icon_directory="/usr/share/icons/breeze-dark/apps/48/ktip.svg"
-		fi
-
-	else
-		echo "Icon for $app_name: $search_icon_directory_svg"
-		search_icon_directory=$(echo $search_icon_directory_svg)
-	fi
-
-	# File where the application icon directory will be stored
-	app_icon_dir="/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt"
-	echo "file://$search_icon_directory" > "$app_icon_dir";
-	sed -i 's/-error//' "$app_icon_dir";
-
-	# If the file is saved with two lines, this could be a problem. If necessary, remove the last row.
-	if [ $(find $app_icon_dir -type f -exec wc -l {} + | awk '{print $1}') -ge 2 ]; then
-		sed -i '$ d' "$app_icon_dir";
-	fi
-fi
+ensure_file() {
+  local f="$1"
+  if [[ ! -f "$f" ]]; then
+    : > "$f"
+  fi
 }
 
-for i in /opt/regataos-store/apps-list/*.json; do
-read -r app_name package_name package_manager enable_dgpu app_executable_snap < <(
-python3 - "$i" <<'PY'
+# Lê "all-apps=on/off" do PRIME_CONF (default on)
+get_all_apps_state() {
+  local v=""
+  if [[ -f "$PRIME_CONF" ]]; then
+    v="$(grep -E '^[[:space:]]*all-apps[[:space:]]*=' "$PRIME_CONF" 2>/dev/null | tail -n 1 | cut -d'=' -f2- | tr -d '[:space:]' || true)"
+  fi
+  [[ "${v,,}" == "off" ]] && echo "off" || echo "on"
+}
+
+file_has_line() { # exact line match
+  local file="$1" line="$2"
+  [[ -f "$file" ]] && grep -Fxq "$line" "$file"
+}
+
+add_line_unique() {
+  local file="$1" line="$2"
+  ensure_file "$file"
+  if ! file_has_line "$file" "$line"; then
+    printf '%s\n' "$line" >> "$file"
+  fi
+  sed -i '/^[[:space:]]*$/d' "$file" 2>/dev/null || true
+}
+
+remove_line_exact() {
+  local file="$1" line="$2"
+  [[ -f "$file" ]] || return 0
+  grep -Fxv "$line" "$file" > "${file}.tmp" 2>/dev/null || true
+  mv -f "${file}.tmp" "$file"
+  sed -i '/^[[:space:]]*$/d' "$file" 2>/dev/null || true
+}
+
+safe_sed_inplace() {
+  local expr="$1"; shift
+  local f
+  for f in "$@"; do
+    [[ -f "$f" ]] || continue
+    sed -i "$expr" "$f" 2>/dev/null || true
+  done
+}
+
+rpm_desktop_basename() {
+  local pkg="$1"
+  rpm -ql "$pkg" 2>/dev/null | grep -m1 -E '\.desktop$' | xargs -r basename || true
+}
+
+snap_desktop_basename() {
+  local exe="$1"
+  local snap_dir="/var/lib/snapd/desktop/applications"
+  [[ -d "$snap_dir" ]] || return 0
+  grep -RIl --exclude='*mimeinfo*' -E "(^Exec=|^TryExec=).*${exe}" "$snap_dir" 2>/dev/null | head -n1 | xargs -r basename || true
+}
+
+flatpak_desktop_basename() {
+  local key="$1"   # nickname ou appid
+  local d cand
+  local user_local="${USER:-$(users | awk '{print $1}' | head -n1)}"
+  for d in "/var/lib/flatpak/exports/share/applications" "/home/${user_local}/.local/share/flatpak/exports/share/applications"; do
+    [[ -d "$d" ]] || continue
+    cand="$(grep -RIl --include="*.desktop" -E "^X-Flatpak=.*${key}.*" "$d" 2>/dev/null | head -n1 || true)"
+    if [[ -n "$cand" ]]; then
+      basename "$cand"
+      return 0
+    fi
+    cand="$(find "$d" -maxdepth 1 -type f -iname "*${key}*.desktop" -print 2>/dev/null | head -n1 || true)"
+    if [[ -n "$cand" ]]; then
+      basename "$cand"
+      return 0
+    fi
+  done
+  return 0
+}
+
+should_run_with_dgpu() {
+  local nickname="$1"
+  local default_dgpu="$2"
+
+  if [[ -f "${PRIME_TMP}/not-hybrid-graphics.txt" ]]; then
+    echo "0"; return 0
+  fi
+
+  if [[ "$(get_all_apps_state)" == "off" ]]; then
+    echo "0"; return 0
+  fi
+
+  if file_has_line "$RUN_WITHOUT_DGPU" "$nickname"; then
+    echo "0"; return 0
+  fi
+
+  if file_has_line "$RUN_WITH_DGPU" "$nickname"; then
+    echo "1"; return 0
+  fi
+
+  if [[ "${default_dgpu}" == "activate" ]]; then
+    echo "1"
+  else
+    echo "0"
+  fi
+}
+
+set_regataos_dgpu_prefix() {
+  local desktop_basename="$1"
+  local enable="$2"
+
+  [[ -n "$desktop_basename" ]] || return 0
+
+  local targets=()
+  local d
+
+  for d in "${DESKTOP_TARGET_DIRS[@]}"; do
+    targets+=("${d}/${desktop_basename}")
+  done
+
+  local user="${USER:-$(users | awk '{print $1}' | head -n1)}"
+  local xdg_conf="${XDG_CONFIG_HOME:-/home/${user}/.config}"
+  local desktop_dir="/home/${user}/Desktop"
+  if [[ -f "${xdg_conf}/user-dirs.dirs" ]]; then
+    # shellcheck disable=SC1090
+    source "${xdg_conf}/user-dirs.dirs" || true
+    desktop_dir="${XDG_DESKTOP_DIR:-${desktop_dir}}"
+  fi
+  targets+=("${desktop_dir}/${desktop_basename}")
+  targets+=("/home/${user}/.local/share/applications/${desktop_basename}")
+
+  if [[ "$enable" == "1" ]]; then
+    local f
+    for f in "${targets[@]}"; do
+      [[ -f "$f" ]] || continue
+      if ! grep -q '^Exec=regataos-dgpu ' "$f" 2>/dev/null; then
+        safe_sed_inplace 's/^Exec=/Exec=regataos-dgpu /' "$f"
+        safe_sed_inplace 's/^TryExec=regataos-dgpu /TryExec=/' "$f"
+      fi
+    done
+  else
+    safe_sed_inplace 's/^Exec=regataos-dgpu /Exec=/' "${targets[@]}"
+    safe_sed_inplace 's/^TryExec=regataos-dgpu /TryExec=/' "${targets[@]}"
+  fi
+}
+
+# =========================
+# Icon search + logging
+# =========================
+
+log_icon() {
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$ICON_LOG_FILE"
+}
+
+should_exclude_icon() {
+  local path="$1"
+  local w
+  for w in "${ICON_EXCLUDE_WORDS[@]}"; do
+    [[ -n "$w" ]] || continue
+    if [[ "$path" == *"$w"* ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+expand_icon_dirs() {
+  local -n _in=$1
+  local _out=()
+  local item d
+
+  shopt -s nullglob
+
+  for item in "${_in[@]}"; do
+    if [[ "$item" == *[\*\?\[]* ]]; then
+      for d in $item; do
+        [[ -d "$d" ]] && _out+=("$d")
+      done
+    else
+      [[ -d "$item" ]] && _out+=("$item")
+    fi
+  done
+
+  shopt -u nullglob
+
+  printf '%s\n' "${_out[@]}"
+}
+
+pick_best_icon_path() {
+  local icon_name="$1"
+  [[ -n "$icon_name" ]] || return 0
+
+  # ✅ Se Icon= já for um caminho absoluto existente, use direto
+  if [[ "$icon_name" == /* && -f "$icon_name" ]]; then
+    log_icon "Icon= é caminho absoluto existente, usando direto: $icon_name"
+    printf '%s\n' "$icon_name"
+    return 0
+  fi
+
+  local best_svg=""
+  local best_png=""
+  local best_size=0
+
+  log_icon "--------------------------------------------"
+  log_icon "Procurando ícone: $icon_name"
+
+  _search_in_dirs() {
+    local -n _dirs_ref=$1
+    local d line size path
+    local expanded=()
+
+    mapfile -t expanded < <(expand_icon_dirs _dirs_ref)
+
+    for d in "${expanded[@]}"; do
+      log_icon "Procurando SVG em: $d"
+
+      best_svg="$(
+        find "$d" -type f -iname "${icon_name}*.svg" \
+          ! -iname "*symbolic*" ! -iname "*regataos-gcs*" \
+          -print 2>/dev/null | while IFS= read -r path; do
+            if ! should_exclude_icon "$path"; then
+              echo "$path"
+              break
+            fi
+          done
+      )"
+
+      [[ -n "$best_svg" ]] && { log_icon "SVG encontrado: $best_svg"; return 0; }
+    done
+
+    for d in "${expanded[@]}"; do
+      log_icon "Procurando PNG em: $d"
+
+      while IFS= read -r line; do
+        size="${line%% *}"
+        path="${line#* }"
+        [[ -n "$size" && -n "$path" ]] || continue
+
+        should_exclude_icon "$path" && continue
+
+        if [[ "$size" -gt "$best_size" ]]; then
+          best_size="$size"
+          best_png="$path"
+        fi
+      done < <(
+        find "$d" -type f -iname "${icon_name}*.png" \
+          ! -iname "*symbolic*" ! -iname "*regataos-gcs*" \
+          -printf '%s %p\n' 2>/dev/null
+      )
+    done
+
+    [[ -n "$best_png" ]] && log_icon "Melhor PNG encontrado (maior tamanho): $best_png ($best_size bytes)"
+    return 0
+  }
+
+  log_icon "Buscando nos diretórios principais (Breeze)..."
+  _search_in_dirs ICON_SEARCH_DIRS
+
+  if [[ -n "$best_svg" ]]; then
+    log_icon "Ícone final escolhido (SVG): $best_svg"
+    printf '%s\n' "$best_svg"
+    return 0
+  fi
+
+  if [[ -n "$best_png" ]]; then
+    log_icon "Ícone final escolhido (PNG): $best_png"
+    printf '%s\n' "$best_png"
+    return 0
+  fi
+
+  log_icon "Nada encontrado no Breeze. Buscando em diretórios alternativos..."
+  _search_in_dirs ICON_SEARCH_DIRS_OTHERS
+
+  if [[ -n "$best_svg" ]]; then
+    log_icon "Ícone final escolhido (SVG fallback): $best_svg"
+    printf '%s\n' "$best_svg"
+    return 0
+  fi
+
+  if [[ -n "$best_png" ]]; then
+    log_icon "Ícone final escolhido (PNG fallback): $best_png"
+    printf '%s\n' "$best_png"
+    return 0
+  fi
+
+  log_icon "Nenhum ícone encontrado para: $icon_name"
+  return 0
+}
+
+capture_icon_from_desktop_basename() {
+  local desktop_basename="$1"
+  local nickname="$2"
+  local desktop_path=""
+  local icon_name=""
+  local best_icon=""
+
+  [[ -n "$desktop_basename" ]] || return 0
+
+  local d
+  for d in "${DESKTOP_TARGET_DIRS[@]}"; do
+    [[ -d "$d" ]] || continue
+    if [[ -f "$d/$desktop_basename" ]]; then
+      desktop_path="$d/$desktop_basename"
+      break
+    fi
+  done
+
+  [[ -n "$desktop_path" && -f "$desktop_path" ]] || return 0
+
+  icon_name="$(grep -m1 -E '^Icon=' "$desktop_path" 2>/dev/null | cut -d'=' -f2- || true)"
+  icon_name="${icon_name//$'\r'/}"
+  icon_name="$(echo "$icon_name" | sed 's/[[:space:]]*$//')"
+  [[ -n "$icon_name" ]] || return 0
+
+  best_icon="$(pick_best_icon_path "$icon_name" || true)"
+  [[ -n "$best_icon" ]] || best_icon="/usr/share/icons/breeze-dark/apps/48/ktip.svg"
+
+  ensure_dir "$ICONS_OUT_DIR"
+  local out="${ICONS_OUT_DIR}/${nickname}-icon.txt"
+  printf 'file://%s\n' "$best_icon" > "$out"
+  sed -i 's/-error//g' "$out" 2>/dev/null || true
+  head -n 1 "$out" > "${out}.tmp" && mv -f "${out}.tmp" "$out"
+}
+
+capture_icon() {
+  local pkg="$1"
+  local nickname="$2"
+  local desktop_path=""
+  local icon_name=""
+  local best_icon=""
+
+  desktop_path="$(rpm -ql "$pkg" 2>/dev/null | grep -m1 -E '\.desktop$' || true)"
+
+  if [[ -z "$desktop_path" || ! -f "$desktop_path" ]]; then
+    local d cand
+
+    for d in "${DESKTOP_SEARCH_DIRS[@]}"; do
+      [[ -d "$d" ]] || continue
+      desktop_path="$(find "$d" -maxdepth 1 -type f \
+        \( -iname "*${nickname}*.desktop" -o -iname "*${pkg}*.desktop" \) \
+        -print 2>/dev/null | head -n 1 || true)"
+      [[ -n "$desktop_path" && -f "$desktop_path" ]] && break
+    done
+
+    if [[ -z "$desktop_path" || ! -f "$desktop_path" ]]; then
+      for d in "${DESKTOP_SEARCH_DIRS[@]}"; do
+        [[ -d "$d" ]] || continue
+
+        cand="$(grep -RIl --include="*.desktop" -E "^Icon=${nickname}([[:space:]]|\$)" "$d" 2>/dev/null | head -n 1 || true)"
+        if [[ -n "$cand" && -f "$cand" ]]; then
+          desktop_path="$cand"
+          break
+        fi
+
+        cand="$(grep -RIl --include="*.desktop" -E "^Icon=.*${nickname}.*" "$d" 2>/dev/null | head -n 1 || true)"
+        if [[ -n "$cand" && -f "$cand" ]]; then
+          desktop_path="$cand"
+          break
+        fi
+      done
+    fi
+
+    if [[ -z "$desktop_path" || ! -f "$desktop_path" ]]; then
+      for d in "${DESKTOP_SEARCH_DIRS[@]}"; do
+        [[ -d "$d" ]] || continue
+        cand="$(grep -RIl --include="*.desktop" -E "^Exec=.*snap[[:space:]]+run[[:space:]]+${nickname}([[:space:]]|\$)" "$d" 2>/dev/null | head -n 1 || true)"
+        if [[ -n "$cand" && -f "$cand" ]]; then
+          desktop_path="$cand"
+          break
+        fi
+      done
+    fi
+
+    if [[ -z "$desktop_path" || ! -f "$desktop_path" ]]; then
+      for d in "${DESKTOP_SEARCH_DIRS[@]}"; do
+        [[ -d "$d" ]] || continue
+
+        cand="$(grep -RIl --include="*.desktop" -E "^Exec=.*flatpak[[:space:]]+run.*${nickname}([[:space:]]|\$)" "$d" 2>/dev/null | head -n 1 || true)"
+        if [[ -n "$cand" && -f "$cand" ]]; then
+          desktop_path="$cand"
+          break
+        fi
+
+        cand="$(grep -RIl --include="*.desktop" -E "^X-Flatpak=.*${nickname}.*" "$d" 2>/dev/null | head -n 1 || true)"
+        if [[ -n "$cand" && -f "$cand" ]]; then
+          desktop_path="$cand"
+          break
+        fi
+      done
+    fi
+  fi
+
+  [[ -n "$desktop_path" && -f "$desktop_path" ]] || return 0
+
+  icon_name="$(grep -m1 -E '^Icon=' "$desktop_path" 2>/dev/null | cut -d'=' -f2- || true)"
+  icon_name="${icon_name//$'\r'/}"
+  icon_name="$(echo "$icon_name" | sed 's/[[:space:]]*$//')"
+  [[ -n "$icon_name" ]] || return 0
+
+  best_icon="$(pick_best_icon_path "$icon_name" || true)"
+  [[ -n "$best_icon" ]] || best_icon="/usr/share/icons/breeze-dark/apps/48/ktip.svg"
+
+  ensure_dir "$ICONS_OUT_DIR"
+  local out="${ICONS_OUT_DIR}/${nickname}-icon.txt"
+  printf 'file://%s\n' "$best_icon" > "$out"
+  sed -i 's/-error//g' "$out" 2>/dev/null || true
+  head -n 1 "$out" > "${out}.tmp" && mv -f "${out}.tmp" "$out"
+}
+
+process_app() {
+  local json_path="$1"
+
+  local nickname package pkgman dgpu exe
+  read -r nickname package pkgman dgpu exe < <(
+    python3 - "$json_path" <<'PY'
 import json, sys
 
 path = sys.argv[1]
 with open(path, "r", encoding="utf-8") as f:
     data = json.load(f)
 
-# seu JSON é uma lista com 1 objeto
-app = data[0] if isinstance(data, list) and data else {}
+app = data[0] if isinstance(data, list) and data else (data if isinstance(data, dict) else {})
 
-def first_or_empty(v):
-    # aceita string ou lista
-    if v is None:
-        return ""
-    if isinstance(v, list):
-        return str(v[0]) if v else ""
+def first(v):
+    if v is None: return ""
+    if isinstance(v, list): return str(v[0]) if v else ""
     return str(v)
 
-nickname = first_or_empty(app.get("nickname"))
-pkg = first_or_empty(app.get("package"))
-pkgman = first_or_empty(app.get("package_manager"))
-dgpu = first_or_empty(app.get("dgpu"))
+def last(v):
+    if v is None: return ""
+    if isinstance(v, list): return str(v[-1]) if v else ""
+    return str(v)
 
-exe = first_or_empty(app.get("executable"))
-# seu script antigo removia "snap run "
-exe = exe.replace("snap run ", "").strip()
+nickname = first(app.get("nickname")).strip()
+package  = first(app.get("package")).strip()
+pkgman   = first(app.get("package_manager")).strip()
+dgpu     = first(app.get("dgpu")).strip()
+exe      = last(app.get("executable")).strip()
 
-print(nickname, pkg, pkgman, dgpu, exe)
+print(nickname, package, pkgman, dgpu, exe)
 PY
-)
+  )
 
-if [[ $enable_dgpu == *"none"* ]]; then
-	echo "$app_name: non-dGPU by default"
-elif [[ $enable_dgpu == *"deactivate"* ]]; then
-	echo "$app_name: deactivate by default"
-else
-	if [[ $enable_dgpu == *"deactivate"* ]]; then
-		echo "$app_name: activate by default"
-	fi
-fi
+  [[ -n "$nickname" ]] || return 0
+  [[ -n "$dgpu" ]] || dgpu="none"
 
-if grep -Fxq "$app_name" /opt/regataos-store/installed-apps/installed-apps.txt; then
-	if [[ $enable_dgpu != *"none"* ]]; then
+  if ! grep -Fxq "$nickname" "$INSTALLED_APPS_FILE" 2>/dev/null; then
+    return 0
+  fi
 
-		# Capture the app icon to display on Max-Q.
-		if [[ $(echo $package_manager) == *"zypper"* ]]; then
-			if test -e "/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt"; then
-				check_icon_file=$(cat /opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt)
-				if [[ $(echo $check_icon_file) != *"file:///"* ]]; then
-					echo "####"
-					echo "Criar link da logo do app."
-					echo "####"
-					capture_icon
-				else
-					sed -i 's/-error//' "/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt";
-				fi
-			else
-					echo "####"
-					echo "Criar link da logo do app."
-					echo "####"
-				capture_icon
-			fi
+  if [[ "$dgpu" == "none" ]]; then
+    log "$nickname: non-dGPU by default"
+    return 0
+  fi
 
-		elif [[ $(echo $package_manager) == *"snap"* ]]; then
-			# Locate the Snap app .desktop file
-			search_desktop_snap_file=$(grep -r $(echo "$app_executable_snap" | sed 's/snap run //') "/var/lib/snapd/desktop/applications/" | sed '/mimeinfo/d' | grep .desktop | head -1 | tail -1 | cut -d":" -f -1 | sed '/^$/d')
+  local icon_file="${ICONS_OUT_DIR}/${nickname}-icon.txt"
+  if [[ ! -f "$icon_file" ]] || ! grep -q '^file:///' "$icon_file" 2>/dev/null; then
+    log "Criar link da logo do app: $nickname"
 
-			# Get the name of the .desktop file from the Snap app
-			desktop_file=$(echo "$search_desktop_snap_file" | sed 's/\// /g' | awk '{print $6}')
+    if [[ "$pkgman" == *"zypper"* && -n "$package" ]]; then
+      capture_icon "$package" "$nickname" || true
 
-			if test -e "/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt"; then
-				check_icon_file=$(cat /opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt)
-				if [[ $(echo $check_icon_file) != *"file:///"* ]]; then
-					# Find the directory for the Snap app icon
-					search_desktop_snap_icon=$(grep -r "Icon=" $(echo $search_desktop_snap_file) | cut -d"=" -f 2-)
-					echo "file://$search_desktop_snap_icon" > "/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt";
-					sed -i 's/-error//' "$app_icon_dir";
-				fi
+    elif [[ "$pkgman" == *"snap"* && -n "$exe" ]]; then
+      local desk=""
+      desk="$(snap_desktop_basename "$exe")"
+      capture_icon_from_desktop_basename "$desk" "$nickname" || true
 
-			else
-				# Find the directory for the Snap app icon
-				search_desktop_snap_icon=$(grep -r "Icon=" $(echo $search_desktop_snap_file) | cut -d"=" -f 2-)
-				echo "file://$search_desktop_snap_icon" > "/opt/regataos-prime/www/images/apps-icons/$app_name-icon.txt";
-				sed -i 's/-error//' "$app_icon_dir";
-			fi
-		else
-			echo "Nothing to do..."
-		fi
+    elif [[ "$pkgman" == *"flatpak"* ]]; then
+      local desk=""
+      desk="$(flatpak_desktop_basename "$nickname")"
+      capture_icon_from_desktop_basename "$desk" "$nickname" || true
+    fi
+  else
+    sed -i 's/-error//g' "$icon_file" 2>/dev/null || true
+  fi
 
-		# Add or remove apps from the list of software running with the dGPU of laptops with hybrid graphics.
-		if [[ $enable_dgpu == *"deactivate"* ]]; then
-			echo "$app_name: deactivate"
-			if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) == *"$app_name"* ]]; then
-				check_app
-			else
-				if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) != *"$app_name"* ]]; then
-					echo "$app_name" >> "/tmp/regataos-prime/config/run-without-dgpu.conf"
-					sed -i '/^$/d' "/tmp/regataos-prime/config/run-without-dgpu.conf"
-				fi
-			check_app
-			fi
+  local desktop_basename=""
+  if [[ "$pkgman" == *"zypper"* && -n "$package" ]]; then
+    desktop_basename="$(rpm_desktop_basename "$package")"
+  elif [[ "$pkgman" == *"snap"* && -n "$exe" ]]; then
+    desktop_basename="$(snap_desktop_basename "$exe")"
+  elif [[ "$pkgman" == *"flatpak"* ]]; then
+    desktop_basename="$(flatpak_desktop_basename "$nickname")"
+  fi
 
-		else
-			if [[ $enable_dgpu == *"activate"* ]]; then
-				echo "$app_name: activate"
-				if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-without-dgpu.conf) == *"$app_name"* ]]; then
-					check_app
-				else
-					if test ! -e "/tmp/regataos-prime/not-hybrid-graphics.txt"; then
-						if [[ $(grep -R "$app_name" /tmp/regataos-prime/config/run-with-dgpu.conf) != *"$app_name"* ]]; then
-							echo "$app_name" >> "/tmp/regataos-prime/config/run-with-dgpu.conf"
-							sed -i '/^$/d' "/tmp/regataos-prime/config/run-with-dgpu.conf"
-							echo "$app_name: activated"
-						else
-							echo "$app_name: activated"
-						fi
-					fi
-				check_app
-				fi
-			fi
-		fi
-	fi
-fi
+  local enable
+  enable="$(should_run_with_dgpu "$nickname" "$dgpu")"
+
+  if [[ "$enable" == "1" ]]; then
+    add_line_unique "$RUN_WITH_DGPU" "$nickname"
+    remove_line_exact "$RUN_WITHOUT_DGPU" "$nickname"
+  else
+    add_line_unique "$RUN_WITHOUT_DGPU" "$nickname"
+    remove_line_exact "$RUN_WITH_DGPU" "$nickname"
+  fi
+
+  if [[ -n "$desktop_basename" ]]; then
+    set_regataos_dgpu_prefix "$desktop_basename" "$enable"
+  fi
+}
+
+# =========================
+# Bootstrapping / dirs
+# =========================
+
+ensure_dir "$PRIME_TMP"
+ensure_dir "$PRIME_CFG"
+ensure_dir "$ICONS_OUT_DIR"
+
+ensure_file "$RUN_WITH_DGPU"
+ensure_file "$RUN_WITHOUT_DGPU"
+
+# =========================
+# Main loop
+# =========================
+
+shopt -s nullglob
+for j in "${APPS_JSON_DIR}"/*.json; do
+  process_app "$j"
 done
 
-# We're finished!
 exit 0

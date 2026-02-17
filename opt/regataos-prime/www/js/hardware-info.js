@@ -1,73 +1,54 @@
-"use strict";
-
-// Reusa fs se já foi declarado em outro script
-var fs = window.fs || require("fs");
-window.fs = fs;
-
-var fsp = window.fsp || fs.promises;
-window.fsp = fsp;
-
-function byId(id) {
-  return document.getElementById(id);
-}
-
-function setHtml(id, value) {
-  const el = byId(id);
-  if (el && value != null) el.innerHTML = value;
-}
-
-async function readTextSafe(p) {
-  try {
-    return await fsp.readFile(p, "utf8");
-  } catch {
-    return null;
-  }
-}
-
 // Capture system information
-async function system_information() {
-  const base = "/tmp/regataos-prime/config/system-info";
+function system_information() {
+	const fs = require('fs');
 
-  // Mapa: elemento -> arquivo
-  const items = [
-    { id: "os-name", file: `${base}/os-name.txt` },
-    { id: "ram-total", file: `${base}/ram-total.txt` },
-    { id: "cpu-model", file: `${base}/cpu-model.txt` },
+	// Capture Operational System
+	const os_name = fs.readFileSync("/tmp/regataos-prime/config/system-info/os-name.txt", "utf8");
+	document.getElementById("os-name").innerHTML = os_name;
 
-    // opcional
-    { id: "nvdriver-version", file: `${base}/nvdriver-version.txt`, optional: true },
+	// Capture total amount of RAM
+	const ram_total = fs.readFileSync("/tmp/regataos-prime/config/system-info/ram-total.txt", "utf8");
+	document.getElementById("ram-total").innerHTML = ram_total;
 
-    { id: "vram-size", file: `${base}/total-vram-size.txt` },
-    { id: "igpu-model", file: `${base}/igpu-model.txt` },
-    { id: "dgpu-model", file: `${base}/dgpu-model.txt` },
-    { id: "mesa-version", file: `${base}/mesa-version.txt` },
-    { id: "gl-version", file: `${base}/opengl-version.txt` },
+	// Capture the CPU model
+	const cpu_model = fs.readFileSync("/tmp/regataos-prime/config/system-info/cpu-model.txt", "utf8");
+	document.getElementById("cpu-model").innerHTML = cpu_model;
 
-    // opcional
-    { id: "vk-version", file: `${base}/vulkan-version.txt`, optional: true },
+	// Capture NVIDIA driver version
+	if (fs.existsSync("/tmp/regataos-prime/config/system-info/nvdriver-version.txt")) {
+		const nvdriver_version = fs.readFileSync("/tmp/regataos-prime/config/system-info/nvdriver-version.txt", "utf8");
+		document.getElementById("nvdriver-version").innerHTML = nvdriver_version;
+	}
 
-    { id: "linux-version", file: `${base}/kernel-version.txt` },
-  ];
+	// Capture the discrete GPU video memory (VRAM) size
+	const vram_size = fs.readFileSync("/tmp/regataos-prime/config/system-info/total-vram-size.txt", "utf8");
+	document.getElementById("vram-size").innerHTML = vram_size;
 
-  // Lê tudo em paralelo (bem mais rápido e sem bloquear a UI)
-  const results = await Promise.all(
-    items.map(async (it) => {
-      const text = await readTextSafe(it.file);
-      return { ...it, text };
-    })
-  );
+	// Capture iGPU
+	const igpu_model = fs.readFileSync("/tmp/regataos-prime/config/system-info/igpu-model.txt", "utf8");
+	document.getElementById("igpu-model").innerHTML = igpu_model;
 
-  // Atualiza DOM
-  for (const r of results) {
-    if (r.text == null) {
-      // se não é opcional, você pode escolher colocar "—" ou deixar vazio
-      if (!r.optional) setHtml(r.id, "");
-      continue;
-    }
-    setHtml(r.id, r.text);
-  }
+	// Capture dgpu
+	const dgpu_model = fs.readFileSync("/tmp/regataos-prime/config/system-info/dgpu-model.txt", "utf8");
+	document.getElementById("dgpu-model").innerHTML = dgpu_model;
+
+	// Capture MESA version
+	const mesa_version = fs.readFileSync("/tmp/regataos-prime/config/system-info/mesa-version.txt", "utf8");
+	document.getElementById("mesa-version").innerHTML = mesa_version;
+
+	// Capture OpenGL version
+	const opengl_version = fs.readFileSync("/tmp/regataos-prime/config/system-info/opengl-version.txt", "utf8");
+	document.getElementById("gl-version").innerHTML = opengl_version;
+
+	// Capture Vulkan version
+	if (fs.existsSync("/tmp/regataos-prime/config/system-info/vulkan-version.txt")) {
+		const vulkan_version = fs.readFileSync("/tmp/regataos-prime/config/system-info/vulkan-version.txt", "utf8");
+		document.getElementById("vk-version").innerHTML = vulkan_version;
+	}
+
+	// Capture Kernel version
+	const kernel_version = fs.readFileSync("/tmp/regataos-prime/config/system-info/kernel-version.txt", "utf8");
+	document.getElementById("linux-version").innerHTML = kernel_version;
 }
 
-system_information().catch((e) => {
-  console.error("system_information error:", e?.message || e);
-});
+system_information();

@@ -1,81 +1,47 @@
-"use strict";
+// Apply in-app translation based on user's language settings.
 
-(function () {
-  // Reuso global (evita conflitos)
-  if (!window.fs) window.fs = require("fs");
-  const fs = window.fs;
+// Apply text translations in the app
+function applyTranslation() {
+    const fs = require('fs');
+    let data = fs.readFileSync(selectTranslationFile(), "utf8");
+    data = JSON.parse(data);
 
-  // Cache do JSON
-  let _cachedPath = "";
-  let _cachedT = null;
+    for (let i = 0; i < data.length; i++) {
+        // Window title
+        const windowTitle = document.querySelector("title");
+        windowTitle.innerHTML = data[i].index.windowTitle;
 
-  function loadTranslation() {
-    const p = (typeof window.selectTranslationFile === "function")
-      ? window.selectTranslationFile()
-      : "";
+        // Side bar
+        //Show or hide text
+        const showText = document.querySelector(".show-sidebar img");
+        showText.title = data[i].index.sideBar.showMenu;
+        const hideText = document.querySelector(".hide-sidebar img");
+        hideText.title = data[i].index.sideBar.hideMenu;
 
-    if (!p) return null;
-    if (_cachedT && _cachedPath === p) return _cachedT;
+        //Menu
+        //apps page
+        const appsPage = document.querySelector(".applications p");
+        appsPage.innerHTML = data[i].index.sideBar.applications;
+        const appsPageTip = document.querySelector(".applications img");
+        appsPageTip.title = data[i].index.sideBar.applications;
 
-    try {
-      const raw = fs.readFileSync(p, "utf8");
-      const parsed = JSON.parse(raw);
+        //settings page
+        const settingsPage = document.querySelector(".settings p");
+        settingsPage.innerHTML = data[i].index.sideBar.settings;
+        const settingsPageTip = document.querySelector(".settings img");
+        settingsPageTip.title = data[i].index.sideBar.settings;
 
-      // pode ser array [ { ... } ] ou objeto { ... }
-      const t = Array.isArray(parsed) ? (parsed[0] || null) : parsed;
+        //performance page
+        const performancePage = document.querySelector(".system-info p");
+        performancePage.innerHTML = data[i].index.sideBar.performance;
+        const performancePageTip = document.querySelector(".system-info img");
+        performancePageTip.title = data[i].index.sideBar.performance;
 
-      _cachedPath = p;
-      _cachedT = t;
-      return t;
-    } catch (e) {
-      console.error("Translation load error:", e?.message || e);
-      return null;
+        //system page
+        const systemPage = document.querySelector(".system p");
+        systemPage.innerHTML = data[i].index.sideBar.system;
+        const systemPageTip = document.querySelector(".system img");
+        systemPageTip.title = data[i].index.sideBar.system;
     }
-  }
-
-  // Helpers seguros
-  function q(sel) {
-    return document.querySelector(sel);
-  }
-
-  function setHTML(sel, html) {
-    const el = q(sel);
-    if (el && html != null) el.innerHTML = String(html);
-  }
-
-  function setTitle(sel, title) {
-    const el = q(sel);
-    if (el && title != null) el.title = String(title);
-  }
-
-  function applyTranslation() {
-    const t = loadTranslation();
-    if (!t) return;
-
-    // Window title
-    setHTML("title", t.index?.windowTitle);
-
-    // Side bar: tooltips do botão de mostrar/esconder
-    setTitle(".show-sidebar img", t.index?.sideBar?.showMenu);
-    setTitle(".hide-sidebar img", t.index?.sideBar?.hideMenu);
-
-    // Menu labels + tooltips
-    setHTML(".applications p", t.index?.sideBar?.applications);
-    setTitle(".applications img", t.index?.sideBar?.applications);
-
-    setHTML(".settings p", t.index?.sideBar?.settings);
-    setTitle(".settings img", t.index?.sideBar?.settings);
-
-    setHTML(".system-info p", t.index?.sideBar?.performance);
-    setTitle(".system-info img", t.index?.sideBar?.performance);
-
-    setHTML(".system p", t.index?.sideBar?.system);
-    setTitle(".system img", t.index?.sideBar?.system);
-  }
-
-  // Exporta caso você queira chamar novamente depois
-  window.applyTranslation = applyTranslation;
-
-  // Executa uma vez
-  applyTranslation();
-})();
+}
+applyTranslation();

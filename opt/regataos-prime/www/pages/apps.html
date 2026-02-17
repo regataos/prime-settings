@@ -1,59 +1,66 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Max-Q</title>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
-  <link rel="stylesheet" type="text/css" href="../css/style2.css">
-  <link rel="stylesheet" type="text/css" href="../css/buttom-switch-all-apps.css">
-  <link rel="stylesheet" type="text/css" href="../css/buttom-switch-apps.css">
+	<title>Max-Q</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+	<link rel="stylesheet" type="text/css" href="../css/style2.css">
+	<link rel="stylesheet" type="text/css" href="../css/buttom-switch-all-apps.css">
+	<link rel="stylesheet" type="text/css" href="../css/buttom-switch-apps.css">
+
+	<script type="text/javascript">
+		setTimeout(function () { applyTranslationPages(); }, 3000);
+	</script>
 </head>
 
 <body>
-  <div id="loadscreen"></div>
+	<div id="loadscreen"></div>
+	<script>
+		setTimeout(function () {
+			document.getElementById("loadscreen").style.display = "none";
+		}, 1000);
+	</script>
 
-  <div class="div1">
-    <div id="title" class="hdiv1 page-apps-title">Applications</div>
-    <p class="pdiv1 page-apps-description">Choose which applications to run with your device's dedicated GPU.</p>
+	<div class="div1">
+		<div id="title" class="hdiv1 page-apps-title">Applications</div>
+		<p class="pdiv1 page-apps-description">Choose which applications to run with your device's dedicated GPU.</p>
 
-    <div class="all-apps">
-      <div class="text-all-apps enable-all"></div>
-      <div class="text-all-apps disable-all"></div>
-      <div class="switch__container" style="margin-top: 6px;">
-        <input id="switch-shadow-all-apps"
-               class="switch switch--shadow-all-apps"
-               type="checkbox">
-        <label for="switch-shadow-all-apps"></label>
-      </div>
-    </div>
-  </div>
+		<div class="all-apps">
+			<div class="text-all-apps enable-all"></div>
+			<div class="text-all-apps disable-all"></div>
+			<div class="switch__container" style="margin-top: 6px;">
+				<input id="switch-shadow-all-apps" class="switch switch--shadow-all-apps" type="checkbox"
+					onclick="actionAllApps(this.id);">
+				<label for="switch-shadow-all-apps"></label>
+			</div>
+		</div>
+	</div>
 
-  <div class="main-div" id="main-div">
-    <div class="div2" id="div2">
-      <!-- External apps -->
-      <ul class="apps-buttons main-ul">
-        <li id="add-external-apps">
-          <label class="label-add" title="" for="add-apps">
-            <div class="div-for-label">
-              <div class="icon-app" style="background-image:url(../images/add-external-apps.png);"></div>
-              <div class="text-app"></div>
-              <span class='desc-option-blocks'></span>
-            </div>
-          </label>
+	<div class="main-div" id="main-div">
+		<div class="div2" id="div2">
 
-          <input id="add-apps"
-                 type="file"
-                 accept=".desktop"
-                 nwworkingdir="/usr/share/applications/" />
-        </li>
-      </ul>
-
-      <script type="text/javascript" src="../js/settings-checker.js"></script>
-      <script type="text/javascript" src="../js/settings.js"></script>
-      <script type="text/javascript" src="../js/actions-apps.js"></script>
-      <script type="text/javascript" src="../js/translations/apply-translation-pages.js"></script>
-      <script type="text/javascript" src="../js/list-apps.js"></script>
-    </div>
-  </div>
+			<!-- External apps -->
+			<ul class="apps-buttons main-ul">
+				<li id="add-external-apps">
+					<label class="label-add" title="" for="add-apps">
+						<div class="div-for-label">
+							<div class="icon-app" style="background-image:url(../images/add-external-apps.png);"></div>
+							<div class="text-app"></div>
+							<span class='desc-option-blocks'></span>
+						</div>
+					</label>
+					<input id="add-apps" onchange="getDesktopFile()" type="file" accept=".desktop"
+						nwworkingdir="/usr/share/applications/" />
+				</li>
+			</ul>
+			<script type="text/javascript" src="../js/settings-checker.js"></script>
+			<script type="text/javascript" src="../js/settings.js"></script>
+			<script type="text/javascript" src="../js/actions-apps.js"></script>
+			<script type="text/javascript" src="../js/translations/apply-translation-pages.js"></script>
+			<script type="text/javascript" src="../js/list-apps.js"></script>
+		</div>
+	</div>
 </body>
+
 </html>

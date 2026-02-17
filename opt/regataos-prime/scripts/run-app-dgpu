@@ -20,16 +20,47 @@ apps_local_dir="/usr/local/share/applications"
 snap_dir="/var/lib/snapd/desktop/applications"
 flatpak_dir="/var/lib/flatpak/exports/share/applications"
 
+DESKTOP_FALLBACK_DIRS=(
+  "$apps_dir"
+  "$apps_local_dir"
+  "$snap_dir"
+)
+
 # Detect file manager
 if [[ $(echo $package_manager) == *"zypper"* ]]; then
-	desktop_file_dir=$(rpm -ql $package_name | grep ".desktop" | head -1 | tail -1 | sed 's/\// /g' | sed 's/local //' | awk '{print $4}')
+	desktop_file_dir="$(rpm -ql "$package_name" 2>/dev/null | grep -m1 -E '\.desktop$' || true)"
 
-	if [ -z $desktop_file_dir ]; then
-		check_fake_desktop_file=$(rpm -ql $package_name | grep ".desktop")
-		desktop_file=$(cat $check_fake_desktop_file | head -5 | tail -1 | cut -d"=" -f 2- | sed 's/\// /g' | sed 's/local //' | awk '{print $4}')
-		echo "$desktop_file"
+	if [[ -z "$desktop_file_dir" ]]; then
+		# 1) Fallback: procurar em diretórios conhecidos
+		desktop_file=""
+		for d in "${DESKTOP_FALLBACK_DIRS[@]}"; do
+			[[ -d "$d" ]] || continue
+
+			# tenta casar por app_name primeiro
+			desktop_file="$(find "$d" -maxdepth 1 -type f \
+			-iname "*${app_name}*.desktop" -print 2>/dev/null | head -n 1 || true)"
+			[[ -n "$desktop_file" ]] && break
+
+			# depois tenta casar por package_name
+			desktop_file="$(find "$d" -maxdepth 1 -type f \
+			-iname "*${package_name}*.desktop" -print 2>/dev/null | head -n 1 || true)"
+			[[ -n "$desktop_file" ]] && break
+		done
+
+		# se achou, converte para só o nome do arquivo
+		if [[ -n "$desktop_file" && -f "$desktop_file" ]]; then
+			desktop_file="$(basename "$desktop_file")"
+			echo "$desktop_file"
+		else
+			# 2) Fallback final (sua lógica antiga do "fake desktop")
+			check_fake_desktop_file="$(rpm -ql "$package_name" 2>/dev/null | grep -m1 -E '\.desktop$' || true)"
+			if [[ -n "$check_fake_desktop_file" && -f "$check_fake_desktop_file" ]]; then
+			desktop_file="$(head -5 "$check_fake_desktop_file" | tail -1 | cut -d"=" -f2- | sed 's/\// /g' | sed 's/local //' | awk '{print $4}')"
+			echo "$desktop_file"
+			fi
+		fi
 	else
-		desktop_file=$(echo $desktop_file_dir)
+		desktop_file="$(basename "$desktop_file_dir")"
 		echo "$desktop_file"
 	fi
 
@@ -129,7 +160,7 @@ if [[ $(echo $package_manager) == *"zypper"* ]]; then
 
 elif [[ $(echo $package_manager) == *"snap"* ]]; then
 	# Locate the Snap app .desktop file
-	search_desktop_snap_file=$(grep -r $(echo "$app_executable" | sed 's/snap run //') "/var/lib/snapd/desktop/applications/" | sed '/mimeinfo/d' | grep .desktop | head -1 | tail -1 | cut -d":" -f -1 | sed '/^$/d')
+	search_desktop_snap_file=$(grep -r $(echo "$app_executable" | sed 's/snap run //') "$snap_dir" | sed '/mimeinfo/d' | grep .desktop | head -1 | tail -1 | cut -d":" -f -1 | sed '/^$/d')
 
 	# Get the name of the .desktop file from the Snap app
 	desktop_file=$(echo "$search_desktop_snap_file" | sed 's/\// /g' | awk '{print $6}')

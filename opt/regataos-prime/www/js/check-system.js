@@ -1,84 +1,73 @@
-"use strict";
-
-var fs = window.fs || require("fs");
-window.fs = fs;
-
-function byId(id) {
-  return document.getElementById(id);
-}
-
-function setDisplay(node, value) {
-  if (node) node.style.display = value;
-}
-
-function readTextSafeSync(p) {
-  try {
-    return fs.readFileSync(p, "utf8");
-  } catch {
-    return "";
-  }
-}
-
 // Check system
 function checkSystem() {
-  // ==========================
-  // Prime support
-  // ==========================
-  const primeOn = byId("primeon");
-  if (primeOn) {
-    const hasHybrid = fs.existsSync("/tmp/regataos-prime/use-hybrid-graphics.txt");
-    setDisplay(primeOn, hasHybrid ? "block" : "none");
-  }
+	const fs = require('fs');
 
-  // ==========================
-  // NVIDIA driver
-  // ==========================
-  const hasNvidiaXconfig = fs.existsSync("/usr/bin/nvidia-xconfig");
+	// Check Prime support
+	const useHybridGraphics = document.getElementById("primeon");
+	const useHybridGraphicsExists = document.body.contains(useHybridGraphics);
+	if (useHybridGraphicsExists) {
+		if (fs.existsSync("/tmp/regataos-prime/use-hybrid-graphics.txt")) {
+			useHybridGraphics.style.display = "block";
+		} else {
+			useHybridGraphics.style.display = "none";
+		}
+	}
 
-  const useNvidiaClick = byId("use-nvidia-click");
-  if (useNvidiaClick) setDisplay(useNvidiaClick, hasNvidiaXconfig ? "block" : "none");
+	// Check NVIDIA driver
+	const useNvidiaClick = document.getElementById("use-nvidia-click");
+	const useNvidiaClickExists = document.body.contains(useNvidiaClick);
+	if (useNvidiaClickExists) {
+		if (fs.existsSync("/usr/bin/nvidia-xconfig")) {
+			useNvidiaClick.style.display = "block";
+		} else {
+			useNvidiaClick.style.display = "none";
+		}
+	}
 
-  const useNvidia = byId("use-nvidia");
-  if (useNvidia) setDisplay(useNvidia, hasNvidiaXconfig ? "block" : "none");
+	const checkNvidiaDriver = document.getElementById("use-nvidia");
+	const checkNvidiaDriverExists = document.body.contains(checkNvidiaDriver);
+	if (checkNvidiaDriverExists) {
+		if (fs.existsSync("/usr/bin/nvidia-xconfig")) {
+			checkNvidiaDriver.style.display = "block";
+		} else {
+			checkNvidiaDriver.style.display = "none";
+		}
+	}
 
-  // ==========================
-  // Vulkan support (cache)
-  // ==========================
-  function checkVulkanSupport() {
-    if (!fs.existsSync("/tmp/regataos-prime/vulkan-version.txt")) return false;
+	// Check support for Vulkan
+	function checkVulkanSupport() {
+		if (fs.existsSync("/tmp/regataos-prime/vulkan-version.txt")) {
+			const vulkanSupport = fs.readFileSync("/tmp/regataos-prime/vulkan-version.txt", "utf8");
+			if ((!vulkanSupport.includes("Incomplete support")) && (!vulkanSupport.includes("Not supported"))) {
+				return true
+			}
+		}
+	}
 
-    const vulkanSupport = readTextSafeSync("/tmp/regataos-prime/vulkan-version.txt");
-    if (!vulkanSupport) return false;
+	const vulkanSupported = document.getElementById("primeon");
+	const vulkanSupportedExists = document.body.contains(vulkanSupported);
+	if (vulkanSupportedExists) {
+		if (checkVulkanSupport) {
+			vulkanSupported.style.display = "block";
+		} else {
+			vulkanSupported.style.display = "none";
+		}
+	}
 
-    // se NÃO contém essas strings, consideramos suportado
-    return (
-      !vulkanSupport.includes("Incomplete support") &&
-      !vulkanSupport.includes("Not supported")
-    );
-  }
-
-  const vulkanOk = checkVulkanSupport();
-
-  // Atenção: você estava usando "primeon" também para Vulkan.
-  // Mantive o comportamento original, mas se existir um ID próprio para Vulkan,
-  // troque aqui (ex.: byId("vulkan-supported")).
-  const vulkanSupportedEl = byId("primeon");
-  if (vulkanSupportedEl) {
-    setDisplay(vulkanSupportedEl, vulkanOk ? "block" : "none");
-  }
-
-  // ==========================
-  // AMD AMF (depende de Vulkan)
-  // ==========================
-  const amfToggle = byId("amf-toggle");
-  if (amfToggle) {
-    if (!vulkanOk) {
-      setDisplay(amfToggle, "none");
-    } else {
-      const openglVendor = readTextSafeSync("/tmp/regataos-prime/config/system-info/opengl-vendor.txt");
-      setDisplay(amfToggle, openglVendor.includes("AMD") ? "block" : "none");
-    }
-  }
+	// Check support for AMD AMF
+	const amfToggle = document.getElementById("amf-toggle");
+	const amfToggleExists = document.body.contains(amfToggle)
+	if (amfToggleExists) {
+		if (checkVulkanSupport) {
+			const openglVendor = fs.readFileSync("/tmp/regataos-prime/config/system-info/opengl-vendor.txt", "utf8");
+			if (openglVendor.includes("AMD")) {
+				amfToggle.style.display = "block";
+			} else {
+				amfToggle.style.display = "none";
+			}
+		} else {
+			amfToggle.style.display = "none";
+		}
+	}
 }
-
 checkSystem();

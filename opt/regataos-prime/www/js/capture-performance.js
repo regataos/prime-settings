@@ -1,305 +1,217 @@
-"use strict";
+// Capture information about using GPU
+//Capture the discrete GPU usage
+function graphicsChipUsage() {
+	const exec = require('child_process').exec;
+	const command = "echo $(/opt/regataos-prime/scripts/hardware-info -gpu-usage | head -1 | tail -1)";
+	exec(command, (error, stdout, stderr) => {
+		if (stdout.length <= 1) {
+			document.getElementById("gpu-usage").style.strokeDashoffset = "calc(440 - (440 * 0) / 100)";
+			document.getElementById("gpu-usage-number").innerHTML = "0";
+		} else {
+			document.getElementById("gpu-usage").style.strokeDashoffset = "calc(440 - (440 * " + stdout + ") / 100)";
+			document.getElementById("gpu-usage-number").innerHTML = stdout.trim();
+		}
+	});
+}
+graphicsChipUsage();
 
-const { execFile } = require("child_process");
-const fsp = require("fs/promises");
+setInterval(function () {
+	graphicsChipUsage();
+}, 1000);
 
-// ==============================
-// Config
-// ==============================
-const HWINFO = "/opt/regataos-prime/scripts/hardware-info";
+//Capture the discrete GPU temp
+function gpuTemp() {
+	const exec = require('child_process').exec;
+	const command = "/opt/regataos-prime/scripts/hardware-info -gpu-temp | head -1 | tail -1";
+	exec(command, (error, stdout, stderr) => {
+		if (stdout) {
+			document.getElementById("gpu-temp").innerHTML = stdout;
+		}
+	});
+}
+gpuTemp();
 
-// Ajuste aqui se quiser ainda mais leve:
-const CONCURRENCY_TICK_MS = 250;  // “resolução” do scheduler (não é frequência das coletas)
+setInterval(function () {
+	gpuTemp();
+}, 1000);
 
-// ==============================
-// Helpers
-// ==============================
-function execFileAsync(file, args, options = {}) {
-  return new Promise((resolve, reject) => {
-    execFile(
-      file,
-      args,
-      {
-        timeout: 10_000,
-        maxBuffer: 2 * 1024 * 1024,
-        ...options,
-      },
-      (error, stdout, stderr) => {
-        if (error) return reject({ error, stdout, stderr });
-        resolve({ stdout: String(stdout || ""), stderr: String(stderr || "") });
-      }
-    );
-  });
+//Capture the discrete GPU frequency
+function gpuFreq() {
+	const exec = require('child_process').exec;
+	const command = "/opt/regataos-prime/scripts/hardware-info -gpu-freq | head -1 | tail -1";
+	exec(command, (error, stdout, stderr) => {
+		if (stdout) {
+			document.getElementById("gpu-freq").innerHTML = stdout;
+		}
+	});
+}
+gpuFreq();
+
+setInterval(function () {
+	gpuFreq();
+}, 1000);
+
+// Capture information about using VRAM
+//Capture total amount of RAM
+function vramSize() {
+	const fs = require("fs");
+	const totalVramSize = fs.readFileSync("/tmp/regataos-prime/config/system-info/total-vram-size.txt", "utf8");
+
+	document.getElementById("vram-size").innerHTML = totalVramSize;
+}
+vramSize();
+
+//Capture the discrete GPU video memory (VRAM) frequency
+function vramFreq() {
+	const exec = require('child_process').exec;
+	const command = "/opt/regataos-prime/scripts/hardware-info -vram-freq | head -1 | tail -1";
+	exec(command, (error, stdout, stderr) => {
+		if (stdout) {
+			document.getElementById("vram-freq").innerHTML = stdout;
+		}
+	});
 }
 
-function firstNonEmptyLine(text) {
-  return String(text || "")
-    .split(/\r?\n/)
-    .map((s) => s.trim())
-    .find(Boolean) || "";
+setInterval(function () {
+	vramFreq();
+}, 1000);
+
+//Capture the discrete GPU video memory (VRAM) usage
+function vramUsage() {
+	const exec = require('child_process').exec;
+	const command = "echo $(/opt/regataos-prime/scripts/hardware-info -vram-usage | head -1 | tail -1)";
+	exec(command, (error, stdout, stderr) => {
+		if (stdout.includes("nodata")) {
+			document.getElementById("vram-usage").style.strokeDashoffset = "calc(440 - (440 * 0) / 100)";
+			document.getElementById("vram-usage-number").innerHTML = "N/A";
+			document.getElementById("vram-usage-nodata").style.display = "none";
+			document.getElementById("vram-usage-block").style.opacity = ".3";
+
+		} else if (stdout.length <= 1) {
+			document.getElementById("vram-usage").style.strokeDashoffset = "calc(440 - (440 * 0) / 100)";
+			document.getElementById("vram-usage-number").innerHTML = "0";
+		} else {
+			document.getElementById("vram-usage").style.strokeDashoffset = "calc(440 - (440 * " + stdout + ") / 100)";
+			document.getElementById("vram-usage-number").innerHTML = stdout.trim();
+		}
+	});
 }
+vramUsage();
 
-function toIntOrNull(text) {
-  const n = parseInt(String(text).trim(), 10);
-  return Number.isFinite(n) ? n : null;
+setInterval(function () {
+	vramUsage();
+}, 1000);
+
+// Capture information about using CPU
+function processorUsage() {
+	const fileLog = "/tmp/regataos-prime/cpu-usage.log";
+	const commandLine = `/opt/regataos-prime/scripts/hardware-info -cpu-use | head -1 | tail -1;`;
+
+	const exec = require('child_process').exec;
+	exec(commandLine, (error, stdout, stderr) => { });
+
+	const fs = require("fs");
+	if (fs.existsSync(fileLog)) {
+		fs.readFile(fileLog, "utf8", (err, data) => {
+			if (err) {
+				console.error(err);
+				return;
+			}
+
+			if (data.length <= 1) {
+				document.getElementById("cpu-usage").style.strokeDashoffset = "calc(440 - (440 * 0) / 100)";
+				document.getElementById("cpu-usage-number").innerHTML = "0";
+			} else {
+				document.getElementById("cpu-usage").style.strokeDashoffset = "calc(440 - (440 * " + data + ") / 100)";
+				document.getElementById("cpu-usage-number").innerHTML = data.trim();
+			}
+		});
+	}
 }
+processorUsage();
 
-function clampPct(n) {
-  if (!Number.isFinite(n)) return 0;
-  return Math.max(0, Math.min(100, n));
+setInterval(function () {
+	processorUsage();
+}, 1000);
+
+function cpuFreq() {
+	const exec = require('child_process').exec;
+	const command = "/opt/regataos-prime/scripts/hardware-info -cpu-freq | head -1 | tail -1";
+	exec(command, (error, stdout, stderr) => {
+		if (stdout) {
+			document.getElementById("cpu-freq").innerHTML = stdout;
+		}
+	});
 }
+cpuFreq();
 
-function setGauge(gaugeEl, numberEl, pctOrNull, fallbackText = "0") {
-  const pct = pctOrNull == null ? 0 : clampPct(pctOrNull);
-  if (gaugeEl) gaugeEl.style.strokeDashoffset = `calc(440 - (440 * ${pct}) / 100)`;
-  if (numberEl) numberEl.innerHTML = pctOrNull == null ? fallbackText : String(pct);
+setInterval(function () {
+	cpuFreq();
+}, 1000);
+
+function cpuTemp() {
+	const exec = require('child_process').exec;
+	const command = "echo $(sensors | egrep -wi 'Tctl|tdie|Package id 0' | sed 's/Package id//' | awk '{print $2}' | cut -d'.' -f -1 | sed 's/+//')°C";
+	exec(command, (error, stdout, stderr) => {
+		if (stdout) {
+			document.getElementById("cpu-temp").innerHTML = stdout;
+		}
+	});
 }
+cpuTemp();
 
-async function readTextSafe(p) {
-  try {
-    return await fsp.readFile(p, "utf8");
-  } catch {
-    return "";
-  }
+setInterval(function () {
+	cpuTemp();
+}, 1000);
+
+// Capture information about using RAM memory
+function ramTotal() {
+	const exec = require('child_process').exec;
+
+	const command = "echo $(free -h | grep -i Mem | awk '{print $2}' | sed 's/Mi/MB/' | sed 's/Gi/GB/')";
+	exec(command, (error, stdout, stderr) => {
+		if (stdout) {
+			document.getElementById("ram-size").innerHTML = stdout;
+		} else {
+			const command = "echo $(free -h | grep -i Mem | awk '{print $2}' | sed 's/Mi/MB/' | sed 's/Gi/GB/')";
+			exec(command, (error, stdout, stderr) => {
+				document.getElementById("ram-size").innerHTML = stdout;
+			});
+		}
+	});
 }
+ramTotal();
 
-// ==============================
-// Cache DOM (evita getElementById toda hora)
-// ==============================
-const el = {
-  gpuUsageGauge: document.getElementById("gpu-usage"),
-  gpuUsageNum: document.getElementById("gpu-usage-number"),
-  gpuTemp: document.getElementById("gpu-temp"),
-  gpuFreq: document.getElementById("gpu-freq"),
-
-  vramSize: document.getElementById("vram-size"),
-  vramFreq: document.getElementById("vram-freq"),
-  vramUsageGauge: document.getElementById("vram-usage"),
-  vramUsageNum: document.getElementById("vram-usage-number"),
-  vramUsageNodata: document.getElementById("vram-usage-nodata"),
-  vramUsageBlock: document.getElementById("vram-usage-block"),
-
-  cpuUsageGauge: document.getElementById("cpu-usage"),
-  cpuUsageNum: document.getElementById("cpu-usage-number"),
-  cpuFreq: document.getElementById("cpu-freq"),
-  cpuTemp: document.getElementById("cpu-temp"),
-
-  ramSize: document.getElementById("ram-size"),
-  ramUsageGauge: document.getElementById("ram-usage"),
-  ramUsageNum: document.getElementById("ram-usage-number"),
-  ramUse: document.getElementById("ram-use"),
-};
-
-// ==============================
-// Coletas (leves e sem pipeline)
-// ==============================
-
-// GPU usage (%)
-async function updateGpuUsage() {
-  try {
-    const { stdout } = await execFileAsync(HWINFO, ["-gpu-usage"]);
-    const line = firstNonEmptyLine(stdout);
-    const n = toIntOrNull(line);
-    setGauge(el.gpuUsageGauge, el.gpuUsageNum, n, "0");
-  } catch {
-    setGauge(el.gpuUsageGauge, el.gpuUsageNum, 0, "0");
-  }
+function ramUsage() {
+	const exec = require('child_process').exec;
+	const command = "echo $(free -m | grep Mem | awk '{print ($3/$2)*100}' | cut -d'.' -f -1)";
+	exec(command, (error, stdout, stderr) => {
+		if (stdout.length <= 1) {
+			document.getElementById("ram-usage").style.strokeDashoffset = "calc(440 - (440 * 0) / 100)";
+			document.getElementById("ram-usage-number").innerHTML = "0";
+		} else {
+			document.getElementById("ram-usage").style.strokeDashoffset = "calc(440 - (440 * " + stdout + ") / 100)";
+			document.getElementById("ram-usage-number").innerHTML = stdout.trim();
+		}
+	});
 }
+ramUsage();
 
-// GPU temp (texto)
-async function updateGpuTemp() {
-  try {
-    const { stdout } = await execFileAsync(HWINFO, ["-gpu-temp"]);
-    const line = firstNonEmptyLine(stdout);
-    if (el.gpuTemp && line) el.gpuTemp.innerHTML = line;
-  } catch {}
+setInterval(function () {
+	ramUsage();
+}, 1000);
+
+function ramUse() {
+	const exec = require('child_process').exec;
+	const command = "echo $(free -h | grep -i Mem | awk '{print $3}' | sed 's/Mi/MB/' | sed 's/Gi/GB/')";
+	exec(command, (error, stdout, stderr) => {
+		if (stdout) {
+			document.getElementById("ram-use").innerHTML = stdout;
+		}
+	});
 }
+ramUse();
 
-// GPU freq (texto)
-async function updateGpuFreq() {
-  try {
-    const { stdout } = await execFileAsync(HWINFO, ["-gpu-freq"]);
-    const line = firstNonEmptyLine(stdout);
-    if (el.gpuFreq && line) el.gpuFreq.innerHTML = line;
-  } catch {}
-}
-
-// VRAM total (one-shot)
-async function updateVramSizeOnce() {
-  const totalVramSize = await readTextSafe("/tmp/regataos-prime/config/system-info/total-vram-size.txt");
-  if (el.vramSize) el.vramSize.innerHTML = totalVramSize || "";
-}
-
-// VRAM freq (texto)
-async function updateVramFreq() {
-  try {
-    const { stdout } = await execFileAsync(HWINFO, ["-vram-freq"]);
-    const line = firstNonEmptyLine(stdout);
-    if (el.vramFreq && line) el.vramFreq.innerHTML = line;
-  } catch {}
-}
-
-// VRAM usage (% ou nodata)
-async function updateVramUsage() {
-  try {
-    const { stdout } = await execFileAsync(HWINFO, ["-vram-usage"]);
-    const line = firstNonEmptyLine(stdout);
-
-    if (line.includes("nodata")) {
-      setGauge(el.vramUsageGauge, el.vramUsageNum, 0, "N/A");
-      if (el.vramUsageNodata) el.vramUsageNodata.style.display = "none";
-      if (el.vramUsageBlock) el.vramUsageBlock.style.opacity = ".3";
-      return;
-    }
-
-    if (el.vramUsageBlock) el.vramUsageBlock.style.opacity = "1";
-
-    const n = toIntOrNull(line);
-    setGauge(el.vramUsageGauge, el.vramUsageNum, n, "0");
-  } catch {
-    setGauge(el.vramUsageGauge, el.vramUsageNum, 0, "0");
-  }
-}
-
-// CPU usage (%)
-// agora vem direto no stdout do hardware-info -cpu-use (sem ler arquivo)
-async function updateCpuUsage() {
-  try {
-    const { stdout } = await execFileAsync(HWINFO, ["-cpu-use"]);
-    const line = firstNonEmptyLine(stdout);
-    const n = toIntOrNull(line);
-    setGauge(el.cpuUsageGauge, el.cpuUsageNum, n, "0");
-  } catch {
-    setGauge(el.cpuUsageGauge, el.cpuUsageNum, 0, "0");
-  }
-}
-
-// CPU freq (texto)
-async function updateCpuFreq() {
-  try {
-    const { stdout } = await execFileAsync(HWINFO, ["-cpu-freq"]);
-    const line = firstNonEmptyLine(stdout);
-    if (el.cpuFreq && line) el.cpuFreq.innerHTML = line;
-  } catch {}
-}
-
-// CPU temp (pesado: sensors) — roda menos
-async function updateCpuTemp() {
-  // Mantive “bash -lc” porque sensors/egrep/sed/awk é um pipeline mesmo.
-  // Se quiser, dá pra trocar por parsing em JS, mas o custo maior é o sensors.
-  try {
-    const { stdout } = await execFileAsync("bash", [
-      "-lc",
-      "sensors | egrep -wi 'Tctl|tdie|Package id 0' | sed 's/Package id//' | awk '{print $2}' | cut -d'.' -f -1 | sed 's/+//' | head -n 1"
-    ]);
-    const line = firstNonEmptyLine(stdout);
-    if (el.cpuTemp && line) el.cpuTemp.innerHTML = `${line}°C`;
-  } catch {}
-}
-
-// RAM total (texto) — parse do free em JS
-async function updateRamTotal() {
-  try {
-    const { stdout } = await execFileAsync("free", ["-h"]);
-    const memLine = stdout.split(/\r?\n/).find(l => l.toLowerCase().startsWith("mem:"));
-    if (!memLine) return;
-
-    const parts = memLine.trim().split(/\s+/);
-    const total = (parts[1] || "").replace("Gi", "GB").replace("Mi", "MB");
-    if (el.ramSize && total) el.ramSize.innerHTML = total;
-  } catch {}
-}
-
-// RAM usage (%) — parse do free em JS
-async function updateRamUsagePercent() {
-  try {
-    const { stdout } = await execFileAsync("free", ["-m"]);
-    const memLine = stdout.split(/\r?\n/).find(l => l.toLowerCase().startsWith("mem:"));
-    if (!memLine) return;
-
-    const parts = memLine.trim().split(/\s+/);
-    const total = parseInt(parts[1], 10);
-    const used = parseInt(parts[2], 10);
-
-    if (!Number.isFinite(total) || !Number.isFinite(used) || total <= 0) {
-      setGauge(el.ramUsageGauge, el.ramUsageNum, 0, "0");
-      return;
-    }
-
-    const pct = Math.round((used / total) * 100);
-    setGauge(el.ramUsageGauge, el.ramUsageNum, pct, "0");
-  } catch {
-    setGauge(el.ramUsageGauge, el.ramUsageNum, 0, "0");
-  }
-}
-
-// RAM used (texto) — parse do free em JS
-async function updateRamUsedHuman() {
-  try {
-    const { stdout } = await execFileAsync("free", ["-h"]);
-    const memLine = stdout.split(/\r?\n/).find(l => l.toLowerCase().startsWith("mem:"));
-    if (!memLine) return;
-
-    const parts = memLine.trim().split(/\s+/);
-    const used = (parts[2] || "").replace("Gi", "GB").replace("Mi", "MB");
-    if (el.ramUse && used) el.ramUse.innerHTML = used;
-  } catch {}
-}
-
-// ==============================
-// Scheduler único (sem empilhar chamadas)
-// ==============================
-const tasks = [
-  // 1s (leves / importantes)
-  { everyMs: 1000, last: 0, running: false, fn: updateGpuUsage },
-  { everyMs: 1000, last: 0, running: false, fn: updateGpuTemp },
-  { everyMs: 1000, last: 0, running: false, fn: updateGpuFreq },
-  { everyMs: 1000, last: 0, running: false, fn: updateVramUsage },
-  { everyMs: 1000, last: 0, running: false, fn: updateCpuFreq },
-  { everyMs: 1000, last: 0, running: false, fn: updateRamUsagePercent },
-  { everyMs: 1000, last: 0, running: false, fn: updateRamUsedHuman },
-
-  // 2s (CPU use tem “sleep 1” no hardware-info; 2s já alivia bastante)
-  { everyMs: 2000, last: 0, running: false, fn: updateCpuUsage },
-  { everyMs: 2000, last: 0, running: false, fn: updateVramFreq },
-
-  // 5s (moderado)
-  { everyMs: 5000, last: 0, running: false, fn: updateRamTotal },
-
-  // 3s (pesado: sensors)
-  { everyMs: 3000, last: 0, running: false, fn: updateCpuTemp },
-];
-
-let schedulerTimer = null;
-
-function tick() {
-  const now = Date.now();
-
-  for (const t of tasks) {
-    if (t.running) continue;
-    if (now - t.last < t.everyMs) continue;
-
-    t.running = true;
-    t.last = now;
-
-    // dispara sem bloquear o tick, mas sem overlap por tarefa
-    t.fn()
-      .catch(() => {})
-      .finally(() => {
-        t.running = false;
-      });
-  }
-}
-
-async function start() {
-  // one-shot
-  await updateVramSizeOnce();
-
-  // primeiro tick
-  tick();
-
-  if (schedulerTimer) clearInterval(schedulerTimer);
-  schedulerTimer = setInterval(tick, CONCURRENCY_TICK_MS);
-}
-
-start().catch(() => {});
+setInterval(function () {
+	ramUse();
+}, 1000);

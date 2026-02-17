@@ -1,127 +1,185 @@
 #!/bin/bash
+set -euo pipefail
 
-# Create the application settings directory for Regata OS Store
-if test -e "/tmp/regataos-store/config"; then
-	chmod 777 "/tmp/regataos-store/config"
+# -----------------------------
+# Helpers
+# -----------------------------
+log() { printf '%s\n' "$*" >&2; }
+
+ensure_dir() {
+  local d="$1"
+  if [[ ! -d "$d" ]]; then
+    mkdir -p "$d"
+  fi
+}
+
+ensure_file() {
+  local f="$1"
+  if [[ ! -e "$f" ]]; then
+    : > "$f"
+  fi
+}
+
+link_force() {
+  # ln -sfn: replace existing symlink/target atomically
+  local target="$1"
+  local linkpath="$2"
+  ln -sfn "$target" "$linkpath"
+}
+
+read_first_glx_vendor() {
+  # glxinfo pode ser lento. Mantém só 1 chamada e tolera falha.
+  glxinfo 2>/dev/null | grep -i "vendor" | head -n 1 || true
+}
+
+# -----------------------------
+# Paths
+# -----------------------------
+HOME_DIR="${HOME}"
+USER_NAME="${USER:-$(id -un)}"
+
+STORE_CONF_DIR_TMP="/tmp/regataos-store/config"
+STORE_CONF_DIR_HOME="${HOME_DIR}/.config/regataos-store"
+STORE_INSTALLED_HOME="${STORE_CONF_DIR_HOME}/installed-apps.txt"
+STORE_INSTALLED_TMP="${STORE_CONF_DIR_TMP}/installed-apps.txt"
+
+REGATA_CONFIGS_TMP="/tmp/regataos-configs/config"
+PLASMA_LOCALERC_HOME="${HOME_DIR}/.config/plasma-localerc"
+PLASMA_LOCALERC_ETC="/etc/xdg/plasma-localerc"
+PLASMA_LOCALERC_TMP="${REGATA_CONFIGS_TMP}/plasma-localerc"
+
+USER_DIRS_LOCALE_HOME="${HOME_DIR}/.config/user-dirs.locale"
+USER_DIRS_LOCALE_TMP="${REGATA_CONFIGS_TMP}/user-dirs.locale"
+
+PRIME_CONF_DIR_HOME="${HOME_DIR}/.config/regataos-prime"
+PRIME_TMP="/tmp/regataos-prime"
+PRIME_TMP_CONF_LINK="${PRIME_TMP}/config"
+
+PRIME_CONF_FILE="${PRIME_CONF_DIR_HOME}/regataos-prime.conf"
+RUN_WITHOUT="${PRIME_CONF_DIR_HOME}/run-without-dgpu.conf"
+RUN_WITH="${PRIME_CONF_DIR_HOME}/run-with-dgpu.conf"
+
+MAXQ_GPUCACHE="${HOME_DIR}/.config/Max-Q/Default/GPUCache"
+
+# -----------------------------
+# 1) Store config + installed apps link
+# -----------------------------
+ensure_dir "$STORE_CONF_DIR_TMP"
+# Se você PRECISA 777 por algum motivo (multi-user / sandbox), comente a linha abaixo e use chmod 777.
+chmod 755 "$STORE_CONF_DIR_TMP" || true
+
+ensure_dir "$STORE_CONF_DIR_HOME"
+ensure_file "$STORE_INSTALLED_HOME"
+
+# link em /tmp -> $HOME
+ensure_dir "$STORE_CONF_DIR_TMP"
+link_force "$STORE_INSTALLED_HOME" "$STORE_INSTALLED_TMP"
+
+# -----------------------------
+# 2) Language config symlinks in /tmp
+# -----------------------------
+ensure_dir "$REGATA_CONFIGS_TMP"
+chmod 755 "$REGATA_CONFIGS_TMP" || true
+
+# plasma-localerc: cria cópia no HOME se só existir em /etc/xdg
+if [[ ! -e "$PLASMA_LOCALERC_TMP" ]]; then
+  if [[ ! -e "$PLASMA_LOCALERC_HOME" && -e "$PLASMA_LOCALERC_ETC" ]]; then
+    ensure_dir "${HOME_DIR}/.config"
+    cp -f "$PLASMA_LOCALERC_ETC" "$PLASMA_LOCALERC_HOME"
+  fi
+  if [[ -e "$PLASMA_LOCALERC_HOME" ]]; then
+    link_force "$PLASMA_LOCALERC_HOME" "$PLASMA_LOCALERC_TMP"
+  fi
+fi
+
+# user-dirs.locale
+if [[ ! -e "$USER_DIRS_LOCALE_TMP" && -e "$USER_DIRS_LOCALE_HOME" ]]; then
+  link_force "$USER_DIRS_LOCALE_HOME" "$USER_DIRS_LOCALE_TMP"
+fi
+
+# -----------------------------
+# 3) PRIME config in $HOME + link in /tmp
+# -----------------------------
+ensure_dir "$PRIME_CONF_DIR_HOME"
+ensure_dir "$PRIME_CONF_DIR_HOME/img"
+ensure_dir "$PRIME_CONF_DIR_HOME/system-info"
+ensure_dir "$PRIME_CONF_DIR_HOME/external-app"
+
+ensure_file "$RUN_WITHOUT"
+ensure_file "$RUN_WITH"
+
+if [[ ! -e "$PRIME_CONF_FILE" ]]; then
+  cat > "$PRIME_CONF_FILE" <<'EOF'
+one-apps=on
+all-apps=on
+render=igpu
+freesync=on
+freesync-supported=false
+tearfree=on
+unlockwidgets=on
+amf=off
+EOF
+fi
+
+ensure_dir "$PRIME_TMP"
+chmod 755 "$PRIME_TMP" || true
+
+# /tmp/regataos-prime/config -> $HOME/.config/regataos-prime
+if [[ ! -e "$PRIME_TMP_CONF_LINK" ]]; then
+  link_force "$PRIME_CONF_DIR_HOME" "$PRIME_TMP_CONF_LINK"
+fi
+
+# -----------------------------
+# 4) Detect hybrid graphics (se existir flag)
+# -----------------------------
+if [[ -e "${PRIME_TMP}/use-hybrid-graphics.txt" ]]; then
+  # roda em background mas não bloqueia a UI
+  sudo /opt/regataos-prime/scripts/apps-hybrid-graphics >/dev/null 2>&1 &
+fi
+
+# -----------------------------
+# 5) Clear GPUCache
+# -----------------------------
+if [[ -d "$MAXQ_GPUCACHE" ]]; then
+  rm -rf "${MAXQ_GPUCACHE:?}/"* || true
+fi
+
+# -----------------------------
+# 6) Background detectors (sem travar)
+# -----------------------------
+/opt/regataos-prime/scripts/detect-system-info.sh start >/dev/null 2>&1 &
+/opt/regataos-prime/scripts/check-hardware-resource-support.sh start >/dev/null 2>&1 &
+
+# -----------------------------
+# 7) Reduce memory usage
+# -----------------------------
+export MALLOC_ARENA_MAX=2
+export NODE_OPTIONS="--max-old-space-size=160"
+
+# -----------------------------
+# 8) Start app (evita duplicar glxinfo)
+# -----------------------------
+vendor_line="$(read_first_glx_vendor)"
+if echo "$vendor_line" | grep -qi "intel"; then
+  regataosprime --disable-gpu /opt/regataos-prime
 else
-	mkdir -p "/tmp/regataos-store/config"
-	chmod 777 "/tmp/regataos-store/config"
+  regataosprime /opt/regataos-prime
 fi
 
-if test ! -e "$HOME/.config/regataos-store"; then
-	mkdir -p "$HOME/.config/regataos-store"
-	echo "" >>"$HOME/.config/regataos-store/installed-apps.txt"
+# -----------------------------
+# 9) Stop radeontop properly (se estiver rodando)
+# -----------------------------
+# Em vez de inventar "ps -C 'radeontop -d ...'", pega o PID real:
+if pgrep -x "radeontop" >/dev/null 2>&1; then
+  pkill -TERM -x "radeontop" || true
 fi
 
-if test ! -e "/tmp/regataos-store/config/installed-apps.txt"; then
-	ln -sf "$HOME/.config/regataos-store/installed-apps.txt" "/tmp/regataos-store/config/"
-else
-	rm -f "/tmp/regataos-store/config/installed-apps.txt"
-	ln -sf "$HOME/.config/regataos-store/installed-apps.txt" "/tmp/regataos-store/config/"
-fi
-
-# Check language
-if test ! -e "/tmp/regataos-configs/config/plasma-localerc"; then
-	if test ! -e "$HOME/.config/plasma-localerc"; then
-		if test -e "/etc/xdg/plasma-localerc"; then
-			cp -f "/etc/xdg/plasma-localerc" "$HOME/.config/plasma-localerc"
-		fi
-	fi
-
-	mkdir -p "/tmp/regataos-configs/config"
-	chmod 777 "/tmp/regataos-configs/config"
-
-	if test -e "$HOME/.config/plasma-localerc"; then
-		ln -sf "$HOME/.config/plasma-localerc" "/tmp/regataos-configs/config/"
-	fi
-fi
-
-if test ! -e "/tmp/regataos-configs/config/user-dirs.locale"; then
-	if test -e "$HOME/.config/user-dirs.locale"; then
-		mkdir -p "/tmp/regataos-configs/config"
-		chmod 777 "/tmp/regataos-configs/config"
-
-		ln -sf "$HOME/.config/user-dirs.locale" "/tmp/regataos-configs/config/"
-	fi
-fi
-
-# Check installed apps
-echo "installed" >"/tmp/apps-scripts/checkapp.txt"
-
-# Check and create the PRIME Settings configuration directory
-if test ! -e "$HOME/.config/regataos-prime"; then
-	mkdir -p "$HOME/.config/regataos-prime/"
-fi
-
-if test ! -e "$HOME/.config/regataos-prime/img"; then
-	mkdir -p "$HOME/.config/regataos-prime/img/"
-fi
-
-if test ! -e "$HOME/.config/regataos-prime/system-info"; then
-	mkdir -p "$HOME/.config/regataos-prime/system-info/"
-fi
-
-if test ! -e "$HOME/.config/regataos-prime/external-app"; then
-	mkdir -p "$HOME/.config/regataos-prime/external-app/"
-fi
-
-if test ! -e "$HOME/.config/regataos-prime/run-without-dgpu.conf"; then
-	echo "" >"$HOME/.config/regataos-prime/run-without-dgpu.conf"
-fi
-
-if test ! -e "$HOME/.config/regataos-prime/run-with-dgpu.conf"; then
-	echo "" >"$HOME/.config/regataos-prime/run-with-dgpu.conf"
-fi
-
-if test ! -e "$HOME/.config/regataos-prime/regataos-prime.conf"; then
-	echo "one-apps=on" >"$HOME/.config/regataos-prime/regataos-prime.conf"
-	echo "all-apps=on" >>"$HOME/.config/regataos-prime/regataos-prime.conf"
-	echo "render=igpu" >>"$HOME/.config/regataos-prime/regataos-prime.conf"
-	echo "freesync=on" >>"$HOME/.config/regataos-prime/regataos-prime.conf"
-	echo "freesync-supported=false" >>"$HOME/.config/regataos-prime/regataos-prime.conf"
-	echo "tearfree=on" >>"$HOME/.config/regataos-prime/regataos-prime.conf"
-	echo "unlockwidgets=on" >>"$HOME/.config/regataos-prime/regataos-prime.conf"
-	echo "amf=off" >>"$HOME/.config/regataos-prime/regataos-prime.conf"
-fi
-
-if test ! -e "/tmp/regataos-prime"; then
-	mkdir -p "/tmp/regataos-prime/"
-	chmod 777 "/tmp/regataos-prime"
-	chmod 777 /tmp/regataos-prime/*
-fi
-
-if test ! -e "/tmp/regataos-prime/config"; then
-	ln -sf "$HOME/.config/regataos-prime" "/tmp/regataos-prime/config"
-	chmod 777 /tmp/regataos-prime/*
-fi
-
-if test -e "/tmp/regataos-prime/use-hybrid-graphics.txt"; then
-	sudo /opt/regataos-prime/scripts/apps-hybrid-graphics &
-	sleep 2
-fi
-
-# Clear GPUCache files
-if test -e "$HOME/.config/Max-Q/Default/GPUCache/index"; then
-	rm -f "$HOME/.config/Max-Q/Default/GPUCache/"*
-fi
-
-/opt/regataos-prime/scripts/detect-system-info.sh start &
-/opt/regataos-prime/scripts/check-hardware-resource-support.sh start &
-
-if [[ $(glxinfo | grep vendor) == *"Intel"* ]]; then
-	regataosprime --disable-gpu /opt/regataos-prime
-else
-	regataosprime /opt/regataos-prime
-fi
-
-# End the radeontop process
-get_pid="radeontop -d /tmp/regataos-prime/radeontop.log"
-kill -SIGTERM $(ps -C "$get_pid" | awk '{print $1}' | tail -1)
-
-# Clear
-rm -f "/tmp/regataos-prime/nvidia-driver-notify.txt"
-rm -f "/tmp/regataos-prime/hardware-notify.txt"
-rm -f "/tmp/regataos-prime/radeontop.log"
-rm -f "/tmp/regataos-prime/cpu-usage.log"
+# -----------------------------
+# 10) Cleanup tmp files
+# -----------------------------
+rm -f "${PRIME_TMP}/nvidia-driver-notify.txt" \
+      "${PRIME_TMP}/hardware-notify.txt" \
+      "${PRIME_TMP}/radeontop.log" \
+      "${PRIME_TMP}/cpu-usage.log" || true
 
 exit 0

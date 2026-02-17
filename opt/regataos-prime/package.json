@@ -3,6 +3,7 @@
   "description": "Graphics settings, hardware usage and more...",
   "version": "0.1.0",
   "main": "www/index.html",
+  "chromium-args": "--enable-low-end-device-mode --disable-default-apps --disable-background-networking --disable-breakpad --disable-component-update --disable-translate --disable-sync --no-first-run --no-pings --disable-domain-reliability --disable-features=TranslateUI,AudioServiceOutOfProcess,MediaRouter --disk-cache-size=33554432 --media-cache-size=33554432 --js-flags=--max-old-space-size=160",
   "window": {
     "show": false,
     "toolbar": false,

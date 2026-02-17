@@ -401,7 +401,6 @@ function cpu_use() {
 		grep 'cpu ' /proc/stat
 	) | cut -d'.' -f -1)
 	echo "$cpu_use" >"/tmp/regataos-prime/cpu-usage.log"
-  echo "$cpu_use"
 }
 
 function cpu_freq() {

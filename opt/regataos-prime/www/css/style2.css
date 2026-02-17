@@ -329,9 +329,7 @@ li#buttom-click:active {
 }
 
 /* CSS nvidia-driver */
-#use-nvidia-click,
-#btn-display,
-#btn-run-tests {
+#use-nvidia-click {
 	cursor: pointer;
 }
 
